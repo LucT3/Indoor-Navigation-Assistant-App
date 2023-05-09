@@ -22,8 +22,6 @@
     <!-- Needed only if your app uses Bluetooth scan results to derive physical location. -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <!-- Permission to initiate device discovery and manipulate Bluetooth settings -->
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <!-- Permission to discover Bluetooth devices in background -->
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     
@@ -47,6 +45,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <meta-data android:name="kontakt.io.API_KEY" android:value="@string/kontakt_io_api_key" />
     </application>
 
 </manifest>
