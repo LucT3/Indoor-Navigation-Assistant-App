@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.kontakt.sdk.android.common.KontaktSDK
@@ -19,28 +18,22 @@ import it.unipi.dii.indoornavigatorassistant.util.Constants
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Check the default mode and set theme accordingly
-        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        }
-        else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        }
-
         super.onCreate(savedInstanceState)
         Log.i(Constants.LOG_TAG,"Activity created")
-        
-        this.initializeDependencies()
+
+        // Initialize dependency
+        initDependencies()
         Log.i(Constants.LOG_TAG,"Dependencies initialized")
 
-        // Set interface
+        // Set graphical user interface
         setContentView(R.layout.activity_main)
+        Log.i(Constants.LOG_TAG,"UI initialized")
 
-        // Check permissions
+        // Check required "dangerous" permissions
         checkPermissions()
     }
 
-    private fun initializeDependencies() {
+    private fun initDependencies() {
         // Initialize Bluetooth beacons API
         KontaktSDK.initialize(this)
         // Initialize logger
