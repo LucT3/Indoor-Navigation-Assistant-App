@@ -1,5 +1,6 @@
 package it.unipi.dii.indoornavigatorassistant
 
+import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -76,18 +77,36 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+//    private fun checkPermissions() {
+//        val requiredPermissions = this.getRequestedPermissions()
+//        if (isAnyOfPermissionsNotGranted(requiredPermissions)) {
+//            Log.i("Sample", "OH NOOOOO 1")
+//            ActivityCompat.requestPermissions(this, requiredPermissions, 100)
+////            ComponentActivity.requestPermissions(this, requiredPermissions, 100)
+//            Log.i("Sample", "OH NOOOOO 2")
+//        } else {
+//            Log.i("Sample", "AAAAA")
+//        }
+//
+//    }
     private fun checkPermissions() {
-        val requiredPermissions = this.getRequestedPermissions()
-        if (isAnyOfPermissionsNotGranted(requiredPermissions)) {
-            Log.i("Sample", "OH NOOOOO 1")
-            ActivityCompat.requestPermissions(this, requiredPermissions, 100)
-//            ComponentActivity.requestPermissions(this, requiredPermissions, 100)
-            Log.i("Sample", "OH NOOOOO 2")
-        } else {
-            Log.i("Sample", "AAAAA")
-        }
+        val x = getRequestedPermissions()
+        Log.i("Sample", x.contentToString())
+        val requiredPermissions = x
 
-    }
+//        val requiredPermissions =
+//            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) arrayOf(Manifest.permission.ACCESS_FINE_LOCATION) else arrayOf(
+//                Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT
+//            ) // Note that there is no need to ask about ACCESS_FINE_LOCATION anymore for BT scanning purposes for VERSION_CODES.S and higher if you add android:usesPermissionFlags="neverForLocation" under BLUETOOTH_SCAN in your manifest file.
+        if (isAnyOfPermissionsNotGranted(requiredPermissions)) {
+            // you should also reqursively check if any of those permissions need rationale popup via ActivityCompat.shouldShowRequestPermissionRationale before doing the actual requestPermissions(...), but this part was cut out for brevity
+            Log.i("Sample", requiredPermissions.contentToString())
+            ActivityCompat.requestPermissions(this, requiredPermissions, 100)
+        } else {
+            Log.i("Sample", "check permission ok")
+        }
+    Log.i("Sample", "check permission okokok")
+}
 
     private fun isAnyOfPermissionsNotGranted(requiredPermissions: Array<String>): Boolean {
         for (permission in requiredPermissions) {
