@@ -19,21 +19,11 @@ import java.util.Arrays
 
 class MainActivity : AppCompatActivity() {
 
-    private val requestPermission =
-        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
-                isGranted ->
-            // Do something if permission granted
-            for (x in isGranted) {
-                if (x.value) {
-                    Log.i("Sample", "permission ${x.key} granted")
-                } else {
-                    Log.i("Sample", "permission ${x.key} denied")
-                }
-            }
-        }
+    val LOG_TAG = "MSSS"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Check the default mode and set theme accordingly
         if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         }
@@ -42,19 +32,22 @@ class MainActivity : AppCompatActivity() {
         }
 
         super.onCreate(savedInstanceState)
-        Log.i("Sample","Buongiorno")
+        Log.i(LOG_TAG,"Activity created")
+        
         this.initializeDependencies()
+        Log.i(LOG_TAG,"Dependencies initialized")
         setContentView(R.layout.activity_main)
-        Log.i("Sample", "ciao")
+
+        // Check permissions
+        checkPermissions()
     }
 
     private fun initializeDependencies() {
-        // Initialize Bluetooth API
+        // Initialize Bluetooth beacons API
         KontaktSDK.initialize(this)
+        // Initialize logger
         Logger.setDebugLoggingEnabled(true)
         Logger.setLogLevelEnabled(LogLevel.DEBUG, true)
-        // Check permissions
-        checkPermissions()
     }
 
     private fun getRequestedPermissions(): Array<String> {
@@ -75,45 +68,38 @@ class MainActivity : AppCompatActivity() {
         Log.i("Sample", "Requested permissions list " + Arrays.toString(requestedPermissions))
         return requestedPermissions
     }
-
-
-//    private fun checkPermissions() {
-//        val requiredPermissions = this.getRequestedPermissions()
-//        if (isAnyOfPermissionsNotGranted(requiredPermissions)) {
-//            Log.i("Sample", "OH NOOOOO 1")
-//            ActivityCompat.requestPermissions(this, requiredPermissions, 100)
-////            ComponentActivity.requestPermissions(this, requiredPermissions, 100)
-//            Log.i("Sample", "OH NOOOOO 2")
-//        } else {
-//            Log.i("Sample", "AAAAA")
-//        }
-//
-//    }
+    
+    
     private fun checkPermissions() {
-        val x = getRequestedPermissions()
-        Log.i("Sample", x.contentToString())
-        val requiredPermissions = x
-
-//        val requiredPermissions =
-//            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) arrayOf(Manifest.permission.ACCESS_FINE_LOCATION) else arrayOf(
-//                Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT
-//            ) // Note that there is no need to ask about ACCESS_FINE_LOCATION anymore for BT scanning purposes for VERSION_CODES.S and higher if you add android:usesPermissionFlags="neverForLocation" under BLUETOOTH_SCAN in your manifest file.
+        // Select required permissions
+        val requiredPermissions =
+           if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+               arrayOf(
+                   Manifest.permission.ACCESS_FINE_LOCATION
+               )
+           } else {
+               arrayOf(
+                   Manifest.permission.BLUETOOTH_SCAN,
+                   Manifest.permission.BLUETOOTH_CONNECT,
+                   Manifest.permission.ACCESS_FINE_LOCATION
+               )
+           }
+        // Check which permissions are not granted and request them
         if (isAnyOfPermissionsNotGranted(requiredPermissions)) {
-            // you should also reqursively check if any of those permissions need rationale popup via ActivityCompat.shouldShowRequestPermissionRationale before doing the actual requestPermissions(...), but this part was cut out for brevity
-            Log.i("Sample", requiredPermissions.contentToString())
             ActivityCompat.requestPermissions(this, requiredPermissions, 100)
         } else {
-            Log.i("Sample", "check permission ok")
+            Log.i(LOG_TAG, "All permissions are granted => start scan")
+            // TODO start scan
         }
-    Log.i("Sample", "check permission okokok")
-}
-
+    }
+    
+    
     private fun isAnyOfPermissionsNotGranted(requiredPermissions: Array<String>): Boolean {
+        Log.d(LOG_TAG, "Check permissions ${requiredPermissions.contentToString()}")
         for (permission in requiredPermissions) {
-            Log.i("Sample", permission)
             val checkSelfPermissionResult = ContextCompat.checkSelfPermission(this, permission)
             if (PackageManager.PERMISSION_GRANTED != checkSelfPermissionResult) {
-                Log.i("Sample", "Permission not granted!")
+                Log.d(LOG_TAG, "Permission $permission not granted!")
                 return true
             }
         }
@@ -141,18 +127,24 @@ class MainActivity : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        Log.i("Sample", "onRequestPermissionsResult ${permissions.contentToString()} \n ${grantResults.contentToString()}")
-        if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            if (100 == requestCode) {
+        if (100 == requestCode) {
+            Log.d(LOG_TAG, "onRequestPermissionsResult ${permissions.contentToString()} => ${grantResults.contentToString()}")
+            
+            if (allPermissionsGranted(grantResults)) {
                 Toast.makeText(this, "Permissions granted", Toast.LENGTH_SHORT).show()
             }
-        } else {
-            Toast.makeText(
-                this,
-                "Location permissions are mandatory to use BLE features on Android 6.0 or higher",
-                Toast.LENGTH_LONG
-            ).show()
+            else {
+                Toast.makeText(
+                    this,
+                    "Location permissions are mandatory to use BLE features on Android 6.0 or higher",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
         }
+    }
+    
+    private fun allPermissionsGranted(grantResults: Array<String>) {
+        
     }
 
 }
