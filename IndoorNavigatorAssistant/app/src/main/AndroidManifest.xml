@@ -46,6 +46,9 @@
             </intent-filter>
         </activity>
         <meta-data android:name="kontakt.io.API_KEY" android:value="@string/kontakt_io_api_key" />
+        
+        <!-- Enable the SDK Proximity service -->
+        <service android:name="com.kontakt.sdk.android.ble.service.ProximityService" android:exported="false"/>
     </application>
 
 </manifest>
