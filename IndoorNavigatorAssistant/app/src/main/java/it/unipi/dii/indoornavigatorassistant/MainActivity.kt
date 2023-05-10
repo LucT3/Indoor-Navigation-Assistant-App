@@ -14,7 +14,6 @@ import com.kontakt.sdk.android.common.profile.IBeaconRegion
 
 
 class MainActivity : ComponentActivity() {
-    private var proximityManager: ProximityManager? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Initialize Bluetooth API
