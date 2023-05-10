@@ -4,8 +4,11 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.kontakt.sdk.android.common.KontaktSDK
 import com.kontakt.sdk.android.common.log.LogLevel
@@ -30,6 +33,13 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }
+        else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
         super.onCreate(savedInstanceState)
         Log.i("Sample","Buongiorno")
         this.initializeDependencies()
@@ -70,7 +80,7 @@ class MainActivity : AppCompatActivity() {
         val requiredPermissions = this.getRequestedPermissions()
         if (isAnyOfPermissionsNotGranted(requiredPermissions)) {
             Log.i("Sample", "OH NOOOOO 1")
-            this.requestPermission.launch(requiredPermissions)
+            ActivityCompat.requestPermissions(this, requiredPermissions, 100)
 //            ComponentActivity.requestPermissions(this, requiredPermissions, 100)
             Log.i("Sample", "OH NOOOOO 2")
         } else {
@@ -105,5 +115,25 @@ class MainActivity : AppCompatActivity() {
 //            }
 //        }
 //    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        Log.i("Sample", "onRequestPermissionsResult ${permissions.contentToString()} \n ${grantResults.contentToString()}")
+        if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (100 == requestCode) {
+                Toast.makeText(this, "Permissions granted", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            Toast.makeText(
+                this,
+                "Location permissions are mandatory to use BLE features on Android 6.0 or higher",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
 
 }
