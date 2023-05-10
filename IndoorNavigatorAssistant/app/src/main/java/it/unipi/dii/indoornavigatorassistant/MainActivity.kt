@@ -16,7 +16,7 @@ import it.unipi.dii.indoornavigatorassistant.util.Constants
 
 
 class MainActivity : AppCompatActivity() {
-
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.i(Constants.LOG_TAG,"Activity created")
