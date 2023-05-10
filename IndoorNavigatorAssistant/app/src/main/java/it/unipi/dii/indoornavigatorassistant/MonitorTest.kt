@@ -21,6 +21,7 @@ class MonitorTest : AppCompatActivity() {
     private var proximityManager: ProximityManager? = null
 
     protected override fun onStart() {
+        println("**START MONITOR**")
         proximityManager = ProximityManagerFactory.create(this)
         proximityManager?.setIBeaconListener(createIBeaconListener())
         super.onStart()
