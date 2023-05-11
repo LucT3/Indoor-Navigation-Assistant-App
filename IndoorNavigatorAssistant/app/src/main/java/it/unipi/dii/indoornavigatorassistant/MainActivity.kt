@@ -17,7 +17,7 @@ import it.unipi.dii.indoornavigatorassistant.util.Constants
 
 
 class MainActivity : AppCompatActivity() {
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.i(Constants.LOG_TAG,"Activity created")
@@ -34,6 +34,9 @@ class MainActivity : AppCompatActivity() {
         checkPermissions()
     }
 
+    /**
+     * Initialize KontaktSDK dependency
+     */
     private fun initDependencies() {
         // Initialize Bluetooth beacons API
         KontaktSDK.initialize(this)
@@ -41,8 +44,11 @@ class MainActivity : AppCompatActivity() {
         Logger.setDebugLoggingEnabled(true)
         Logger.setLogLevelEnabled(LogLevel.DEBUG, true)
     }
-    
-    
+
+
+    /**
+     * Check if application owns necessary permissions for its features
+     */
     private fun checkPermissions() {
         // Select required permissions
         val requiredPermissions =
@@ -60,14 +66,16 @@ class MainActivity : AppCompatActivity() {
         // Check which permissions are not granted and request them
         if (isAnyOfPermissionsNotGranted(requiredPermissions)) {
             ActivityCompat.requestPermissions(this, requiredPermissions, 100)
-        } else {
-            Log.i(Constants.LOG_TAG, "All permissions are granted => start scan")
-            val intent = Intent(this, MonitorTest::class.java)
-            startActivity(intent)
+        }
+        else {
+            startScanningActivity()
         }
     }
-    
-    
+
+
+    /**
+     * Check if any of the input permission is NOT granted
+     */
     private fun isAnyOfPermissionsNotGranted(requiredPermissions: Array<String>): Boolean {
         Log.d(Constants.LOG_TAG, "Check permissions ${requiredPermissions.contentToString()}")
         for (permission in requiredPermissions) {
@@ -77,25 +85,32 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
         }
-
         return false
     }
 
 
+    /**
+     * Handle the result of a permission request
+     */
     override fun onRequestPermissionsResult(requestCode: Int,
                                             permissions: Array<String>,
                                             grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (100 == requestCode) {
-            Log.d(Constants.LOG_TAG, "onRequestPermissionsResult ${permissions.contentToString()} => ${grantResults.contentToString()}")
+            Log.d(Constants.LOG_TAG, "onRequestPermissionsResult " +
+                    "${permissions.contentToString()} => ${grantResults.contentToString()}")
 
             // Check if any permission have not been granted
             if (grantResults.contentEquals(
                     IntArray(grantResults.size){ PackageManager.PERMISSION_GRANTED })
             ) {
-                Toast.makeText(this, "Permissions granted", Toast.LENGTH_SHORT).show()
-                // TODO start activity MonitorTest
+                Toast.makeText(
+                    this,
+                    "Permissions granted",
+                    Toast.LENGTH_SHORT
+                ).show()
+                startScanningActivity()
             }
             else {
                 Toast.makeText(
@@ -107,4 +122,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+    /**
+     * Start activity MonitorTest TODO
+     */
+    private fun startScanningActivity() {
+        Log.i(Constants.LOG_TAG, "All permissions are granted => start scan")
+        val intent = Intent(this, MonitorTest::class.java)
+        startActivity(intent)
+    }
+    
 }
