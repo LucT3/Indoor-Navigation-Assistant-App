@@ -39,7 +39,7 @@ class MonitorTest : AppCompatActivity() {
     }
 
     private fun createIBeaconListener(): IBeaconListener {
-        Log.i(Constants.LOG_TAG, "**CREATE BEACON LISTENER")
+        Log.i(Constants.LOG_TAG, "**CREATE BEACON LISTENER**")
         return object : SimpleIBeaconListener() {
             override fun onIBeaconDiscovered(ibeacon: IBeaconDevice, region: IBeaconRegion) {
                 Log.i(Constants.LOG_TAG, "**BEACON DISCOVERED**: $ibeacon")
