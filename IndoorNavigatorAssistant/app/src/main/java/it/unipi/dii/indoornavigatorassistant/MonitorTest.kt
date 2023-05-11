@@ -8,42 +8,41 @@ import com.kontakt.sdk.android.ble.manager.listeners.IBeaconListener
 import com.kontakt.sdk.android.ble.manager.listeners.simple.SimpleIBeaconListener
 import com.kontakt.sdk.android.common.profile.IBeaconDevice
 import com.kontakt.sdk.android.common.profile.IBeaconRegion
+import it.unipi.dii.indoornavigatorassistant.util.Constants
 
 
 class MonitorTest : AppCompatActivity() {
-    private var proximityManager: ProximityManager? = null
+    private lateinit var proximityManager: ProximityManager
 
     override fun onStart() {
-        println("**START MONITOR**")
-        proximityManager = ProximityManagerFactory.create(this)
-        proximityManager?.setIBeaconListener(createIBeaconListener())
         super.onStart()
+        Log.i(Constants.LOG_TAG, "**START MONITOR**")
+        proximityManager = ProximityManagerFactory.create(this)
+        proximityManager.setIBeaconListener(createIBeaconListener())
         startScanning()
     }
 
     override fun onStop() {
-        println("**STOP MONITOR**")
-        proximityManager!!.stopScanning()
         super.onStop()
+        Log.i(Constants.LOG_TAG, "**STOP MONITOR**")
+        proximityManager.stopScanning()
     }
 
     override fun onDestroy() {
-        proximityManager!!.disconnect()
-        proximityManager = null
         super.onDestroy()
+        proximityManager.disconnect()
     }
 
     private fun startScanning() {
-        println("**START SCANNING**")
-        proximityManager!!.connect { proximityManager!!.startScanning() }
+        Log.i(Constants.LOG_TAG, "**START SCANNING**")
+        proximityManager.connect { proximityManager.startScanning() }
     }
 
     private fun createIBeaconListener(): IBeaconListener {
-        println("**CREATE BEACON LISTENER")
+        Log.i(Constants.LOG_TAG, "**CREATE BEACON LISTENER")
         return object : SimpleIBeaconListener() {
             override fun onIBeaconDiscovered(ibeacon: IBeaconDevice, region: IBeaconRegion) {
-                Log.i("Sample", "IBeacon discovered: $ibeacon")
-                println("**BEACON DISCOVERED**: ${ibeacon}")
+                Log.i(Constants.LOG_TAG, "**BEACON DISCOVERED**: $ibeacon")
             }
         }
     }

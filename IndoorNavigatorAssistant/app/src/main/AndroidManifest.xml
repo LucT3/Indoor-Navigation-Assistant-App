@@ -36,6 +36,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light"
         tools:targetApi="31">
+        
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -46,6 +47,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <activity
+            android:name=".MonitorTest"
+            android:theme="@style/Theme.AppCompat.Light" />
+        
+        
         <meta-data android:name="kontakt.io.API_KEY" android:value="@string/kontakt_io_api_key" />
         
         <!-- Enable the SDK Proximity service -->
