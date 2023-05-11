@@ -1,6 +1,7 @@
 package it.unipi.dii.indoornavigatorassistant
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -61,7 +62,8 @@ class MainActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(this, requiredPermissions, 100)
         } else {
             Log.i(Constants.LOG_TAG, "All permissions are granted => start scan")
-            // TODO start scan
+            val intent = Intent(this, MonitorTest::class.java)
+            startActivity(intent)
         }
     }
     
