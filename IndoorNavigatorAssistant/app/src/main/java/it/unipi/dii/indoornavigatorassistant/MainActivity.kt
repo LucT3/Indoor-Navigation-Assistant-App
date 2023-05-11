@@ -95,6 +95,7 @@ class MainActivity : AppCompatActivity() {
                     IntArray(grantResults.size){ PackageManager.PERMISSION_GRANTED })
             ) {
                 Toast.makeText(this, "Permissions granted", Toast.LENGTH_SHORT).show()
+                // TODO start activity MonitorTest
             }
             else {
                 Toast.makeText(
