@@ -8,13 +8,14 @@ import com.kontakt.sdk.android.ble.manager.listeners.IBeaconListener
 import com.kontakt.sdk.android.ble.manager.listeners.simple.SimpleIBeaconListener
 import com.kontakt.sdk.android.common.profile.IBeaconDevice
 import com.kontakt.sdk.android.common.profile.IBeaconRegion
+import it.unipi.dii.indoornavigatorassistant.util.Constants
 
 
 class MonitorTest : AppCompatActivity() {
     private var proximityManager: ProximityManager? = null
 
     override fun onStart() {
-        println("**START MONITOR**")
+        Log.i(Constants.LOG_TAG, "**START MONITOR**")
         proximityManager = ProximityManagerFactory.create(this)
         proximityManager?.setIBeaconListener(createIBeaconListener())
         super.onStart()
@@ -22,7 +23,7 @@ class MonitorTest : AppCompatActivity() {
     }
 
     override fun onStop() {
-        println("**STOP MONITOR**")
+        Log.i(Constants.LOG_TAG, "**STOP MONITOR**")
         proximityManager!!.stopScanning()
         super.onStop()
     }
@@ -34,7 +35,7 @@ class MonitorTest : AppCompatActivity() {
     }
 
     private fun startScanning() {
-        println("**START SCANNING**")
+        Log.i(Constants.LOG_TAG, "**START SCANNING**")
         proximityManager!!.connect { proximityManager!!.startScanning() }
     }
 
@@ -42,8 +43,7 @@ class MonitorTest : AppCompatActivity() {
         println("**CREATE BEACON LISTENER")
         return object : SimpleIBeaconListener() {
             override fun onIBeaconDiscovered(ibeacon: IBeaconDevice, region: IBeaconRegion) {
-                Log.i("Sample", "IBeacon discovered: $ibeacon")
-                println("**BEACON DISCOVERED**: ${ibeacon}")
+                Log.i(Constants.LOG_TAG, "**BEACON DISCOVERED**: $ibeacon")
             }
         }
     }

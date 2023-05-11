@@ -47,10 +47,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    
+        
         <activity
             android:name=".MonitorTest"
-            android:exported="true"
             android:theme="@style/Theme.AppCompat.Light" />
         
         
