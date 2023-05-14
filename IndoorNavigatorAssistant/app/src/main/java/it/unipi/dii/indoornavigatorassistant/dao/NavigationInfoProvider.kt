@@ -30,7 +30,16 @@ class NavigationInfoProvider(context: Context) {
 
     }
 
-    fun getBLERegionInfo(beacon1: String, beacon2: String): Array<String> {
-        return null;
+    private fun getBLERegionId(beacon1: String, beacon2: String): String {
+        return if (beacon1 <= beacon2) {
+            beacon1 + beacon2
+        } else {
+            beacon2 + beacon1
+        }
     }
+
+    fun getBLERegionInfo(beacon1: String, beacon2: String): List<String>? {
+        return bleRegionMap[getBLERegionId(beacon1, beacon2)]
+    }
+    
 }
