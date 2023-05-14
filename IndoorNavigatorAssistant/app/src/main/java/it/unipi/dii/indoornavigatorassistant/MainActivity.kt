@@ -1,12 +1,16 @@
 package it.unipi.dii.indoornavigatorassistant
 
 import android.Manifest
+import android.app.Activity
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothManager
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -32,6 +36,9 @@ class MainActivity : AppCompatActivity() {
 
         // Check required "dangerous" permissions
         checkPermissions()
+
+        enableBluetooth()
+
     }
 
     /**
@@ -123,6 +130,31 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun enableBluetooth() {
+        // Get Bluetooth adapter
+        val bluetoothAdapter = getSystemService(BluetoothManager::class.java).adapter
+            ?: throw RuntimeException()
+
+        // Check if bluetooth is not enabled
+        if (!bluetoothAdapter.isEnabled) {
+            // Enable Bluetooth
+            val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    // There are no request codes
+                    val data: Intent? = result.data
+                    // do something
+                    Log.d(Constants.LOG_TAG, "Bluetooth funziona! $data")
+                    throw RuntimeException("Ciao!")
+                }
+                else {
+                    // TODO handle refusal
+                    throw RuntimeException()
+                }
+            }.launch(enableBtIntent)
+        }
+    }
 
     /**
      * Start activity MonitorTest TODO
