@@ -16,8 +16,6 @@ class BeaconScanner(navigationActivity: NavigationActivity) {
         proximityManager = ProximityManagerFactory.create(navigationActivity)
     }
 
-
-
     fun startScanning() {
         Log.i(Constants.LOG_TAG, "**START SCANNING**")
         proximityManager.setIBeaconListener(createIBeaconListener())
@@ -29,6 +27,15 @@ class BeaconScanner(navigationActivity: NavigationActivity) {
         return object : SimpleIBeaconListener() {
             override fun onIBeaconDiscovered(ibeacon: IBeaconDevice, region: IBeaconRegion) {
                 Log.i(Constants.LOG_TAG, "**BEACON DISCOVERED**: $ibeacon")
+            }
+            override fun onIBeaconsUpdated(ibeacons: MutableList<IBeaconDevice>, region: IBeaconRegion) {
+                // Sort beacons by signal strength
+                val sortedBeacons = ibeacons.sortedByDescending { it.rssi }
+                // Get the top 2 beacons
+                val top2Beacons = sortedBeacons.take(2)
+                // Print the top 2 beacon IDs
+                val top2BeaconIds = top2Beacons.map { it.uniqueId }
+                Log.i(Constants.LOG_TAG, "**2 NEAREST BEACONS**: $top2BeaconIds")
             }
         }
     }
