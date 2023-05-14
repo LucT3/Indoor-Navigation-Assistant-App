@@ -1,7 +1,6 @@
 package it.unipi.dii.indoornavigatorassistant
 
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import com.kontakt.sdk.android.ble.manager.ProximityManager
 import com.kontakt.sdk.android.ble.manager.ProximityManagerFactory
 import com.kontakt.sdk.android.ble.manager.listeners.IBeaconListener
@@ -10,32 +9,18 @@ import com.kontakt.sdk.android.common.profile.IBeaconDevice
 import com.kontakt.sdk.android.common.profile.IBeaconRegion
 import it.unipi.dii.indoornavigatorassistant.util.Constants
 
+class BeaconScanner(navigationActivity: NavigationActivity) {
+    private val proximityManager: ProximityManager
 
-class MonitorTest : AppCompatActivity() {
-    private lateinit var proximityManager: ProximityManager
-
-    override fun onStart() {
-        super.onStart()
-        Log.i(Constants.LOG_TAG, "**START MONITOR**")
-        proximityManager = ProximityManagerFactory.create(this)
-        proximityManager.setIBeaconListener(createIBeaconListener())
-        startScanning()
+    init {
+        proximityManager = ProximityManagerFactory.create(navigationActivity)
     }
 
-    override fun onStop() {
-        super.onStop()
-        Log.i(Constants.LOG_TAG, "**STOP MONITOR**")
-        proximityManager.stopScanning()
-    }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        proximityManager.disconnect()
-    }
 
-    private fun startScanning() {
+    fun startScanning() {
         Log.i(Constants.LOG_TAG, "**START SCANNING**")
-        proximityManager.connect { proximityManager.startScanning() }
+        proximityManager.setIBeaconListener(createIBeaconListener())
     }
 
     private fun createIBeaconListener(): IBeaconListener {
@@ -43,7 +28,19 @@ class MonitorTest : AppCompatActivity() {
         return object : SimpleIBeaconListener() {
             override fun onIBeaconDiscovered(ibeacon: IBeaconDevice, region: IBeaconRegion) {
                 Log.i(Constants.LOG_TAG, "**BEACON DISCOVERED**: $ibeacon")
+                println("**BEACON DISCOVERED**: $ibeacon")
             }
         }
     }
+
+    fun stopScanning() {
+        Log.i(Constants.LOG_TAG, "**STOP SCANNING**")
+        proximityManager.stopScanning()
+    }
+
+    fun disconnect() {
+        Log.i(Constants.LOG_TAG, "**DISCONNECT SCANNING SERVICE**")
+        proximityManager.disconnect()
+    }
+
 }

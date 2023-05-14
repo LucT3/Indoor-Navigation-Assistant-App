@@ -128,7 +128,7 @@ class MainActivity : AppCompatActivity() {
      */
     private fun startScanningActivity() {
         Log.i(Constants.LOG_TAG, "All permissions are granted => start scan")
-        val intent = Intent(this, MonitorTest::class.java)
+        val intent = Intent(this, NavigationActivity::class.java)
         startActivity(intent)
     }
     
