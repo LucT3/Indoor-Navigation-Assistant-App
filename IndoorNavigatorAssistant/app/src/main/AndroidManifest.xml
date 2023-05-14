@@ -49,7 +49,7 @@
         </activity>
         
         <activity
-            android:name=".MonitorTest"
+            android:name=".NavigationActivity"
             android:theme="@style/Theme.AppCompat.Light" />
         
         
