@@ -110,6 +110,7 @@ class MainActivity : AppCompatActivity() {
                     "Permissions granted",
                     Toast.LENGTH_SHORT
                 ).show()
+
                 startScanningActivity()
             }
             else {

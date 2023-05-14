@@ -21,6 +21,7 @@ class BeaconScanner(navigationActivity: NavigationActivity) {
     fun startScanning() {
         Log.i(Constants.LOG_TAG, "**START SCANNING**")
         proximityManager.setIBeaconListener(createIBeaconListener())
+        proximityManager.connect { proximityManager.startScanning() }
     }
 
     private fun createIBeaconListener(): IBeaconListener {
@@ -28,7 +29,6 @@ class BeaconScanner(navigationActivity: NavigationActivity) {
         return object : SimpleIBeaconListener() {
             override fun onIBeaconDiscovered(ibeacon: IBeaconDevice, region: IBeaconRegion) {
                 Log.i(Constants.LOG_TAG, "**BEACON DISCOVERED**: $ibeacon")
-                println("**BEACON DISCOVERED**: $ibeacon")
             }
         }
     }
