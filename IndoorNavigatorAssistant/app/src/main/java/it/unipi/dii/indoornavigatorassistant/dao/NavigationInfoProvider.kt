@@ -12,9 +12,15 @@ class NavigationInfoProvider(context: Context) {
 
     private var bleRegionMap: MutableMap<String, List<String>> = mutableMapOf()
 
+    /**
+     * Initializer block (primary constructor) of NavigationInfoProvider class.
+     * Reads a json (to do for all JSONs) and put the json data into the BLE Region Map
+     */
     init {
+        //ObjectMapper instance to read the json
         val mapper = jacksonObjectMapper()
 
+        //load json file TODO customize for all JSONs or for a specific json
         lateinit var jsonString: String
         try {
             jsonString = context.assets.open("ble-regions.json")
@@ -23,12 +29,13 @@ class NavigationInfoProvider(context: Context) {
         } catch (ex: IOException) {
             throw RuntimeException(ex)
         }
+        Log.d(Constants.LOG_TAG, "NavigationInfoProvider::init - json read: $jsonString")
 
-        Log.d(Constants.LOG_TAG, "json: $jsonString")
-
+        //read data from a JSON string
         val bleRegions: List<BLERegion> = mapper.readValue(jsonString)
-        Log.d(Constants.LOG_TAG, "ble regions: $bleRegions")
+        Log.d(Constants.LOG_TAG, "NavigationInfoProvider::init - ble regions: $bleRegions")
 
+        //append json data into the BLE region Map
         for (region in bleRegions) {
             bleRegionMap[region.id] = region.pointOfInterests
         }
