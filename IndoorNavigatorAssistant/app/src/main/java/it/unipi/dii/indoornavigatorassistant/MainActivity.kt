@@ -1,6 +1,7 @@
 package it.unipi.dii.indoornavigatorassistant
 
 import android.Manifest
+import android.bluetooth.BluetoothManager
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -21,17 +22,19 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.i(Constants.LOG_TAG,"Activity created")
-
+        
         // Initialize dependency
         initDependencies()
         Log.i(Constants.LOG_TAG,"Dependencies initialized")
-
+        
         // Set graphical user interface
         setContentView(R.layout.activity_main)
         Log.i(Constants.LOG_TAG,"UI initialized")
-
+        
         // Check required "dangerous" permissions
         checkPermissions()
+        
+        startScanningActivity()
     }
 
     /**
@@ -66,9 +69,6 @@ class MainActivity : AppCompatActivity() {
         // Check which permissions are not granted and request them
         if (isAnyOfPermissionsNotGranted(requiredPermissions)) {
             ActivityCompat.requestPermissions(this, requiredPermissions, 100)
-        }
-        else {
-            startScanningActivity()
         }
     }
 
@@ -122,8 +122,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
-
+    
     /**
      * Start activity MonitorTest TODO
      */
