@@ -5,43 +5,58 @@ import android.util.Log
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import it.unipi.dii.indoornavigatorassistant.R
-import it.unipi.dii.indoornavigatorassistant.model.BLERegion
+import it.unipi.dii.indoornavigatorassistant.model.BLECurveInfo
+import it.unipi.dii.indoornavigatorassistant.model.BLECurveJson
+import it.unipi.dii.indoornavigatorassistant.model.BLERegionJson
 import it.unipi.dii.indoornavigatorassistant.util.Constants
 import java.io.IOException
 
 class NavigationInfoProvider(context: Context) {
     
     private var bleRegionMap: MutableMap<String, List<String>> = mutableMapOf()
+    private var bleCurves: MutableSet<String> = mutableSetOf()
+    private var bleBeforeCurves: MutableMap<String, BLECurveInfo> = mutableMapOf()
+    
+    // ObjectMapper instance to read the json
+    private val jsonObjectMapper = jacksonObjectMapper()
 
     /**
      * Initializer block (primary constructor) of NavigationInfoProvider class.
      * Reads a json (to do for all JSONs) and put the json data into the BLE Region Map
      */
     init {
-        //ObjectMapper instance to read the json
-        val mapper = jacksonObjectMapper()
+        // Load BLE regions
+        val bleRegionJsonList = loadListFromJsonFile<BLERegionJson>(
+            context,
+            context.resources.getString(R.string.ble_regions_file)
+        )
+        bleRegionJsonList.forEach { r -> bleRegionMap[r.id] = r.pointOfInterests }
+        
+        // Load BLE curves
+        val bleCurveJsonList = loadListFromJsonFile<BLECurveJson>(
+            context,
+            "TODO"
+        )
+        bleCurveJsonList.forEach { x -> bleCurves.add(x.id) }
 
-        //load json file TODO customize for all JSONs or for a specific json
+    }
+    
+    private fun <T> loadListFromJsonFile(context: Context, filename: String): List<T> {
         lateinit var jsonString: String
         try {
             jsonString = context.assets
-                .open(context.resources.getString(R.string.ble_regions_file))
+                .open(filename)
                 .bufferedReader()
                 .use { it.readText() }
         } catch (ex: IOException) {
             throw RuntimeException(ex)
         }
-        Log.d(Constants.LOG_TAG, "NavigationInfoProvider::init - json read: $jsonString")
-
+        Log.d(Constants.LOG_TAG, "NavigationInfoProvider::loadFromJson - json read: $jsonString")
+    
         //read data from a JSON string
-        val bleRegions: List<BLERegion> = mapper.readValue(jsonString)
-        Log.d(Constants.LOG_TAG, "NavigationInfoProvider::init - ble regions: $bleRegions")
-
-        //append json data into the BLE region Map
-        for (region in bleRegions) {
-            bleRegionMap[region.id] = region.pointOfInterests
-        }
-
+        val tList: List<T> = jsonObjectMapper.readValue(jsonString)
+        Log.d(Constants.LOG_TAG, "NavigationInfoProvider::loadFromJson - ble regions: $tList")
+        return tList
     }
 
     /**
