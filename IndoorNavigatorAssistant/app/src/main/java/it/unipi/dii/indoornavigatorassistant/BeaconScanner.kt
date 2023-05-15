@@ -7,13 +7,16 @@ import com.kontakt.sdk.android.ble.manager.listeners.IBeaconListener
 import com.kontakt.sdk.android.ble.manager.listeners.simple.SimpleIBeaconListener
 import com.kontakt.sdk.android.common.profile.IBeaconDevice
 import com.kontakt.sdk.android.common.profile.IBeaconRegion
+import it.unipi.dii.indoornavigatorassistant.dao.NavigationInfoProvider
 import it.unipi.dii.indoornavigatorassistant.util.Constants
 
 class BeaconScanner(navigationActivity: NavigationActivity) {
     private val proximityManager: ProximityManager
+    private val navigationInfoProvider: NavigationInfoProvider
 
     init {
         proximityManager = ProximityManagerFactory.create(navigationActivity)
+        navigationInfoProvider = NavigationInfoProvider(navigationActivity)
     }
 
     fun startScanning() {
@@ -36,6 +39,9 @@ class BeaconScanner(navigationActivity: NavigationActivity) {
                 // Print the top 2 beacon IDs
                 val top2BeaconIds = top2Beacons.map { it.uniqueId }
                 Log.d(Constants.LOG_TAG, "BeaconScanner::onIBeaconsUpdated - 2 nearest beacons: $top2BeaconIds")
+                Log.d(Constants.LOG_TAG, "BeaconScanner::onIBeaconsUpdated - Points of interest: " +
+                        navigationInfoProvider.getBLERegionInfo(top2BeaconIds[0], top2BeaconIds[1]))
+
             }
         }
     }
