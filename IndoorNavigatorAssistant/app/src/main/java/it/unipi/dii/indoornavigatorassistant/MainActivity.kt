@@ -81,7 +81,8 @@ class MainActivity : AppCompatActivity() {
      * Start activity NavigationActivity
      */
     private fun startNavigationActivity() {
-        Log.d(Constants.LOG_TAG, "MainActivity::startNavigationActivity - All permissions are granted => start NavigationActivity")
+        Log.d(Constants.LOG_TAG, "MainActivity::startNavigationActivity - " +
+                "All permissions are granted => start NavigationActivity")
         val intent = Intent(this, NavigationActivity::class.java)
         startActivity(intent)
     }
