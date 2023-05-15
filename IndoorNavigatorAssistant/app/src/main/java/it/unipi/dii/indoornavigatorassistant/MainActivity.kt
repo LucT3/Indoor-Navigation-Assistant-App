@@ -1,5 +1,6 @@
 package it.unipi.dii.indoornavigatorassistant
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -55,11 +56,19 @@ class MainActivity : AppCompatActivity() {
             .rationale("We need location permissions to use BLE features")
             .checkPermission { granted: Boolean ->
                 if (granted) {
-                    println("Yes!")
+                    Log.d(Constants.LOG_TAG, "MainActivity::checkPermissions - Permissions granted!")
                     startScanningActivity()
                 } else {
-                    println("No!")
-                    checkPermissions()
+                    Log.d(Constants.LOG_TAG, "MainActivity::checkPermissions - Permissions refused!")
+                    // Show pop-up to user and close the application
+                    AlertDialog.Builder(this)
+                        .setTitle(this.getString(R.string.dialog_permission_not_granted_title))
+                        .setMessage(this.getString(R.string.dialog_permission_not_granted_message))
+                        .setCancelable(false)
+                        .setPositiveButton(this.getString(R.string.dialog_permissions_not_granted_button)) { _, _ ->
+                            finishAndRemoveTask()
+                        }
+                        .show()
                 }
             }
     }

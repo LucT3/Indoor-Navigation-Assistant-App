@@ -2,10 +2,12 @@ package it.unipi.dii.indoornavigatorassistant.permissions
 
 import android.app.AlertDialog
 import android.content.pm.PackageManager
+import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts.RequestMultiplePermissions
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import it.unipi.dii.indoornavigatorassistant.R
+import it.unipi.dii.indoornavigatorassistant.util.Constants
 import java.lang.ref.WeakReference
 
 class PermissionManager private constructor(private val activity: WeakReference<AppCompatActivity>) {
@@ -100,10 +102,10 @@ class PermissionManager private constructor(private val activity: WeakReference<
      */
     private fun displayRationale(activity: AppCompatActivity) {
         AlertDialog.Builder(activity)
-            .setTitle(activity.getString(R.string.dialog_permission_title))
-            .setMessage(rationale ?: activity.getString(R.string.dialog_permission_default_message))
+            .setTitle(activity.getString(R.string.dialog_request_permission_title))
+            .setMessage(rationale ?: activity.getString(R.string.dialog_request_permission_default_message))
             .setCancelable(false)
-            .setPositiveButton(activity.getString(R.string.dialog_permission_button_positive)) { _, _ ->
+            .setPositiveButton(activity.getString(R.string.dialog_request_permission_button_positive)) { _, _ ->
                 requestPermissions()
             }
             .show()
@@ -122,6 +124,7 @@ class PermissionManager private constructor(private val activity: WeakReference<
      * @param grantResults
      */
     private fun sendResultAndCleanUp(grantResults: Map<String, Boolean>) {
+        Log.d(Constants.LOG_TAG, "PermissionManager::sendResultAndCleanUp - grantResults=$grantResults")
         callback(grantResults.all { it.value })
         cleanUp()
     }
