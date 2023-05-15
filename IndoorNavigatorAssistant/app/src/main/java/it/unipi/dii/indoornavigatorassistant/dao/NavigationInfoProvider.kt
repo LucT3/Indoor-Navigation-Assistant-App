@@ -55,10 +55,8 @@ class NavigationInfoProvider(context: Context) {
      */
     fun computeBLERegionId(beacon1: String, beacon2: String): String {
         return if (beacon1 <= beacon2) {
-            Log.d(Constants.LOG_TAG, "NavigationInfoProvider::computeBLERegionId - Current region: $beacon1$beacon2")
             beacon1 + beacon2
         } else {
-            Log.d(Constants.LOG_TAG, "NavigationInfoProvider::computeBLERegionId - Current region: $beacon2$beacon1")
             beacon2 + beacon1
         }
 
