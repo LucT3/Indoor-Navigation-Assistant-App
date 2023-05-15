@@ -5,6 +5,8 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import it.unipi.dii.indoornavigatorassistant.util.Constants
 
@@ -17,7 +19,13 @@ class NavigationActivity : AppCompatActivity() {
         val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         bluetoothManager.adapter
     }
-    
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.i(Constants.LOG_TAG,"Navigation Activity created")
+        setContentView(R.layout.activity_navigation)
+    }
+
     override fun onStart() {
         super.onStart()
         beaconScanner = BeaconScanner(this)
