@@ -53,7 +53,7 @@ class NavigationInfoProvider(context: Context) {
      * @param beacon2 id of the second beacon
      * @return the id of the BLE region
      */
-    private fun computeBLERegionId(beacon1: String, beacon2: String): String {
+    fun computeBLERegionId(beacon1: String, beacon2: String): String {
         return if (beacon1 <= beacon2) {
             Log.d(Constants.LOG_TAG, "NavigationInfoProvider::computeBLERegionId - Current region: $beacon1$beacon2")
             beacon1 + beacon2
@@ -68,12 +68,11 @@ class NavigationInfoProvider(context: Context) {
      * Get the list of points of interest within a BLE region,
      * given the corresponding BLE beacons.
      *
-     * @param beacon1 id of the first beacon
-     * @param beacon2 id of the second beacon
+     * @param regionId id of the region
      * @return list of strings which describes the points of interest if the region is valid, null otherwise
      */
-    fun getBLERegionInfo(beacon1: String, beacon2: String): List<String>? {
-        return bleRegionMap[computeBLERegionId(beacon1, beacon2)]
+    fun getBLERegionInfo(regionId: String): List<String>? {
+        return bleRegionMap[regionId]
     }
     
 }

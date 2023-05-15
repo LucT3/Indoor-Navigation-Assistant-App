@@ -13,10 +13,12 @@ import it.unipi.dii.indoornavigatorassistant.util.Constants
 class BeaconScanner(navigationActivity: NavigationActivity) {
     private val proximityManager: ProximityManager
     private val navigationInfoProvider: NavigationInfoProvider
+    private val regionManager : BLERegionManager
 
     init {
         proximityManager = ProximityManagerFactory.create(navigationActivity)
         navigationInfoProvider = NavigationInfoProvider(navigationActivity)
+        regionManager = BLERegionManager()
     }
 
     fun startScanning() {
@@ -39,8 +41,12 @@ class BeaconScanner(navigationActivity: NavigationActivity) {
                 // Print the top 2 beacon IDs
                 val top2BeaconIds = top2Beacons.map { it.uniqueId }
                 Log.d(Constants.LOG_TAG, "BeaconScanner::onIBeaconsUpdated - 2 nearest beacons: $top2BeaconIds")
-                Log.d(Constants.LOG_TAG, "BeaconScanner::onIBeaconsUpdated - Points of interest: " +
-                        navigationInfoProvider.getBLERegionInfo(top2BeaconIds[0], top2BeaconIds[1]))
+                val regionId = navigationInfoProvider.computeBLERegionId(top2BeaconIds[0], top2BeaconIds[1])
+                if (regionManager.isNewRegion(regionId)) {
+                    navigationInfoProvider.getBLERegionInfo(regionId)
+                    Log.d(Constants.LOG_TAG, "BeaconScanner::onIBeaconsUpdated - Points of interest: " +
+                            navigationInfoProvider.getBLERegionInfo(regionId))
+                }
 
             }
         }
