@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">IndoorNavigatorAssistant</string>
+    <!--main activity strings-->
     <string name="welcome_message">Welcome to Visual Impaired Navigation App</string>
     <string name="main_button_text">Go to Navigation</string>
+    <!--navigation activity strings-->
+    <string name="navigation_activity_welcome_message">Welcome To The Navigation Page!</string>
 </resources>
