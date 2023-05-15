@@ -19,6 +19,7 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
+
     }
 
     buildTypes {
@@ -61,6 +62,7 @@ dependencies {
     implementation 'androidx.activity:activity:1.5.1'
     implementation 'androidx.fragment:fragment:1.5.7'
     implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     kapt 'com.google.dagger:dagger-compiler:2.46'
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.14.3"
     implementation 'androidx.appcompat:appcompat:1.4.1'

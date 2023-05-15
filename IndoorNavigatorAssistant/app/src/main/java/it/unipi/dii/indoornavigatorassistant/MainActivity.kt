@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -18,9 +19,9 @@ import it.unipi.dii.indoornavigatorassistant.util.Constants
 
 
 class MainActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         Log.i(Constants.LOG_TAG,"Activity created")
         
         // Initialize dependency
@@ -33,8 +34,18 @@ class MainActivity : AppCompatActivity() {
         
         // Check required "dangerous" permissions
         checkPermissions()
+
+        //navigation button click listener
+        // get reference to button
+        val navigationButton : Button  = findViewById(R.id.buttonNavigation)
+        // set on-click listener
+       navigationButton.setOnClickListener {
+            //launch navigation activity
+           val intent = Intent(this, NavigationActivity::class.java)
+           startActivity(intent)
+        }
         
-        startScanningActivity()
+        //startScanningActivity()
     }
 
     /**
