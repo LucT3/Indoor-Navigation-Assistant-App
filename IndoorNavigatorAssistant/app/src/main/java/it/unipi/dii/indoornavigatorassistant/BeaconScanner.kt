@@ -41,6 +41,7 @@ class BeaconScanner(navigationActivity: NavigationActivity) {
                 // Print the top 2 beacon IDs
                 val top2BeaconIds = top2Beacons.map { it.uniqueId }
                 Log.d(Constants.LOG_TAG, "BeaconScanner::onIBeaconsUpdated - 2 nearest beacons: $top2BeaconIds")
+                // Get regionId from the top 2 beacons for rssi
                 val regionId = navigationInfoProvider.computeBLERegionId(top2BeaconIds[0], top2BeaconIds[1])
                 Log.d(Constants.LOG_TAG, "BeaconScanner::onIBeaconsUpdated - Region scanned: $regionId")
                 if (regionManager.isNewRegion(regionId)) {

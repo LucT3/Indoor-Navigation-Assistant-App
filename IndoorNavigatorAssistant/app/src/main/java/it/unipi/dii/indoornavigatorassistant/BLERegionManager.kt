@@ -19,22 +19,30 @@ class BLERegionManager {
     fun isNewRegion(regionScanned: String): Boolean {
         if (currentRegion != regionScanned) {
             if (regionScanned != lastRegionScanned) {
+                // Reset the counter to 1 (new consecutive sequence)
                 counter = 1
             } else {
+                // Increment counter (region scanned is the same)
                 counter++
             }
 
             if (counter == threshold) {
+                // The region has changed consecutively for the specified number of times.
+                // Update the currentRegion, reset the counter, and update the lastRegionScanned.
                 currentRegion = regionScanned
                 counter = 0
                 lastRegionScanned = regionScanned
                 return true
             }
         } else {
+            // If the regionScanned is the same as the currentRegion,
+            // reset the counter as the consecutive sequence is broken.
             counter = 0
         }
 
+        // Update the lastRegionScanned
         lastRegionScanned = regionScanned
         return false
     }
+
 }
