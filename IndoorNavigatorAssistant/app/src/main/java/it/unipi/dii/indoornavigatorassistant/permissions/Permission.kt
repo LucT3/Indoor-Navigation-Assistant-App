@@ -5,7 +5,7 @@ import android.os.Build
 
 data class Permission(val permissions: Array<String>)
 
-val BluetoothPermission: Permission =
+val BluetoothPermissions: Permission =
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
         Permission(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION))
     } else {
