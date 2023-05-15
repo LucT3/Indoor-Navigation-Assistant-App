@@ -8,12 +8,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import it.unipi.dii.indoornavigatorassistant.databinding.ActivityMainBinding
+import it.unipi.dii.indoornavigatorassistant.databinding.ActivityNavigationBinding
 import it.unipi.dii.indoornavigatorassistant.util.Constants
 
 
 class NavigationActivity : AppCompatActivity() {
 
     private lateinit var beaconScanner : BeaconScanner
+    private lateinit var binding : ActivityNavigationBinding
 
     private val bluetoothAdapter: BluetoothAdapter by lazy {
         val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
@@ -22,8 +25,9 @@ class NavigationActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.i(Constants.LOG_TAG,"Navigation Activity created")
-        setContentView(R.layout.activity_navigation)
+        binding = ActivityNavigationBinding.inflate(layoutInflater)
+        Log.i(Constants.LOG_TAG,"NavigationActivity::onCreate - Navigation Activity created")
+        setContentView(binding.root)
     }
 
     override fun onStart() {

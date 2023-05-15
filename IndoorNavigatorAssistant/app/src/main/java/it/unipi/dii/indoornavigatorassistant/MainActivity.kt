@@ -9,15 +9,18 @@ import androidx.appcompat.app.AppCompatActivity
 import com.kontakt.sdk.android.common.KontaktSDK
 import com.kontakt.sdk.android.common.log.LogLevel
 import com.kontakt.sdk.android.common.log.Logger
+import it.unipi.dii.indoornavigatorassistant.databinding.ActivityMainBinding
 import it.unipi.dii.indoornavigatorassistant.permissions.BluetoothPermissions
 import it.unipi.dii.indoornavigatorassistant.permissions.PermissionManager
 import it.unipi.dii.indoornavigatorassistant.util.Constants
 
 
 class MainActivity : AppCompatActivity() {
-    
+
+    private lateinit var binding : ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         Log.d(Constants.LOG_TAG, "MainActivity::onCreate - Activity created")
         
         // Initialize dependency
@@ -25,17 +28,14 @@ class MainActivity : AppCompatActivity() {
         Log.d(Constants.LOG_TAG, "MainActivity::onCreate - Dependencies initialized")
         
         // Set graphical user interface
-        setContentView(R.layout.activity_main)
+        setContentView(binding.root)
         Log.d(Constants.LOG_TAG, "MainActivity::onCreate - UI initialized")
     
         // Check required "dangerous" permissions
         checkPermissions()
         
-        // Navigation button click listener
-        // get reference to button
-        val navigationButton: Button = findViewById(R.id.buttonNavigation)
-        // set on-click listener
-        navigationButton.setOnClickListener {
+        // Navigation button on-click listener
+        binding.buttonNavigation.setOnClickListener {
             startNavigationActivity()
         }
     }
