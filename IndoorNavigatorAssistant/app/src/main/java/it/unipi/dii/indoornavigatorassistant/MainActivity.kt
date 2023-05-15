@@ -27,14 +27,16 @@ class MainActivity : AppCompatActivity() {
         // Set graphical user interface
         setContentView(R.layout.activity_main)
         Log.d(Constants.LOG_TAG, "MainActivity::onCreate - UI initialized")
+    
+        // Check required "dangerous" permissions
+        checkPermissions()
         
         // Navigation button click listener
         // get reference to button
         val navigationButton: Button = findViewById(R.id.buttonNavigation)
         // set on-click listener
         navigationButton.setOnClickListener {
-            // Check required "dangerous" permissions
-            checkPermissions()
+            startNavigationActivity()
         }
     }
     
@@ -64,7 +66,6 @@ class MainActivity : AppCompatActivity() {
                         Constants.LOG_TAG,
                         "MainActivity::checkPermissions - Permissions granted!"
                     )
-                    startNavigationActivity()
                 } else {
                     Log.d(
                         Constants.LOG_TAG,
