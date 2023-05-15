@@ -13,34 +13,28 @@ class BLERegionManager {
     /**
      * Checks if the provided region is a new region based on the consecutive occurrence threshold.
      *
-     * @param regionScanned The region that was scanned.
+     * @param regionScanned The last region that was detected.
      * @return True if the region is new, false otherwise.
      */
-    fun isNewRegion (regionScanned : String) : Boolean {
-        if (currentRegion == null) {
-            if (regionScanned == lastRegionScanned || lastRegionScanned == null) {
-                counter++
+    fun isNewRegion(regionScanned: String): Boolean {
+        if (currentRegion != regionScanned) {
+            if (regionScanned != lastRegionScanned) {
+                counter = 1
             } else {
-                counter = 0
+                counter++
             }
-            lastRegionScanned = regionScanned
-            return if (counter == threshold) {
+
+            if (counter == threshold) {
                 currentRegion = regionScanned
                 counter = 0
-                true
-            } else {
-                false
+                lastRegionScanned = regionScanned
+                return true
             }
         } else {
-            if (regionScanned == lastRegionScanned) {
-                counter++
-                if (counter == threshold && regionScanned != currentRegion) {
-                    currentRegion = regionScanned
-                    counter = 0
-                    return true
-                }
-            }
+            counter = 0
         }
+
+        lastRegionScanned = regionScanned
         return false
     }
 }
