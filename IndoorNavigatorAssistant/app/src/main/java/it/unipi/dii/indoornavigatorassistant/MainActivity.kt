@@ -17,7 +17,12 @@ import it.unipi.dii.indoornavigatorassistant.util.Constants
 
 
 class MainActivity : AppCompatActivity() {
-
+    
+//    private val semaphore = Semaphore(0, 1)
+    
+    private lateinit var permissionManager: PermissionManager
+    private var num = 1
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.i(Constants.LOG_TAG,"Activity created")
@@ -30,8 +35,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         Log.i(Constants.LOG_TAG,"UI initialized")
 
+        permissionManager = PermissionManager.from(this)
         // Check required "dangerous" permissions
         checkPermissions()
+        
+//        semaphore.acquire()
+//        startScanningActivity()
     }
 
     /**
@@ -66,6 +75,22 @@ class MainActivity : AppCompatActivity() {
         // Check which permissions are not granted and request them
         if (isAnyOfPermissionsNotGranted(requiredPermissions)) {
             ActivityCompat.requestPermissions(this, requiredPermissions, 100)
+            permissionManager
+                .request(Permission.Location)
+                .rationale("We need permission to use the camera")
+                .checkPermission { granted: Boolean ->
+                    if (granted) {
+                        // Do something with the camera
+                        println("Yes!")
+                    } else {
+                        // You can't access the camera
+                        println("No!")
+                        num = 2
+                    }
+                }
+        }
+        else {
+//            semaphore.release()
         }
         else {
             startScanningActivity()
