@@ -13,6 +13,9 @@ import androidx.core.content.ContextCompat
 import com.kontakt.sdk.android.common.KontaktSDK
 import com.kontakt.sdk.android.common.log.LogLevel
 import com.kontakt.sdk.android.common.log.Logger
+import it.unipi.dii.indoornavigatorassistant.permissions.BluetoothPermission
+import it.unipi.dii.indoornavigatorassistant.permissions.Permission
+import it.unipi.dii.indoornavigatorassistant.prova.PermissionManager
 import it.unipi.dii.indoornavigatorassistant.util.Constants
 
 
@@ -38,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         permissionManager = PermissionManager.from(this)
         // Check required "dangerous" permissions
         checkPermissions()
-        
+        BluetoothPermission
 //        semaphore.acquire()
 //        startScanningActivity()
     }
@@ -91,9 +94,6 @@ class MainActivity : AppCompatActivity() {
         }
         else {
 //            semaphore.release()
-        }
-        else {
-            startScanningActivity()
         }
     }
 
