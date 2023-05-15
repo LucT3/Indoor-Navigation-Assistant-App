@@ -1,10 +1,12 @@
 <resources>
     <string name="app_name">IndoorNavigatorAssistant</string>
     
+    <!-- dialog pop-up when application requires permissions -->
     <string name="dialog_request_permission_title">Permission required</string>
     <string name="dialog_request_permission_default_message">Default message</string>
     <string name="dialog_request_permission_button_positive">OK</string>
     
+    <!-- dialog pop-up when users doesn't grant permissions -->
     <string name="dialog_permission_not_granted_title">Permissions not granted!</string>
     <string name="dialog_permission_not_granted_message">We need location permissions to use BLE features. The application will stop</string>
     <string name="dialog_permissions_not_granted_button">OK</string>

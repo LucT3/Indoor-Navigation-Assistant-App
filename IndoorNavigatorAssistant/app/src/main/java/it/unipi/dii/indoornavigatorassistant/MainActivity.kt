@@ -1,13 +1,10 @@
 package it.unipi.dii.indoornavigatorassistant
 
 import android.app.AlertDialog
-import android.Manifest
-import android.bluetooth.BluetoothManager
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.kontakt.sdk.android.common.KontaktSDK
 import com.kontakt.sdk.android.common.log.LogLevel
@@ -31,20 +28,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         Log.d(Constants.LOG_TAG, "MainActivity::onCreate - UI initialized")
         
-        // Check required "dangerous" permissions
-        checkPermissions()
-
-        //navigation button click listener
+        // Navigation button click listener
         // get reference to button
-        val navigationButton : Button  = findViewById(R.id.buttonNavigation)
+        val navigationButton: Button = findViewById(R.id.buttonNavigation)
         // set on-click listener
-       navigationButton.setOnClickListener {
-            //launch navigation activity
-           val intent = Intent(this, NavigationActivity::class.java)
-           startActivity(intent)
+        navigationButton.setOnClickListener {
+            // Check required "dangerous" permissions
+            checkPermissions()
         }
-        
-        //startScanningActivity()
     }
     
     /**
@@ -97,8 +88,10 @@ class MainActivity : AppCompatActivity() {
      * Start activity NavigationActivity
      */
     private fun startNavigationActivity() {
-        Log.d(Constants.LOG_TAG, "MainActivity::startNavigationActivity - " +
-                "All permissions are granted => start NavigationActivity")
+        Log.d(
+            Constants.LOG_TAG, "MainActivity::startNavigationActivity - " +
+                    "All permissions are granted => start NavigationActivity"
+        )
         val intent = Intent(this, NavigationActivity::class.java)
         startActivity(intent)
     }
