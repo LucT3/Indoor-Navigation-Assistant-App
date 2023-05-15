@@ -15,19 +15,17 @@ import it.unipi.dii.indoornavigatorassistant.util.Constants
 
 class MainActivity : AppCompatActivity() {
     
-    private lateinit var permissionManager: PermissionManager
-    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.i(Constants.LOG_TAG, "Activity created")
+        Log.d(Constants.LOG_TAG, "MainActivity::onCreate - Activity created")
         
         // Initialize dependency
         initDependencies()
-        Log.i(Constants.LOG_TAG, "Dependencies initialized")
+        Log.d(Constants.LOG_TAG, "MainActivity::onCreate - Dependencies initialized")
         
         // Set graphical user interface
         setContentView(R.layout.activity_main)
-        Log.i(Constants.LOG_TAG, "UI initialized")
+        Log.d(Constants.LOG_TAG, "MainActivity::onCreate - UI initialized")
         
         // Check required "dangerous" permissions
         checkPermissions()
@@ -49,17 +47,22 @@ class MainActivity : AppCompatActivity() {
      * Check if application owns necessary permissions for its features
      */
     private fun checkPermissions() {
-        permissionManager = PermissionManager.from(this)
         // Check which permissions are not granted and request them
-        permissionManager
+        PermissionManager.from(this)
             .request(BluetoothPermissions)
             .rationale("We need location permissions to use BLE features")
             .checkPermission { granted: Boolean ->
                 if (granted) {
-                    Log.d(Constants.LOG_TAG, "MainActivity::checkPermissions - Permissions granted!")
-                    startScanningActivity()
+                    Log.d(
+                        Constants.LOG_TAG,
+                        "MainActivity::checkPermissions - Permissions granted!"
+                    )
+                    startNavigationActivity()
                 } else {
-                    Log.d(Constants.LOG_TAG, "MainActivity::checkPermissions - Permissions refused!")
+                    Log.d(
+                        Constants.LOG_TAG,
+                        "MainActivity::checkPermissions - Permissions refused!"
+                    )
                     // Show pop-up to user and close the application
                     AlertDialog.Builder(this)
                         .setTitle(this.getString(R.string.dialog_permission_not_granted_title))
@@ -75,10 +78,10 @@ class MainActivity : AppCompatActivity() {
     
     
     /**
-     * Start activity MonitorTest TODO
+     * Start activity NavigationActivity
      */
-    private fun startScanningActivity() {
-        Log.i(Constants.LOG_TAG, "All permissions are granted => start scan")
+    private fun startNavigationActivity() {
+        Log.d(Constants.LOG_TAG, "MainActivity::startNavigationActivity - All permissions are granted => start NavigationActivity")
         val intent = Intent(this, NavigationActivity::class.java)
         startActivity(intent)
     }
