@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         // Set graphical user interface
         setContentView(R.layout.activity_main)
         Log.d(Constants.LOG_TAG, "MainActivity::onCreate - UI initialized")
-    
+        
         // Check required "dangerous" permissions
         checkPermissions()
         
