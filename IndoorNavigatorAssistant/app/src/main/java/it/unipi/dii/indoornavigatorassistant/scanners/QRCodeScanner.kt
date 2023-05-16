@@ -25,12 +25,11 @@ class QRCodeScanner(navigationActivity: NavigationActivity) : ImageAnalysis.Anal
         //configure BarcodeScanner options
         val options = BarcodeScannerOptions.Builder()
             .setBarcodeFormats(
-                Barcode.FORMAT_QR_CODE,
-                Barcode.FORMAT_AZTEC)
+                Barcode.FORMAT_QR_CODE,)
             .enableAllPotentialBarcodes()
             .build()
 
-        //get an instance of BarcodeScanner
+        //get an instance of MLkit BarcodeScanner with specified options
         qrScanner = BarcodeScanning.getClient(options) //to specify the format
         Log.d(Constants.LOG_TAG, "QrCodeScanner::init - created qrScanner instance")
 
