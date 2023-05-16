@@ -10,12 +10,13 @@ import com.kontakt.sdk.android.common.profile.IBeaconDevice
 import com.kontakt.sdk.android.common.profile.IBeaconRegion
 import it.unipi.dii.indoornavigatorassistant.dao.NavigationInfoProvider
 import it.unipi.dii.indoornavigatorassistant.util.Constants
+import java.lang.ref.WeakReference
 
-class BeaconScanner(private val navigationActivity: NavigationActivity) {
+class BeaconScanner(private val navigationActivity: WeakReference<NavigationActivity>) {
     private val proximityManager: ProximityManager =
-        ProximityManagerFactory.create(navigationActivity)
+        ProximityManagerFactory.create(navigationActivity.get()!!)
     private val navigationInfoProvider: NavigationInfoProvider =
-        NavigationInfoProvider(navigationActivity)
+        NavigationInfoProvider(navigationActivity.get()!!)
     private val regionManager : BLERegionManager = BLERegionManager()
 
     fun startScanning() {
@@ -48,7 +49,7 @@ class BeaconScanner(private val navigationActivity: NavigationActivity) {
                     val pointsOfInterest = navigationInfoProvider.getBLERegionInfo(regionId)
                     Log.d(Constants.LOG_TAG, "BeaconScanner::onIBeaconsUpdated " +
                             "- Points of interest: $pointsOfInterest")
-                    Toast.makeText(navigationActivity, pointsOfInterest.toString(), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(navigationActivity.get()!!, pointsOfInterest.toString(), Toast.LENGTH_SHORT).show()
                 }
 
             }
