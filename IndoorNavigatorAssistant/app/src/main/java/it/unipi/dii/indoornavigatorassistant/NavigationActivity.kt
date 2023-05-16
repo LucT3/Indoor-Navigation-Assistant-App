@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import it.unipi.dii.indoornavigatorassistant.databinding.ActivityMainBinding
 import it.unipi.dii.indoornavigatorassistant.databinding.ActivityNavigationBinding
 import it.unipi.dii.indoornavigatorassistant.util.Constants
+import java.lang.ref.WeakReference
 
 
 class NavigationActivity : AppCompatActivity() {
@@ -32,7 +33,7 @@ class NavigationActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        beaconScanner = BeaconScanner(this)
+        beaconScanner = BeaconScanner(WeakReference(this))
         beaconScanner.startScanning()
     }
     
