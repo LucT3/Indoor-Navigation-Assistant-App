@@ -67,7 +67,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.14.3'
     implementation 'com.google.mlkit:barcode-scanning:17.1.0'
-    
+    implementation 'androidx.camera:camera-mlkit-vision:1.2.0-beta02'
+
     def camerax_version = "1.2.2"
     implementation "androidx.camera:camera-core:${camerax_version}"
     implementation "androidx.camera:camera-camera2:${camerax_version}"
@@ -83,5 +84,4 @@ dependencies {
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
     debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'
-    implementation 'com.google.mlkit:barcode-scanning:17.1.0'
 }

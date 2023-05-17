@@ -3,54 +3,72 @@ package it.unipi.dii.indoornavigatorassistant
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.Preview
-import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.mlkit.vision.MlKitAnalyzer
+import androidx.camera.view.CameraController.COORDINATE_SYSTEM_VIEW_REFERENCED
+import androidx.camera.view.LifecycleCameraController
+import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
+import com.google.mlkit.vision.barcode.BarcodeScanner
+import com.google.mlkit.vision.barcode.BarcodeScannerOptions
+import com.google.mlkit.vision.barcode.BarcodeScanning
+import com.google.mlkit.vision.barcode.common.Barcode
 import it.unipi.dii.indoornavigatorassistant.databinding.ActivityCameraBinding
 import it.unipi.dii.indoornavigatorassistant.util.Constants
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
-class CameraActivity: AppCompatActivity() {
-    
-    private lateinit var binding : ActivityCameraBinding
+class CameraActivity : AppCompatActivity() {
+    private lateinit var viewBinding: ActivityCameraBinding
+    private lateinit var cameraExecutor: ExecutorService
+    private lateinit var barcodeScanner: BarcodeScanner
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityCameraBinding.inflate(layoutInflater)
-        Log.d(Constants.LOG_TAG, "CameraActivity::onCreate - Activity created")
-        bindCameraUseCases()
+        viewBinding = ActivityCameraBinding.inflate(layoutInflater)
+        setContentView(viewBinding.root)
+        
+        // Request camera permissions
+        startCamera()
+        
+        cameraExecutor = Executors.newSingleThreadExecutor()
     }
     
-    private fun bindCameraUseCases() {
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
+    private fun startCamera() {
+        val cameraController = LifecycleCameraController(baseContext)
+        val previewView: PreviewView = viewBinding.viewFinder
         
-        cameraProviderFuture.addListener({
-            val cameraProvider = cameraProviderFuture.get()
-            
-            // setting up the preview use case
-            val previewUseCase = Preview.Builder()
-                .build()
-                .also {
-                    it.setSurfaceProvider(binding.cameraView.surfaceProvider)
+        val options = BarcodeScannerOptions.Builder()
+            .setBarcodeFormats(Barcode.FORMAT_QR_CODE)
+            .build()
+        barcodeScanner = BarcodeScanning.getClient(options)
+        
+        cameraController.setImageAnalysisAnalyzer(
+            ContextCompat.getMainExecutor(this),
+            MlKitAnalyzer(
+                listOf(barcodeScanner),
+                COORDINATE_SYSTEM_VIEW_REFERENCED,
+                ContextCompat.getMainExecutor(this)
+            ) { result: MlKitAnalyzer.Result? ->
+                val barcodeResults = result?.getValue(barcodeScanner)
+                if (barcodeResults == null
+                    || barcodeResults.size == 0
+                    || barcodeResults.first() == null
+                ) {
+                    return@MlKitAnalyzer
                 }
-            
-            // configure to use the back camera
-            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-            
-            try {
-                cameraProvider.bindToLifecycle(
-                    this,
-                    cameraSelector,
-                    previewUseCase
-                    //TODO: Add Image analysis use case
-                )
-            } catch (illegalStateException: IllegalStateException) {
-                // If the use case has already been bound to another lifecycle or method is not called on main thread.
-                Log.e(Constants.LOG_TAG, illegalStateException.message.orEmpty())
-            } catch (illegalArgumentException: IllegalArgumentException) {
-                // If the provided camera selector is unable to resolve a camera to be used for the given use cases.
-                Log.e(Constants.LOG_TAG, illegalArgumentException.message.orEmpty())
+                Log.d(Constants.LOG_TAG, "Ciao $barcodeResults")
+                // TODO
             }
-        }, ContextCompat.getMainExecutor(this))
+        )
+        
+        cameraController.bindToLifecycle(this)
+        previewView.controller = cameraController
     }
+    
+    override fun onDestroy() {
+        super.onDestroy()
+        cameraExecutor.shutdown()
+        barcodeScanner.close()
+    }
+    
 }
