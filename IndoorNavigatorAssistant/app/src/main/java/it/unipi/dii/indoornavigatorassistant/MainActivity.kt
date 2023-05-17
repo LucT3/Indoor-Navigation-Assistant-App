@@ -4,13 +4,13 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.kontakt.sdk.android.common.KontaktSDK
 import com.kontakt.sdk.android.common.log.LogLevel
 import com.kontakt.sdk.android.common.log.Logger
 import it.unipi.dii.indoornavigatorassistant.databinding.ActivityMainBinding
 import it.unipi.dii.indoornavigatorassistant.permissions.BluetoothPermissions
+import it.unipi.dii.indoornavigatorassistant.permissions.CameraPermissions
 import it.unipi.dii.indoornavigatorassistant.permissions.PermissionManager
 import it.unipi.dii.indoornavigatorassistant.util.Constants
 
@@ -18,6 +18,7 @@ import it.unipi.dii.indoornavigatorassistant.util.Constants
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityMainBinding
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -58,7 +59,7 @@ class MainActivity : AppCompatActivity() {
     private fun checkPermissions() {
         // Check which permissions are not granted and request them
         PermissionManager.from(this)
-            .request(BluetoothPermissions)
+            .request(BluetoothPermissions, CameraPermissions)
             .rationale("We need location permissions to use BLE features")
             .checkPermission { granted: Boolean ->
                 if (granted) {
