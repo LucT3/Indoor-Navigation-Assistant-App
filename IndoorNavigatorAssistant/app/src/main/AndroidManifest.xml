@@ -58,10 +58,6 @@
         <activity
             android:name=".NavigationActivity"
             android:theme="@style/Theme.AppCompat.Light" />
-    
-        <activity
-            android:name=".CameraActivity"
-            android:theme="@style/Theme.AppCompat.Light" />
         
         
         <meta-data android:name="kontakt.io.API_KEY" android:value="@string/kontakt_io_api_key" />

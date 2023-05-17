@@ -1,4 +1,4 @@
-package it.unipi.dii.indoornavigatorassistant
+package it.unipi.dii.indoornavigatorassistant.scanners
 
 import android.util.Log
 import com.kontakt.sdk.android.ble.manager.ProximityManager
@@ -7,6 +7,7 @@ import com.kontakt.sdk.android.ble.manager.listeners.IBeaconListener
 import com.kontakt.sdk.android.ble.manager.listeners.simple.SimpleIBeaconListener
 import com.kontakt.sdk.android.common.profile.IBeaconDevice
 import com.kontakt.sdk.android.common.profile.IBeaconRegion
+import it.unipi.dii.indoornavigatorassistant.NavigationActivity
 import it.unipi.dii.indoornavigatorassistant.util.Constants
 
 class BeaconScanner(navigationActivity: NavigationActivity) {
