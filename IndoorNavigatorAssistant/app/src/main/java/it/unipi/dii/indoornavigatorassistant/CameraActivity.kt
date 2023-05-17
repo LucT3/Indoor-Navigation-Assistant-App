@@ -14,23 +14,16 @@ import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import it.unipi.dii.indoornavigatorassistant.databinding.ActivityCameraBinding
 import it.unipi.dii.indoornavigatorassistant.util.Constants
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 
 class CameraActivity : AppCompatActivity() {
     private lateinit var viewBinding: ActivityCameraBinding
-    private lateinit var cameraExecutor: ExecutorService
     private lateinit var barcodeScanner: BarcodeScanner
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityCameraBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
-        
-        // Request camera permissions
         startCamera()
-        
-        cameraExecutor = Executors.newSingleThreadExecutor()
     }
     
     private fun startCamera() {
@@ -67,7 +60,6 @@ class CameraActivity : AppCompatActivity() {
     
     override fun onDestroy() {
         super.onDestroy()
-        cameraExecutor.shutdown()
         barcodeScanner.close()
     }
     
