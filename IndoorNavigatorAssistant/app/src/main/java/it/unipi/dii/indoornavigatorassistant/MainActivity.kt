@@ -94,7 +94,7 @@ class MainActivity : AppCompatActivity() {
             Constants.LOG_TAG, "MainActivity::startNavigationActivity - " +
                     "All permissions are granted => start NavigationActivity"
         )
-        val intent = Intent(this, NavigationActivity::class.java)
+        val intent = Intent(this, CameraActivity::class.java)
         startActivity(intent)
     }
     
