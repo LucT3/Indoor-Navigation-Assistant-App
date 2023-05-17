@@ -1,4 +1,4 @@
-package it.unipi.dii.indoornavigatorassistant
+package it.unipi.dii.indoornavigatorassistant.scanners
 
 import android.util.Log
 import android.widget.Toast
@@ -9,6 +9,7 @@ import com.kontakt.sdk.android.ble.manager.listeners.simple.SimpleIBeaconListene
 import com.kontakt.sdk.android.common.profile.IBeaconDevice
 import com.kontakt.sdk.android.common.profile.IBeaconRegion
 import it.unipi.dii.indoornavigatorassistant.dao.NavigationInfoProvider
+import it.unipi.dii.indoornavigatorassistant.NavigationActivity
 import it.unipi.dii.indoornavigatorassistant.util.Constants
 import java.lang.ref.WeakReference
 
