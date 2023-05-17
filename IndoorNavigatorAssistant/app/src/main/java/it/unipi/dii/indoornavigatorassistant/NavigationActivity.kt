@@ -8,8 +8,18 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import it.unipi.dii.indoornavigatorassistant.databinding.ActivityMainBinding
+import androidx.camera.mlkit.vision.MlKitAnalyzer
+import androidx.camera.view.CameraController
+import androidx.camera.view.LifecycleCameraController
+import androidx.camera.view.PreviewView
+import androidx.core.content.ContextCompat
+import com.google.mlkit.vision.barcode.BarcodeScanner
+import com.google.mlkit.vision.barcode.BarcodeScannerOptions
+import com.google.mlkit.vision.barcode.BarcodeScanning
+import com.google.mlkit.vision.barcode.common.Barcode
 import it.unipi.dii.indoornavigatorassistant.databinding.ActivityNavigationBinding
+import it.unipi.dii.indoornavigatorassistant.scanners.BeaconScanner
+import it.unipi.dii.indoornavigatorassistant.scanners.QRCodeScanner
 import it.unipi.dii.indoornavigatorassistant.util.Constants
 import java.lang.ref.WeakReference
 
@@ -17,6 +27,7 @@ import java.lang.ref.WeakReference
 class NavigationActivity : AppCompatActivity() {
 
     private lateinit var beaconScanner : BeaconScanner
+    private lateinit var qrCodeScanner: QRCodeScanner
     private lateinit var binding : ActivityNavigationBinding
 
     private val bluetoothAdapter: BluetoothAdapter by lazy {
@@ -34,7 +45,10 @@ class NavigationActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         beaconScanner = BeaconScanner(WeakReference(this))
+        qrCodeScanner = QRCodeScanner(WeakReference(this))
+
         beaconScanner.startScanning()
+        qrCodeScanner.startCamera(binding)
     }
     
     override fun onResume() {
@@ -52,9 +66,11 @@ class NavigationActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         beaconScanner.disconnect()
+        qrCodeScanner.disconnect()
     }
     
-    
+
+    //BLUETOOTH METHODS
     private fun promptEnableBluetooth() {
         // Check if bluetooth is not enabled
         if (!bluetoothAdapter.isEnabled) {
@@ -80,5 +96,6 @@ class NavigationActivity : AppCompatActivity() {
             }
         }
     }
+
 
 }
