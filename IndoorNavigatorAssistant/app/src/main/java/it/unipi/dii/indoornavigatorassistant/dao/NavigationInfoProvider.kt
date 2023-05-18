@@ -1,49 +1,75 @@
 package it.unipi.dii.indoornavigatorassistant.dao
 
 import android.content.Context
+import android.content.res.AssetManager
 import android.util.Log
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import it.unipi.dii.indoornavigatorassistant.R
-import it.unipi.dii.indoornavigatorassistant.model.BLERegion
+import it.unipi.dii.indoornavigatorassistant.model.BLEAreaBeforeCurveJson
+import it.unipi.dii.indoornavigatorassistant.model.BLECurveInfo
+import it.unipi.dii.indoornavigatorassistant.model.BLECurveJson
+import it.unipi.dii.indoornavigatorassistant.model.BLERegionJson
 import it.unipi.dii.indoornavigatorassistant.util.Constants
 import java.io.IOException
 
 class NavigationInfoProvider(context: Context) {
     
-    private var bleRegionMap: MutableMap<String, List<String>> = mutableMapOf()
-
+    private var bleRegions: MutableMap<String, List<String>> = mutableMapOf()
+    private var bleCurves: MutableSet<String> = mutableSetOf()
+    private var bleAreasBeforeCurves: MutableMap<String, BLECurveInfo> = mutableMapOf()
+    
+    // ObjectMapper instance to read the json
+    private val jsonObjectMapper = jacksonObjectMapper()
+    
     /**
      * Initializer block (primary constructor) of NavigationInfoProvider class.
      * Reads a json (to do for all JSONs) and put the json data into the BLE Region Map
      */
     init {
-        //ObjectMapper instance to read the json
-        val mapper = jacksonObjectMapper()
-
-        //load json file TODO customize for all JSONs or for a specific json
+        // Load data of BLE regions
+        val bleRegionJsonList = loadListFromJsonFile<BLERegionJson>(
+            context.assets,
+            context.resources.getString(R.string.ble_regions_file)
+        )
+        bleRegionJsonList.forEach { x -> bleRegions[x.id] = x.pointOfInterests }
+        
+        // Load data of BLE curves
+        val bleCurveJsonList = loadListFromJsonFile<BLECurveJson>(
+            context.assets,
+            context.resources.getString(R.string.ble_curves_file)
+        )
+        bleCurveJsonList.forEach { x -> bleCurves.add(x.id) }
+        
+        // Load data of areas before curves
+        val bleAreaBeforeCurveJsonList = loadListFromJsonFile<BLEAreaBeforeCurveJson>(
+            context.assets,
+            context.resources.getString(R.string.ble_pre_curves_file)
+        )
+        bleAreaBeforeCurveJsonList.forEach { x ->
+            bleAreasBeforeCurves[x.id] = BLECurveInfo(x.curve, x.direction)
+        }
+    }
+    
+    private fun <T> loadListFromJsonFile(assets: AssetManager, filename: String): List<T> {
         lateinit var jsonString: String
         try {
-            jsonString = context.assets
-                .open(context.resources.getString(R.string.ble_regions_file))
+            jsonString = assets
+                .open(filename)
                 .bufferedReader()
                 .use { it.readText() }
         } catch (ex: IOException) {
             throw RuntimeException(ex)
         }
-        Log.d(Constants.LOG_TAG, "NavigationInfoProvider::init - json read: $jsonString")
-
+        Log.d(Constants.LOG_TAG, "NavigationInfoProvider::loadFromJson - json read: $jsonString")
+        
         //read data from a JSON string
-        val bleRegions: List<BLERegion> = mapper.readValue(jsonString)
-        Log.d(Constants.LOG_TAG, "NavigationInfoProvider::init - ble regions: $bleRegions")
-
-        //append json data into the BLE region Map
-        for (region in bleRegions) {
-            bleRegionMap[region.id] = region.pointOfInterests
-        }
-
+        val tList: List<T> = jsonObjectMapper.readValue(jsonString)
+        Log.d(Constants.LOG_TAG, "NavigationInfoProvider::loadFromJson - ble regions: $tList")
+        return tList
     }
-
+    
+    
     /**
      * Compute the `id` of a **BLE region** from the `id` of the two corresponding beacons.
      *
@@ -61,7 +87,7 @@ class NavigationInfoProvider(context: Context) {
         }
 
     }
-
+    
     /**
      * Get the list of points of interest within a BLE region,
      * given the corresponding BLE beacons.
@@ -73,14 +99,6 @@ class NavigationInfoProvider(context: Context) {
         return bleRegionMap[regionId]
     }
     
+    // TODO get info about curves and area before curves
+    
 }
-
-/*
-    val provider = NavigationInfoProvider(this)
-    val poi1 = provider.getBLERegionInfo("SJG9", "U9LQ")
-    val poi2 = provider.getBLERegionInfo("U9LQ", "SJG9")
-    assert(poi1 == poi2)
-    poi1?.forEach {
-        Log.d(Constants.LOG_TAG, it)
-    }
- */
