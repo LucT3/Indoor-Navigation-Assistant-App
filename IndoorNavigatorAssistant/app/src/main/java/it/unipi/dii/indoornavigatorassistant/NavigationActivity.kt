@@ -36,10 +36,10 @@ class NavigationActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         beaconScanner = BeaconScanner(WeakReference(this))
-        qrCodeScanner = QRCodeScanner(WeakReference(this))
+        qrCodeScanner = QRCodeScanner(WeakReference(this), binding)
 
         beaconScanner.startScanning()
-        qrCodeScanner.startCamera(binding)
+        qrCodeScanner.start()
     }
     
     override fun onResume() {
@@ -57,7 +57,7 @@ class NavigationActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         beaconScanner.disconnect()
-        qrCodeScanner.disconnect()
+        qrCodeScanner.stop()
     }
     
 
