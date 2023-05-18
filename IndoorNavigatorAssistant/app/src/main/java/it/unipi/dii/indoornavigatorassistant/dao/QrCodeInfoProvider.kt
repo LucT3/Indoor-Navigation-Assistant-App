@@ -6,9 +6,20 @@ import it.unipi.dii.indoornavigatorassistant.R
 import it.unipi.dii.indoornavigatorassistant.model.QrCodeJson
 import it.unipi.dii.indoornavigatorassistant.util.JsonParser
 
-class QrCodeInfoProvider(context: Context) {
+class QrCodeInfoProvider private constructor(context: Context) {
 
     private var qrInfoMap: MutableMap<String, String> = mutableMapOf()
+    
+    companion object {
+        private var instance: QrCodeInfoProvider? = null
+        
+        fun getInstance(context: Context): QrCodeInfoProvider {
+            if (instance == null) {
+                instance = QrCodeInfoProvider(context)
+            }
+            return instance as QrCodeInfoProvider
+        }
+    }
 
     init {
         // Load data of QR Code Info
