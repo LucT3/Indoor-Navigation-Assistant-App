@@ -9,7 +9,7 @@ import it.unipi.dii.indoornavigatorassistant.model.BLECurveJson
 import it.unipi.dii.indoornavigatorassistant.model.BLERegionJson
 import it.unipi.dii.indoornavigatorassistant.util.JsonParser
 
-class NavigationInfoProvider(context: Context) {
+class BeaconInfoProvider(context: Context) {
     
     private var bleRegions: MutableMap<String, List<String>> = mutableMapOf()
     private var bleCurves: MutableSet<String> = mutableSetOf()
