@@ -9,11 +9,22 @@ import it.unipi.dii.indoornavigatorassistant.model.BLECurveJson
 import it.unipi.dii.indoornavigatorassistant.model.BLERegionJson
 import it.unipi.dii.indoornavigatorassistant.util.JsonParser
 
-class BeaconInfoProvider(context: Context) {
+class BeaconInfoProvider private constructor(context: Context) {
     
     private var bleRegions: MutableMap<String, List<String>> = mutableMapOf()
     private var bleCurves: MutableSet<String> = mutableSetOf()
     private var bleAreasBeforeCurves: MutableMap<String, BLECurveInfo> = mutableMapOf()
+    
+    companion object {
+        private var instance: BeaconInfoProvider? = null
+        
+        fun getInstance(context: Context): BeaconInfoProvider {
+            if (instance == null) {
+                instance = BeaconInfoProvider(context)
+            }
+            return instance as BeaconInfoProvider
+        }
+    }
     
     /**
      * Initializer block (primary constructor) of NavigationInfoProvider class.

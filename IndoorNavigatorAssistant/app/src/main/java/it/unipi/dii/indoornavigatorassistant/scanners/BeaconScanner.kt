@@ -2,24 +2,22 @@ package it.unipi.dii.indoornavigatorassistant.scanners
 
 import android.util.Log
 import android.widget.Toast
-import com.kontakt.sdk.android.ble.manager.ProximityManager
 import com.kontakt.sdk.android.ble.manager.ProximityManagerFactory
 import com.kontakt.sdk.android.ble.manager.listeners.IBeaconListener
 import com.kontakt.sdk.android.ble.manager.listeners.simple.SimpleIBeaconListener
 import com.kontakt.sdk.android.common.profile.IBeaconDevice
 import com.kontakt.sdk.android.common.profile.IBeaconRegion
 import it.unipi.dii.indoornavigatorassistant.BLERegionManager
-import it.unipi.dii.indoornavigatorassistant.dao.BeaconInfoProvider
 import it.unipi.dii.indoornavigatorassistant.NavigationActivity
+import it.unipi.dii.indoornavigatorassistant.dao.BeaconInfoProvider
 import it.unipi.dii.indoornavigatorassistant.util.Constants
 import java.lang.ref.WeakReference
 
 class BeaconScanner(private val navigationActivity: WeakReference<NavigationActivity>) {
-    private val proximityManager: ProximityManager =
-        ProximityManagerFactory.create(navigationActivity.get()!!)
-    private val beaconInfoProvider: BeaconInfoProvider =
-        BeaconInfoProvider(navigationActivity.get()!!)
-    private val regionManager : BLERegionManager = BLERegionManager()
+    
+    private val proximityManager = ProximityManagerFactory.create(navigationActivity.get()!!)
+    private val beaconInfoProvider = BeaconInfoProvider.getInstance(navigationActivity.get()!!)
+    private val regionManager = BLERegionManager()
 
     fun startScanning() {
         Log.d(Constants.LOG_TAG, "BeaconScanner::startScanning - scanning started")

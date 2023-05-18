@@ -20,7 +20,7 @@ class QRCodeScanner (private val navigationActivity : WeakReference<NavigationAc
                      private val binding: ActivityNavigationBinding) {
     
     private val barcodeScanner : BarcodeScanner
-    private val qrCodeInfoProvider: QrCodeInfoProvider = QrCodeInfoProvider(navigationActivity.get()!!)
+    private val qrCodeInfoProvider = QrCodeInfoProvider.getInstance(navigationActivity.get()!!)
     private val cameraExecutor = Executors.newSingleThreadExecutor()
     
     init {
