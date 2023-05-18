@@ -48,8 +48,6 @@ class QRCodeScanner(private val navigationActivity : WeakReference<NavigationAct
                 Log.d(Constants.LOG_TAG, "QrCodeScanner::startCamera -  QR Code Id: ${qrCodeId}")
                 Log.d(Constants.LOG_TAG, "QrCodeScanner::startCamera " +
                         "- Points of interest: $pointsOfInterest")
-
-                Thread.sleep(1000)
             }
         )
 
