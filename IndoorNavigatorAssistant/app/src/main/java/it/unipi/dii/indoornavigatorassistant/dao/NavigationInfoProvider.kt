@@ -6,9 +6,7 @@ import android.util.Log
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import it.unipi.dii.indoornavigatorassistant.R
-import it.unipi.dii.indoornavigatorassistant.model.BLEAreaBeforeCurveJson
 import it.unipi.dii.indoornavigatorassistant.model.BLECurveInfo
-import it.unipi.dii.indoornavigatorassistant.model.BLECurveJson
 import it.unipi.dii.indoornavigatorassistant.model.BLERegionJson
 import it.unipi.dii.indoornavigatorassistant.util.Constants
 import java.io.IOException
@@ -28,30 +26,34 @@ class NavigationInfoProvider(context: Context) {
      */
     init {
         // Load data of BLE regions
-        val bleRegionJsonList = loadListFromJsonFile<BLERegionJson>(
+        val bleRegionJsonList = loadListFromJsonFile(
             context.assets,
             context.resources.getString(R.string.ble_regions_file)
         )
-        bleRegionJsonList.forEach { x -> bleRegions[x.id] = x.pointOfInterests }
+        for (x in bleRegionJsonList) {
+            bleRegions[x.id] = x.pointOfInterests
+        }
+//        bleRegionJsonList.forEach { x -> bleRegions[x.id] = x.pointOfInterests }
         
         // Load data of BLE curves
-        val bleCurveJsonList = loadListFromJsonFile<BLECurveJson>(
-            context.assets,
-            context.resources.getString(R.string.ble_curves_file)
-        )
-        bleCurveJsonList.forEach { x -> bleCurves.add(x.id) }
-        
-        // Load data of areas before curves
-        val bleAreaBeforeCurveJsonList = loadListFromJsonFile<BLEAreaBeforeCurveJson>(
-            context.assets,
-            context.resources.getString(R.string.ble_pre_curves_file)
-        )
-        bleAreaBeforeCurveJsonList.forEach { x ->
-            bleAreasBeforeCurves[x.id] = BLECurveInfo(x.curve, x.direction)
-        }
+//        val bleCurveJsonList = loadListFromJsonFile<BLECurveJson>(
+//            context.assets,
+//            context.resources.getString(R.string.ble_curves_file)
+//        )
+//        bleCurveJsonList.forEach { x -> bleCurves.add(x.id) }
+//
+//        // Load data of areas before curves
+//        val bleAreaBeforeCurveJsonList = loadListFromJsonFile<BLEAreaBeforeCurveJson>(
+//            context.assets,
+//            context.resources.getString(R.string.ble_pre_curves_file)
+//        )
+//        bleAreaBeforeCurveJsonList.forEach { x ->
+//            bleAreasBeforeCurves[x.id] = BLECurveInfo(x.curve, x.direction)
+//        }
     }
     
-    private fun <T> loadListFromJsonFile(assets: AssetManager, filename: String): List<T> {
+    @Deprecated("TODO")
+    private fun loadListFromJsonFile(assets: AssetManager, filename: String): List<BLERegionJson> {
         lateinit var jsonString: String
         try {
             jsonString = assets
@@ -64,7 +66,7 @@ class NavigationInfoProvider(context: Context) {
         Log.d(Constants.LOG_TAG, "NavigationInfoProvider::loadFromJson - json read: $jsonString")
         
         //read data from a JSON string
-        val tList: List<T> = jsonObjectMapper.readValue(jsonString)
+        val tList: List<BLERegionJson> = jsonObjectMapper.readValue(jsonString)
         Log.d(Constants.LOG_TAG, "NavigationInfoProvider::loadFromJson - ble regions: $tList")
         return tList
     }

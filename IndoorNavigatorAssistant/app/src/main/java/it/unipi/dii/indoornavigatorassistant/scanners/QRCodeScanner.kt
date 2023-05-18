@@ -13,11 +13,11 @@ import com.google.mlkit.vision.barcode.common.Barcode
 import it.unipi.dii.indoornavigatorassistant.NavigationActivity
 import it.unipi.dii.indoornavigatorassistant.databinding.ActivityNavigationBinding
 import it.unipi.dii.indoornavigatorassistant.util.Constants
-import java.io.IOException
 import java.lang.ref.WeakReference
 
 class QRCodeScanner(private val navigationActivity : WeakReference<NavigationActivity>){
     private lateinit var barcodeScanner : BarcodeScanner
+    
     fun startCamera(binding: ActivityNavigationBinding) {
         val cameraController = LifecycleCameraController(navigationActivity.get()!!)
         val previewView: PreviewView = binding.viewFinder
@@ -43,6 +43,7 @@ class QRCodeScanner(private val navigationActivity : WeakReference<NavigationAct
                 }
                 Log.d(Constants.LOG_TAG, "QrCodeScanner::startCamera -  ${barcodeResults[0].rawValue.toString()}")
                 // TODO return id of QR code
+                Thread.sleep(1000)
             }
         )
 
