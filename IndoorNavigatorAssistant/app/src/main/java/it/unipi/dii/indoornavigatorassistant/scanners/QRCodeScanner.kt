@@ -11,7 +11,6 @@ import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import it.unipi.dii.indoornavigatorassistant.NavigationActivity
-import it.unipi.dii.indoornavigatorassistant.dao.NavigationInfoProvider
 import it.unipi.dii.indoornavigatorassistant.dao.QrCodeInfoProvider
 import it.unipi.dii.indoornavigatorassistant.databinding.ActivityNavigationBinding
 import it.unipi.dii.indoornavigatorassistant.util.Constants
@@ -46,7 +45,7 @@ class QRCodeScanner(private val navigationActivity : WeakReference<NavigationAct
                 }
                 val qrCodeId : String = barcodeResults[0].rawValue.toString()
                 val pointsOfInterest = qrCodeInfoProvider.getQrCodeInfo(qrCodeId)
-                Log.d(Constants.LOG_TAG, "QrCodeScanner::startCamera -  ${qrCodeId}")
+                Log.d(Constants.LOG_TAG, "QrCodeScanner::startCamera -  QR Code Id: ${qrCodeId}")
                 Log.d(Constants.LOG_TAG, "QrCodeScanner::startCamera " +
                         "- Points of interest: $pointsOfInterest")
 

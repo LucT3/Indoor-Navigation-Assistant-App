@@ -1,10 +1,10 @@
 [
   {
     "id": "ekuu",
-    "pointOfInterests": "Bathroom"
+    "pointOfInterest": "Bathroom"
   },
   {
     "id": "aUZK",
-    "pointOfInterests": "Room A28"
+    "pointOfInterest": "Room A28"
   }
 ]
