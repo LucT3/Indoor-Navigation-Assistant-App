@@ -38,7 +38,7 @@ class NavigationActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         //call the method to set the layout (show/don't show camera)
-        showCamera()
+        setCamera()
     }
 
     override fun onStart() {
@@ -101,7 +101,7 @@ class NavigationActivity : AppCompatActivity() {
     //--------------MENU--------------------
     //--------------------------------------
     /**
-     * To inflate the options menu (put the current image)
+     * To inflate the options menu (set the current icon)
      */
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.layout_menu, menu)
@@ -112,14 +112,14 @@ class NavigationActivity : AppCompatActivity() {
     }
 
     /**
-     * Called when the a menu layout is selected, it changes the current layout and
+     * Called when a menu layout is selected, it changes the current layout and
      * update the menu choices
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_switch_layout -> {
                 isCameraShowing = !isCameraShowing
-                showCamera()
+                setCamera()
                 setIcon(item)
                 return true
             }
@@ -128,20 +128,21 @@ class NavigationActivity : AppCompatActivity() {
     }
 
     /**
-     * It change the layout of the application (between a list or grid of letters in the main page)
+     * It change the layout of the application (show/don't show camera)
      */
-    private fun showCamera() {
+    private fun setCamera() {
         if (isCameraShowing) {
             //turn camera on
             binding.viewFinder.visibility = View.VISIBLE
         }
         else {
+            //turn camera off
             binding.viewFinder.visibility = View.INVISIBLE
         }
     }
 
     /**
-     * It change the icon menu, based on which layout is chosen (list or grid)
+     * It change the icon menu, based on which layout is chosen (camera visible/non-visible)
      */
     private fun setIcon(menuItem: MenuItem?) {
         if (menuItem == null)
