@@ -36,24 +36,26 @@ class BeaconScanner(private val navigationActivity: WeakReference<NavigationActi
             override fun onIBeaconsUpdated(ibeacons: MutableList<IBeaconDevice>, region: IBeaconRegion) {
                 // Sort beacons by signal strength
                 val sortedBeacons = ibeacons.sortedByDescending { it.rssi }
-                // Get the top 2 beacons
-                val top2Beacons = sortedBeacons.take(2)
-                // Print the top 2 beacon IDs
-                val top2BeaconIds = top2Beacons.map { it.uniqueId }
-                Log.d(Constants.LOG_TAG, "BeaconScanner::onIBeaconsUpdated " +
-                        "- 2 nearest beacons: $top2BeaconIds")
-                // Get regionId from the top 2 beacons for rssi
-                val regionId = navigationInfoProvider.computeBLERegionId(top2BeaconIds[0], top2BeaconIds[1])
-                Log.d(Constants.LOG_TAG, "BeaconScanner::onIBeaconsUpdated " +
-                        "- Region scanned: $regionId")
-                if (regionManager.isNewRegion(regionId)) {
-                    // Get points of interest
-                    val pointsOfInterest = navigationInfoProvider.getBLERegionInfo(regionId)
-                    Log.d(Constants.LOG_TAG, "BeaconScanner::onIBeaconsUpdated " +
-                            "- Points of interest: $pointsOfInterest")
-                    Toast.makeText(navigationActivity.get()!!, pointsOfInterest.toString(), Toast.LENGTH_SHORT).show()
-                }
 
+                if (sortedBeacons.size >= 2) {
+                    // Get the top 2 beacons
+                    val top2Beacons = sortedBeacons.take(2)
+                    // Print the top 2 beacon IDs
+                    val top2BeaconIds = top2Beacons.map { it.uniqueId }
+                    Log.d(Constants.LOG_TAG, "BeaconScanner::onIBeaconsUpdated " +
+                            "- 2 nearest beacons: $top2BeaconIds")
+                    // Get regionId from the top 2 beacons for rssi
+                    val regionId = navigationInfoProvider.computeBLERegionId(top2BeaconIds[0], top2BeaconIds[1])
+                    Log.d(Constants.LOG_TAG, "BeaconScanner::onIBeaconsUpdated " +
+                            "- Region scanned: $regionId")
+                    if (regionManager.isNewRegion(regionId)) {
+                        // Get points of interest
+                        val pointsOfInterest = navigationInfoProvider.getBLERegionInfo(regionId)
+                        Log.d(Constants.LOG_TAG, "BeaconScanner::onIBeaconsUpdated " +
+                                "- Points of interest: $pointsOfInterest")
+                        Toast.makeText(navigationActivity.get()!!, pointsOfInterest.toString(), Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
         }
     }
