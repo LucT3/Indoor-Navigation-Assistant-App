@@ -11,12 +11,15 @@ import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import it.unipi.dii.indoornavigatorassistant.NavigationActivity
+import it.unipi.dii.indoornavigatorassistant.dao.NavigationInfoProvider
+import it.unipi.dii.indoornavigatorassistant.dao.QrCodeInfoProvider
 import it.unipi.dii.indoornavigatorassistant.databinding.ActivityNavigationBinding
 import it.unipi.dii.indoornavigatorassistant.util.Constants
 import java.lang.ref.WeakReference
 
 class QRCodeScanner(private val navigationActivity : WeakReference<NavigationActivity>){
     private lateinit var barcodeScanner : BarcodeScanner
+    private val qrCodeInfoProvider: QrCodeInfoProvider = QrCodeInfoProvider(navigationActivity.get()!!)
     
     fun startCamera(binding: ActivityNavigationBinding) {
         val cameraController = LifecycleCameraController(navigationActivity.get()!!)
@@ -41,8 +44,12 @@ class QRCodeScanner(private val navigationActivity : WeakReference<NavigationAct
                 ) {
                     return@MlKitAnalyzer
                 }
-                Log.d(Constants.LOG_TAG, "QrCodeScanner::startCamera -  ${barcodeResults[0].rawValue.toString()}")
-                // TODO return id of QR code
+                val qrCodeId : String = barcodeResults[0].rawValue.toString()
+                val pointsOfInterest = qrCodeInfoProvider.getQrCodeInfo(qrCodeId)
+                Log.d(Constants.LOG_TAG, "QrCodeScanner::startCamera -  ${qrCodeId}")
+                Log.d(Constants.LOG_TAG, "QrCodeScanner::startCamera " +
+                        "- Points of interest: $pointsOfInterest")
+
                 Thread.sleep(1000)
             }
         )
