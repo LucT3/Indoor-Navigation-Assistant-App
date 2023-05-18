@@ -26,7 +26,7 @@ class BeaconInfoProvider(context: Context) {
             context.resources.getString(R.string.ble_regions_file),
             object: TypeReference<List<BLERegionJson>>(){}
         )
-        bleRegionJsonList.forEach { x -> bleRegions[x.id] = x.pointOfInterests }
+        bleRegionJsonList.forEach { x -> bleRegions[x.id] = x.pointsOfInterest }
         
         // Load data of BLE curves
         val bleCurveJsonList = JsonParser.loadFromJsonAsset(
@@ -43,7 +43,7 @@ class BeaconInfoProvider(context: Context) {
             object: TypeReference<List<BLEAreaBeforeCurveJson>>(){}
         )
         bleAreaBeforeCurveJsonList.forEach { x ->
-            bleAreasBeforeCurves[x.id] = BLECurveInfo(x.curve, x.isTurnRight)
+            bleAreasBeforeCurves[x.id] = BLECurveInfo(x.curve, x.direction)
         }
     }
     

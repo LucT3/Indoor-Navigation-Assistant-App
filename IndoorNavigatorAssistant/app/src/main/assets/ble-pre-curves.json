@@ -2,6 +2,6 @@
   {
     "id": "aaaa",
     "curve" : "MKoUmipj",
-    "isTurnRight" : true
+    "direction" : "LEFT"
   }
 ]
