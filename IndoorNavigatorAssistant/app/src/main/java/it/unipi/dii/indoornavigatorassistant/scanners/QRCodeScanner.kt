@@ -43,7 +43,6 @@ class QRCodeScanner(private val navigationActivity : WeakReference<NavigationAct
                 }
                 Log.d(Constants.LOG_TAG, "QrCodeScanner::startCamera -  ${barcodeResults[0].rawValue.toString()}")
                 // TODO return id of QR code
-                Thread.sleep(1000)
             }
         )
 
