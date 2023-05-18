@@ -17,4 +17,9 @@
     
     <!--navigation activity strings-->
     <string name="navigation_activity_welcome_message">Welcome To The Navigation Page!</string>
+    <string name="navigation_activity_beacon_region_message">Current Region Detected: </string>
+    <string name="navigation_activity_beacon_points_of_interest">Points Of Interest</string>
+    <string name="navigation_activity_qr_code_point">Qr Code Point of Interest: </string>
+
+    <string name="action_switch_layout">Switch Layout</string>
 </resources>
