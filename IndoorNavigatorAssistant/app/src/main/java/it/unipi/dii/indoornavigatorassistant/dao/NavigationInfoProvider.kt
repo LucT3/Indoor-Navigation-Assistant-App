@@ -1,15 +1,13 @@
 package it.unipi.dii.indoornavigatorassistant.dao
 
 import android.content.Context
-import android.content.res.AssetManager
-import android.util.Log
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
+import com.fasterxml.jackson.core.type.TypeReference
 import it.unipi.dii.indoornavigatorassistant.R
+import it.unipi.dii.indoornavigatorassistant.model.BLEAreaBeforeCurveJson
 import it.unipi.dii.indoornavigatorassistant.model.BLECurveInfo
+import it.unipi.dii.indoornavigatorassistant.model.BLECurveJson
 import it.unipi.dii.indoornavigatorassistant.model.BLERegionJson
-import it.unipi.dii.indoornavigatorassistant.util.Constants
-import java.io.IOException
+import it.unipi.dii.indoornavigatorassistant.util.JsonParser
 
 class NavigationInfoProvider(context: Context) {
     
@@ -17,58 +15,36 @@ class NavigationInfoProvider(context: Context) {
     private var bleCurves: MutableSet<String> = mutableSetOf()
     private var bleAreasBeforeCurves: MutableMap<String, BLECurveInfo> = mutableMapOf()
     
-    // ObjectMapper instance to read the json
-    private val jsonObjectMapper = jacksonObjectMapper()
-    
     /**
      * Initializer block (primary constructor) of NavigationInfoProvider class.
      * Reads a json (to do for all JSONs) and put the json data into the BLE Region Map
      */
     init {
         // Load data of BLE regions
-        val bleRegionJsonList = loadListFromJsonFile(
+        val bleRegionJsonList = JsonParser.loadFromJsonAsset(
             context.assets,
-            context.resources.getString(R.string.ble_regions_file)
+            context.resources.getString(R.string.ble_regions_file),
+            object: TypeReference<List<BLERegionJson>>(){}
         )
-        for (x in bleRegionJsonList) {
-            bleRegions[x.id] = x.pointOfInterests
-        }
-//        bleRegionJsonList.forEach { x -> bleRegions[x.id] = x.pointOfInterests }
+        bleRegionJsonList.forEach { x -> bleRegions[x.id] = x.pointOfInterests }
         
         // Load data of BLE curves
-//        val bleCurveJsonList = loadListFromJsonFile<BLECurveJson>(
-//            context.assets,
-//            context.resources.getString(R.string.ble_curves_file)
-//        )
-//        bleCurveJsonList.forEach { x -> bleCurves.add(x.id) }
-//
-//        // Load data of areas before curves
-//        val bleAreaBeforeCurveJsonList = loadListFromJsonFile<BLEAreaBeforeCurveJson>(
-//            context.assets,
-//            context.resources.getString(R.string.ble_pre_curves_file)
-//        )
-//        bleAreaBeforeCurveJsonList.forEach { x ->
-//            bleAreasBeforeCurves[x.id] = BLECurveInfo(x.curve, x.direction)
-//        }
-    }
-    
-    @Deprecated("TODO")
-    private fun loadListFromJsonFile(assets: AssetManager, filename: String): List<BLERegionJson> {
-        lateinit var jsonString: String
-        try {
-            jsonString = assets
-                .open(filename)
-                .bufferedReader()
-                .use { it.readText() }
-        } catch (ex: IOException) {
-            throw RuntimeException(ex)
+        val bleCurveJsonList = JsonParser.loadFromJsonAsset(
+            context.assets,
+            context.resources.getString(R.string.ble_curves_file),
+            object: TypeReference<List<BLECurveJson>>(){}
+        )
+        bleCurveJsonList.forEach { x -> bleCurves.add(x.id) }
+
+        // Load data of areas before curves
+        val bleAreaBeforeCurveJsonList = JsonParser.loadFromJsonAsset(
+            context.assets,
+            context.resources.getString(R.string.ble_pre_curves_file),
+            object: TypeReference<List<BLEAreaBeforeCurveJson>>(){}
+        )
+        bleAreaBeforeCurveJsonList.forEach { x ->
+            bleAreasBeforeCurves[x.id] = BLECurveInfo(x.curve, x.isTurnRight)
         }
-        Log.d(Constants.LOG_TAG, "NavigationInfoProvider::loadFromJson - json read: $jsonString")
-        
-        //read data from a JSON string
-        val tList: List<BLERegionJson> = jsonObjectMapper.readValue(jsonString)
-        Log.d(Constants.LOG_TAG, "NavigationInfoProvider::loadFromJson - ble regions: $tList")
-        return tList
     }
     
     

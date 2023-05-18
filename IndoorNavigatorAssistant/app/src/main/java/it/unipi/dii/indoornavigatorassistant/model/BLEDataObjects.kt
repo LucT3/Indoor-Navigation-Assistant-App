@@ -1,9 +1,14 @@
 package it.unipi.dii.indoornavigatorassistant.model
 
-data class BLERegionJson(val id: String, val pointOfInterests: List<String>)
+import java.io.Serializable
 
-data class BLECurveJson(val id: String)
+// Data class for JSON documents which describe regions of BLE beacons
+data class BLERegionJson (val id: String, val pointOfInterests: List<String>): Serializable
+// Data class for JSON documents which describe curves in a assisted path
+data class BLECurveJson(val id: String): Serializable
+// Data class for JSON documents which describe areas before curves in a assisted path
+data class BLEAreaBeforeCurveJson(val id: String, val curve: String, val isTurnRight: Boolean): Serializable
 
-data class BLEAreaBeforeCurveJson(val id: String, val curve: String, val direction: Boolean)
 
-data class BLECurveInfo(val curve: String, val direction: Boolean)
+// Data class which stores information related to a curve
+data class BLECurveInfo(val curve: String, val isTurnRight: Boolean)
