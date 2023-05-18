@@ -19,20 +19,8 @@ val BluetoothPermissions: Permission =
     }
 
 val CameraPermissions: Permission =
-    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
         Permission(
             arrayOf(
-                CAMERA,
-                RECORD_AUDIO, // TODO unnecessary?
-                WRITE_EXTERNAL_STORAGE
+                CAMERA
             )
         )
-    }
-    else {
-        Permission(
-            arrayOf(
-                CAMERA,
-                RECORD_AUDIO
-            )
-        )
-    }
