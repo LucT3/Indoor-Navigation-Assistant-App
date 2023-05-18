@@ -3,23 +3,78 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="216dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/navigation_activity_welcome_message"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/textViewCurrentRegion"
+        android:layout_width="297dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/navigation_activity_beacon_region_message"
+        android:textAlignment="textStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.09"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <TextView
+        android:id="@+id/textViewPointsOfInterest"
+        android:layout_width="210dp"
+        android:layout_height="23dp"
+        android:layout_marginTop="24dp"
+        android:text="Points Of Interest"
+        android:textAlignment="textStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.008"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCurrentRegion" />
+
+    <TextView
+        android:id="@+id/textViewQrCode"
+        android:layout_width="319dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/navigation_activity_qr_code_point"
+        android:textAlignment="textStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/POIBeacons" />
+
+    <ListView
+        android:id="@+id/POIBeacons"
+        android:layout_width="298dp"
+        android:layout_height="257dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewPointsOfInterest" />
 
     <androidx.camera.view.PreviewView
         android:id="@+id/viewFinder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible"/>
-    
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="216dp"
-        android:layout_height="38dp"
-        android:layout_marginTop="104dp"
-        android:text="@string/navigation_activity_welcome_message"
-        android:textAlignment="center"
+        android:layout_marginTop="8dp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-    
+        app:layout_constraintTop_toTopOf="parent">
+
+    </androidx.camera.view.PreviewView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

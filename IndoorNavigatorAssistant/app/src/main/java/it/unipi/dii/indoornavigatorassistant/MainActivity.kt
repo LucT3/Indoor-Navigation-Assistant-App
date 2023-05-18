@@ -4,7 +4,12 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.kontakt.sdk.android.common.KontaktSDK
 import com.kontakt.sdk.android.common.log.LogLevel
 import com.kontakt.sdk.android.common.log.Logger
@@ -97,5 +102,6 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, NavigationActivity::class.java)
         startActivity(intent)
     }
+
     
 }
