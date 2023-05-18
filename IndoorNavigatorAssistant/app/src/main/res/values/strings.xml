@@ -10,7 +10,12 @@
     <string name="dialog_permission_not_granted_title">Permissions not granted!</string>
     <string name="dialog_permission_not_granted_message">We need location permissions to use BLE features. The application will stop</string>
     <string name="dialog_permissions_not_granted_button">OK</string>
-    
+
+    <!-- dialog pop-up when user doesn't enable services -->
+    <string name="dialog_service_not_enabled_title">Service not enabled!</string>
+    <string name="dialog_bluetooth_not_enabled_message">We need bluetooth service enabled to use BLE features.</string>
+    <string name="dialog_location_not_enabled_message">We need location service enabled to use BLE features.</string>
+    <string name="dialog_service_not_enabled_button">OK</string>
     <!--main activity strings-->
     <string name="welcome_message">Welcome to Visual Impaired Navigation App</string>
     <string name="main_button_text">Go to Navigation</string>
