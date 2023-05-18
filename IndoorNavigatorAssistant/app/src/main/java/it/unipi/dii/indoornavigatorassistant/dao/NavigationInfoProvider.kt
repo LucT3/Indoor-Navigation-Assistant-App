@@ -96,7 +96,7 @@ class NavigationInfoProvider(context: Context) {
      * @return list of strings which describes the points of interest if the region is valid, null otherwise
      */
     fun getBLERegionInfo(regionId: String): List<String>? {
-        return bleRegionMap[regionId]
+        return bleRegions[regionId]
     }
     
     // TODO get info about curves and area before curves
