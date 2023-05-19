@@ -67,13 +67,25 @@ class QRCodeScanner (private val navigationActivity : WeakReference<NavigationAc
         Log.d(Constants.LOG_TAG, "QrCodeScanner::start -  QR Code Id: $qrCodeId")
         Log.d(Constants.LOG_TAG, "QrCodeScanner::start " +
                 "- Point of interest: $pointOfInterest")
-        binding.textViewQrCode.text = "Qr Code Point of Interest: ${pointOfInterest}"
+        if (pointOfInterest != null) {
+            binding.textViewQrCode.text = QR_CODE_INFO_MESSAGE + "$pointOfInterest"
+        }
+        else{
+            binding.textViewQrCode.text = QR_CODE_INFO_MESSAGE
+        }
     }
     
     fun stop() {
         Log.i(Constants.LOG_TAG, "QrCodeScanner::stop - barCodeScanner instance closed")
         cameraExecutor.shutdown()
         barcodeScanner.close()
+    }
+
+    /**
+     * QR Code Info Message
+     */
+    companion object{
+        const val QR_CODE_INFO_MESSAGE = "Qr Code Point of Interest: "
     }
 
 }
