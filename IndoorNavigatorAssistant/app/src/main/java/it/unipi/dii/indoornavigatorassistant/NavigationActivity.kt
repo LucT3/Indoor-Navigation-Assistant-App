@@ -48,7 +48,7 @@ class NavigationActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        beaconScanner = BeaconScanner(WeakReference(this))
+        beaconScanner = BeaconScanner(WeakReference(this),binding)
         qrCodeScanner = QRCodeScanner(WeakReference(this), binding)
 
         beaconScanner.startScanning()

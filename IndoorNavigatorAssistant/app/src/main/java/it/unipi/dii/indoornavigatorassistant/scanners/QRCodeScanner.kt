@@ -1,5 +1,6 @@
 package it.unipi.dii.indoornavigatorassistant.scanners
 
+import android.graphics.Point
 import android.util.Log
 import androidx.camera.mlkit.vision.MlKitAnalyzer
 import androidx.camera.view.CameraController
@@ -10,6 +11,7 @@ import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import it.unipi.dii.indoornavigatorassistant.NavigationActivity
+import it.unipi.dii.indoornavigatorassistant.R
 import it.unipi.dii.indoornavigatorassistant.dao.QrCodeInfoProvider
 import it.unipi.dii.indoornavigatorassistant.databinding.ActivityNavigationBinding
 import it.unipi.dii.indoornavigatorassistant.util.Constants
@@ -49,14 +51,8 @@ class QRCodeScanner (private val navigationActivity : WeakReference<NavigationAc
                 ) {
                     return@MlKitAnalyzer
                 }
-                val qrCodeId : String = barcodeResults[0].rawValue.toString()
-                val pointOfInterest = qrCodeInfoProvider.getQrCodeInfo(qrCodeId)
-                Log.d(Constants.LOG_TAG, "QrCodeScanner::start -  QR Code Id: $qrCodeId")
-                Log.d(Constants.LOG_TAG, "QrCodeScanner::start " +
-                        "- Point of interest: $pointOfInterest")
-                
-                binding.textView.text = qrCodeId
-                
+
+                displayQrInfo(barcodeResults)
                 Thread.sleep(1000)
             }
         )
@@ -64,11 +60,32 @@ class QRCodeScanner (private val navigationActivity : WeakReference<NavigationAc
         cameraController.bindToLifecycle(navigationActivity.get()!!)
         previewView.controller = cameraController
     }
+
+    private fun displayQrInfo(barcodeResults : List<Barcode>){
+        val qrCodeId : String = barcodeResults[0].rawValue.toString()
+        val pointOfInterest = qrCodeInfoProvider.getQrCodeInfo(qrCodeId)
+        Log.d(Constants.LOG_TAG, "QrCodeScanner::start -  QR Code Id: $qrCodeId")
+        Log.d(Constants.LOG_TAG, "QrCodeScanner::start " +
+                "- Point of interest: $pointOfInterest")
+        if (pointOfInterest != null) {
+            binding.textViewQrCode.text = QR_CODE_INFO_MESSAGE + "$pointOfInterest"
+        }
+        else{
+            binding.textViewQrCode.text = QR_CODE_INFO_MESSAGE
+        }
+    }
     
     fun stop() {
         Log.i(Constants.LOG_TAG, "QrCodeScanner::stop - barCodeScanner instance closed")
         cameraExecutor.shutdown()
         barcodeScanner.close()
+    }
+
+    /**
+     * QR Code Info Message
+     */
+    companion object{
+        const val QR_CODE_INFO_MESSAGE = "Qr Code Point of Interest: "
     }
 
 }
