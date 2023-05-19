@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -21,31 +22,37 @@ import it.unipi.dii.indoornavigatorassistant.scanners.BeaconScanner
 import it.unipi.dii.indoornavigatorassistant.scanners.QRCodeScanner
 import it.unipi.dii.indoornavigatorassistant.util.Constants
 import java.lang.ref.WeakReference
+import java.util.Locale
 
-class NavigationActivity : AppCompatActivity() {
-
+class NavigationActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
+    
+    private lateinit var binding: ActivityNavigationBinding
+    
+    // Scanners
     private lateinit var beaconScanner: BeaconScanner
     private lateinit var qrCodeScanner: QRCodeScanner
-    private lateinit var binding: ActivityNavigationBinding
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    
+    // Text-to-speech
+    private lateinit var textToSpeech: TextToSpeech
+    
+    // Variables for GUI
     private var isCameraShowing = false
-
-    private val bluetoothAdapter: BluetoothAdapter by lazy {
-        val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
-        bluetoothManager.adapter
-    }
-
+    
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Set the activity layout
         binding = ActivityNavigationBinding.inflate(layoutInflater)
-        Log.d(Constants.LOG_TAG, "NavigationActivity::onCreate - Navigation Activity created")
         setContentView(binding.root)
-
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        //call the method to set the layout (show/don't show camera)
         setCamera()
+        
+        // Configure Text-to-Speech functionality
+        textToSpeech = TextToSpeech(this, this)
+        
+        Log.d(Constants.LOG_TAG, "NavigationActivity::onCreate - Navigation Activity created")
     }
-
+    
     override fun onStart() {
         super.onStart()
         beaconScanner = BeaconScanner(WeakReference(this))
@@ -54,7 +61,9 @@ class NavigationActivity : AppCompatActivity() {
         beaconScanner.startScanning()
         qrCodeScanner.start()
         
-        if (!bluetoothAdapter.isEnabled) {
+        // Check Bluetooth and GPS services
+        val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+        if (!bluetoothManager.adapter.isEnabled) {
             promptEnableBluetooth()
         }
         else {
@@ -63,14 +72,18 @@ class NavigationActivity : AppCompatActivity() {
     }
     
     override fun onStop() {
-        super.onStop()
         beaconScanner.stopScanning()
+        textToSpeech.stop()
+        
+        super.onStop()
     }
     
     override fun onDestroy() {
-        super.onDestroy()
         beaconScanner.disconnect()
         qrCodeScanner.stop()
+        textToSpeech.shutdown()
+    
+        super.onDestroy()
     }
     // TODO gestire meglio create/start/stop/destroy dell'activity (by Riccardo)
     
@@ -211,6 +224,34 @@ class NavigationActivity : AppCompatActivity() {
                 ContextCompat.getDrawable(this, R.drawable.show_img)
             else ContextCompat.getDrawable(this, R.drawable.dont_show_img)
     }
-
-
+    
+    
+    // --------------------------------------
+    // ----------- TEXT-TO-SPEECH -----------
+    // --------------------------------------
+    
+    override fun onInit(status: Int) {
+        if (status == TextToSpeech.SUCCESS) {
+            val result = textToSpeech.setLanguage(Locale.ITALIAN)
+            
+            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                Log.e(Constants.LOG_TAG,"The language is not supported!")
+            }
+        }
+    }
+    
+    /**
+     * Speaks the text using the specified queuing strategy.
+     * This method is asynchronous, i.e. the method just adds the request
+     * to the queue of TTS requests and then returns.
+     *
+     * @param text The string of text to be spoken.
+     *             No longer than `TextToSpeech.getMaxSpeechInputLength()` characters.
+     * @param queueMode The queuing strategy to use, `TextToSpeech.QUEUE_ADD` or `TextToSpeech.QUEUE_FLUSH`.
+     */
+    fun speak(text: String, queueMode: Int) {
+        textToSpeech.speak(text, queueMode, null, "")
+        
+    }
+    
 }
