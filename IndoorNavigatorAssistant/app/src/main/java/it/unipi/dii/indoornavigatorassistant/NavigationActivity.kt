@@ -120,7 +120,11 @@ class NavigationActivity : AppCompatActivity() {
             if (resultCode != Activity.RESULT_OK) {
                 promptEnableBluetooth()
             } else {
-                checkLocationEnabled()
+                if (!isLocationEnabled(this)) {
+                    checkLocationEnabled()
+                } else {
+                    startScanners()
+                }
             }
         }
         if (requestCode == Constants.REQUEST_ENABLE_LOCATION) {
