@@ -80,6 +80,7 @@ class NavigationActivity : AppCompatActivity() {
                 }
             }
         }
+    }
 
     override fun onDestroy() {
         super.onDestroy()
