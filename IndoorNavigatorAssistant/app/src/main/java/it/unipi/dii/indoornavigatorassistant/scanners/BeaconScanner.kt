@@ -69,7 +69,7 @@ class BeaconScanner(private val navigationActivity: WeakReference<NavigationActi
     private fun displayBeaconRegionInfo(regionId : String){
         Log.d(Constants.LOG_TAG, "BeaconScanner::onIBeaconsUpdated " +
                 "- Region scanned: $regionId")
-        binding.textViewCurrentRegion.text = "Current Region Detected:  ${regionId}"
+        binding.textViewCurrentRegion.text = BEACON_INFO_MESSAGE + "$regionId"
     }
 
     /**
@@ -107,6 +107,13 @@ class BeaconScanner(private val navigationActivity: WeakReference<NavigationActi
     fun disconnect() {
         proximityManager.disconnect()
         Log.d(Constants.LOG_TAG, "BeaconScanner::disconnect - scanning service disconnected")
+    }
+
+    /**
+     * Beacon Region Info Message
+     */
+    companion object{
+        const val BEACON_INFO_MESSAGE = "Current Region Detected: "
     }
 
 }
