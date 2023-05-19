@@ -7,24 +7,23 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
 import android.os.Bundle
-import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
-import androidx.core.content.ContextCompat
 import it.unipi.dii.indoornavigatorassistant.databinding.ActivityNavigationBinding
 import it.unipi.dii.indoornavigatorassistant.scanners.BeaconScanner
 import it.unipi.dii.indoornavigatorassistant.scanners.QRCodeScanner
+import it.unipi.dii.indoornavigatorassistant.speech.TextToSpeechContainer
 import it.unipi.dii.indoornavigatorassistant.util.Constants
 import java.lang.ref.WeakReference
-import java.util.Locale
 
-class NavigationActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
+class NavigationActivity : AppCompatActivity() {
     
     private lateinit var binding: ActivityNavigationBinding
     
@@ -33,7 +32,7 @@ class NavigationActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private lateinit var qrCodeScanner: QRCodeScanner
     
     // Text-to-speech
-    private lateinit var textToSpeech: TextToSpeech
+    private lateinit var textToSpeech: TextToSpeechContainer
     
     // Variables for GUI
     private var isCameraShowing = false
@@ -48,7 +47,7 @@ class NavigationActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         setCamera()
         
         // Configure Text-to-Speech functionality
-        textToSpeech = TextToSpeech(this, this)
+        textToSpeech = TextToSpeechContainer(this)
         
         Log.d(Constants.LOG_TAG, "NavigationActivity::onCreate - Navigation Activity created")
     }
@@ -226,32 +225,6 @@ class NavigationActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     }
     
     
-    // --------------------------------------
-    // ----------- TEXT-TO-SPEECH -----------
-    // --------------------------------------
     
-    override fun onInit(status: Int) {
-        if (status == TextToSpeech.SUCCESS) {
-            val result = textToSpeech.setLanguage(Locale.ITALIAN)
-            
-            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                Log.e(Constants.LOG_TAG,"The language is not supported!")
-            }
-        }
-    }
-    
-    /**
-     * Speaks the text using the specified queuing strategy.
-     * This method is asynchronous, i.e. the method just adds the request
-     * to the queue of TTS requests and then returns.
-     *
-     * @param text The string of text to be spoken.
-     *             No longer than `TextToSpeech.getMaxSpeechInputLength()` characters.
-     * @param queueMode The queuing strategy to use, `TextToSpeech.QUEUE_ADD` or `TextToSpeech.QUEUE_FLUSH`.
-     */
-    fun speak(text: String, queueMode: Int) {
-        textToSpeech.speak(text, queueMode, null, "")
-        
-    }
     
 }
