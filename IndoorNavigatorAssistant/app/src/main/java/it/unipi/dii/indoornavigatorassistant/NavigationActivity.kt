@@ -29,7 +29,6 @@ class NavigationActivity : AppCompatActivity() {
     private lateinit var beaconScanner: BeaconScanner
     private lateinit var qrCodeScanner: QRCodeScanner
     private lateinit var binding: ActivityNavigationBinding
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var isCameraShowing = false
 
     private val bluetoothAdapter: BluetoothAdapter by lazy {
@@ -43,7 +42,6 @@ class NavigationActivity : AppCompatActivity() {
         Log.i(Constants.LOG_TAG, "NavigationActivity::onCreate - Navigation Activity created")
         setContentView(binding.root)
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         //call the method to set the layout (show/don't show camera)
         setCamera()
     }
@@ -58,6 +56,16 @@ class NavigationActivity : AppCompatActivity() {
         else {
             checkLocationEnabled()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        beaconScanner.disconnect()
+        qrCodeScanner.stop()
+    }
+    override fun onStop() {
+        super.onStop()
+        beaconScanner.stopScanning()
     }
 
     private fun startScanners() {
@@ -96,12 +104,6 @@ class NavigationActivity : AppCompatActivity() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        beaconScanner.disconnect()
-        qrCodeScanner.stop()
-    }
-
     private fun promptEnableBluetooth() {
         val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
         try {
@@ -134,11 +136,6 @@ class NavigationActivity : AppCompatActivity() {
                 startScanners()
             }
         }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        beaconScanner.stopScanning()
     }
 
     //--------------------------------------
