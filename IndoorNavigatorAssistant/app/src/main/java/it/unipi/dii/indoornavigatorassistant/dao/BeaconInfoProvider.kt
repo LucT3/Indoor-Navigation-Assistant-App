@@ -88,6 +88,26 @@ class BeaconInfoProvider private constructor(context: Context) {
         return bleRegions[regionId]
     }
     
-    // TODO get info about curves and area before curves
+    /**
+     * Check if a pair of BLE beacons delimits a curve.
+     *
+     * @param regionId id of the region
+     * @return true if the BLE region is a curve, false otherwise
+     */
+    fun isCurve(regionId: String): Boolean {
+        return bleCurves.contains(regionId)
+    }
+    
+    /**
+     * Given the id of a BLE beacons pair which delimits an area next to a curve,
+     * get information about the curve (id + direction).
+     *
+     * @param regionId id of the region
+     * @return information about the curve if the selected region is just before a curve,
+     *         null otherwise
+     */
+    fun getAreaBeforeCurveInfo(regionId: String): BLECurveInfo? {
+        return bleAreasBeforeCurves[regionId]
+    }
     
 }
