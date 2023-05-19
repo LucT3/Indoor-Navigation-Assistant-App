@@ -54,7 +54,7 @@ class NavigationActivity : AppCompatActivity() {
             promptEnableBluetooth()
         }
         else {
-            checkLocationEnabled()
+            requestEnableLocation()
         }
     }
 
@@ -81,7 +81,7 @@ class NavigationActivity : AppCompatActivity() {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
     }
 
-    private fun checkLocationEnabled() {
+    private fun requestEnableLocation() {
         val locationRequest = LocationRequest.create()
 
         val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
@@ -123,7 +123,7 @@ class NavigationActivity : AppCompatActivity() {
                 promptEnableBluetooth()
             } else {
                 if (!isLocationEnabled(this)) {
-                    checkLocationEnabled()
+                    requestEnableLocation()
                 } else {
                     startScanners()
                 }
@@ -131,7 +131,7 @@ class NavigationActivity : AppCompatActivity() {
         }
         if (requestCode == Constants.REQUEST_ENABLE_LOCATION) {
             if (resultCode != Activity.RESULT_OK) {
-                checkLocationEnabled()
+                requestEnableLocation()
             } else {
                 startScanners()
             }
