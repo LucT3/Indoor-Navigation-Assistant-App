@@ -8,10 +8,14 @@ import android.content.Intent
 import android.content.IntentSender
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
+import androidx.core.content.ContextCompat
 import it.unipi.dii.indoornavigatorassistant.databinding.ActivityNavigationBinding
 import it.unipi.dii.indoornavigatorassistant.scanners.BeaconScanner
 import it.unipi.dii.indoornavigatorassistant.scanners.QRCodeScanner
@@ -23,8 +27,8 @@ class NavigationActivity : AppCompatActivity() {
     private lateinit var beaconScanner: BeaconScanner
     private lateinit var qrCodeScanner: QRCodeScanner
     private lateinit var binding: ActivityNavigationBinding
-
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var isCameraShowing = false
 
     private val bluetoothAdapter: BluetoothAdapter by lazy {
         val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
@@ -38,24 +42,21 @@ class NavigationActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        //call the method to set the layout (show/don't show camera)
+        setCamera()
     }
 
     override fun onStart() {
         super.onStart()
         beaconScanner = BeaconScanner(WeakReference(this))
-        qrCodeScanner = QRCodeScanner(WeakReference(this))
+        qrCodeScanner = QRCodeScanner(WeakReference(this), binding)
 
         beaconScanner.startScanning()
-        qrCodeScanner.startCamera(binding)
-
+        qrCodeScanner.start()
         if (!bluetoothAdapter.isEnabled) {
             promptEnableBluetooth()
         }
         checkLocationEnabled()
-    }
-
-    override fun onResume() {
-        super.onResume()
     }
 
     private fun checkLocationEnabled() {
@@ -79,6 +80,11 @@ class NavigationActivity : AppCompatActivity() {
                 }
             }
         }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        beaconScanner.disconnect()
+        qrCodeScanner.stop()
     }
 
     private fun promptEnableBluetooth() {
@@ -115,10 +121,62 @@ class NavigationActivity : AppCompatActivity() {
         beaconScanner.stopScanning()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        beaconScanner.disconnect()
-        qrCodeScanner.disconnect()
+    //--------------------------------------
+    //--------------MENU--------------------
+    //--------------------------------------
+    /**
+     * To inflate the options menu (set the current icon)
+     */
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.layout_menu, menu)
+
+        val layoutButton = menu?.findItem(R.id.action_switch_layout)
+        setIcon(layoutButton)
+        return true
     }
+
+    /**
+     * Called when a menu layout is selected, it changes the current layout and
+     * update the menu choices
+     */
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_switch_layout -> {
+                isCameraShowing = !isCameraShowing
+                setCamera()
+                setIcon(item)
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    /**
+     * It change the layout of the application (show/don't show camera)
+     */
+    private fun setCamera() {
+        if (isCameraShowing) {
+            //turn camera on
+            binding.viewFinder.visibility = View.VISIBLE
+        }
+        else {
+            //turn camera off
+            binding.viewFinder.visibility = View.INVISIBLE
+        }
+    }
+
+    /**
+     * It change the icon menu, based on which layout is chosen (camera visible/non-visible)
+     */
+    private fun setIcon(menuItem: MenuItem?) {
+        if (menuItem == null)
+            return
+
+        menuItem.icon =
+            if (isCameraShowing)
+                ContextCompat.getDrawable(this, R.drawable.show_img)
+            else ContextCompat.getDrawable(this, R.drawable.dont_show_img)
+    }
+
 
 }

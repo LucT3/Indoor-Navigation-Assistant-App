@@ -1,7 +1,7 @@
 [
   {
     "id": "aaaa",
-    "curve-id" : "MKoUmipj",
-    "direction" : "right"
+    "curve" : "MKoUmipj",
+    "direction" : "LEFT"
   }
 ]

@@ -5,34 +5,42 @@ import androidx.camera.mlkit.vision.MlKitAnalyzer
 import androidx.camera.view.CameraController
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
-import androidx.core.content.ContextCompat
 import com.google.mlkit.vision.barcode.BarcodeScanner
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
 import it.unipi.dii.indoornavigatorassistant.NavigationActivity
+import it.unipi.dii.indoornavigatorassistant.dao.QrCodeInfoProvider
 import it.unipi.dii.indoornavigatorassistant.databinding.ActivityNavigationBinding
 import it.unipi.dii.indoornavigatorassistant.util.Constants
 import java.lang.ref.WeakReference
+import java.util.concurrent.Executors
 
-class QRCodeScanner(private val navigationActivity : WeakReference<NavigationActivity>){
-    private lateinit var barcodeScanner : BarcodeScanner
+class QRCodeScanner (private val navigationActivity : WeakReference<NavigationActivity>,
+                     private val binding: ActivityNavigationBinding) {
     
-    fun startCamera(binding: ActivityNavigationBinding) {
-        val cameraController = LifecycleCameraController(navigationActivity.get()!!)
-        val previewView: PreviewView = binding.viewFinder
-
+    private val barcodeScanner : BarcodeScanner
+    private val qrCodeInfoProvider = QrCodeInfoProvider.getInstance(navigationActivity.get()!!)
+    private val cameraExecutor = Executors.newSingleThreadExecutor()
+    
+    init {
+        // Initialize barcode scanner
         val options = BarcodeScannerOptions.Builder()
             .setBarcodeFormats(Barcode.FORMAT_QR_CODE)
             .build()
         barcodeScanner = BarcodeScanning.getClient(options)
+    }
+    
+    fun start() {
+        val cameraController = LifecycleCameraController(navigationActivity.get()!!)
+        val previewView: PreviewView = binding.viewFinder
 
         cameraController.setImageAnalysisAnalyzer(
-            ContextCompat.getMainExecutor(navigationActivity.get()!!),
+            cameraExecutor,
             MlKitAnalyzer(
                 listOf(barcodeScanner),
                 CameraController.COORDINATE_SYSTEM_VIEW_REFERENCED,
-                ContextCompat.getMainExecutor(navigationActivity.get()!!)
+                cameraExecutor
             ) { result: MlKitAnalyzer.Result? ->
                 val barcodeResults = result?.getValue(barcodeScanner)
                 if (barcodeResults == null
@@ -41,18 +49,25 @@ class QRCodeScanner(private val navigationActivity : WeakReference<NavigationAct
                 ) {
                     return@MlKitAnalyzer
                 }
-                Log.d(Constants.LOG_TAG, "QrCodeScanner::startCamera -  ${barcodeResults[0].rawValue.toString()}")
-                // TODO return id of QR code
+                val qrCodeId : String = barcodeResults[0].rawValue.toString()
+                val pointOfInterest = qrCodeInfoProvider.getQrCodeInfo(qrCodeId)
+                Log.d(Constants.LOG_TAG, "QrCodeScanner::start -  QR Code Id: $qrCodeId")
+                Log.d(Constants.LOG_TAG, "QrCodeScanner::start " +
+                        "- Point of interest: $pointOfInterest")
+                
+                binding.textView.text = qrCodeId
+                
                 Thread.sleep(1000)
             }
         )
-
+        
         cameraController.bindToLifecycle(navigationActivity.get()!!)
         previewView.controller = cameraController
     }
-
-    fun disconnect() {
-        Log.i(Constants.LOG_TAG, "QrCodeScanner::disconnect - barCodeScanner instance closed")
+    
+    fun stop() {
+        Log.i(Constants.LOG_TAG, "QrCodeScanner::stop - barCodeScanner instance closed")
+        cameraExecutor.shutdown()
         barcodeScanner.close()
     }
 
