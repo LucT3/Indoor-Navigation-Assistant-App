@@ -61,7 +61,7 @@ class NavigationActivity : AppCompatActivity() {
     }
 
     private fun startScanners() {
-        beaconScanner = BeaconScanner(WeakReference(this))
+        beaconScanner = BeaconScanner(WeakReference(this),binding)
         qrCodeScanner = QRCodeScanner(WeakReference(this), binding)
 
         beaconScanner.startScanning()
