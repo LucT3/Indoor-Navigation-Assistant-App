@@ -5,12 +5,16 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.content.Intent
+import android.content.IntentSender
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.*
 import androidx.core.content.ContextCompat
 import it.unipi.dii.indoornavigatorassistant.databinding.ActivityNavigationBinding
 import it.unipi.dii.indoornavigatorassistant.scanners.BeaconScanner
@@ -18,12 +22,12 @@ import it.unipi.dii.indoornavigatorassistant.scanners.QRCodeScanner
 import it.unipi.dii.indoornavigatorassistant.util.Constants
 import java.lang.ref.WeakReference
 
-
 class NavigationActivity : AppCompatActivity() {
 
-    private lateinit var beaconScanner : BeaconScanner
+    private lateinit var beaconScanner: BeaconScanner
     private lateinit var qrCodeScanner: QRCodeScanner
-    private lateinit var binding : ActivityNavigationBinding
+    private lateinit var binding: ActivityNavigationBinding
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var isCameraShowing = false
 
     private val bluetoothAdapter: BluetoothAdapter by lazy {
@@ -34,9 +38,10 @@ class NavigationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityNavigationBinding.inflate(layoutInflater)
-        Log.i(Constants.LOG_TAG,"NavigationActivity::onCreate - Navigation Activity created")
+        Log.i(Constants.LOG_TAG, "NavigationActivity::onCreate - Navigation Activity created")
         setContentView(binding.root)
 
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         //call the method to set the layout (show/don't show camera)
         setCamera()
     }
@@ -48,28 +53,40 @@ class NavigationActivity : AppCompatActivity() {
 
         beaconScanner.startScanning()
         qrCodeScanner.start()
-    }
-    
-    override fun onResume() {
-        super.onResume()
         if (!bluetoothAdapter.isEnabled) {
             promptEnableBluetooth()
         }
+        checkLocationEnabled()
     }
-    
-    override fun onStop() {
-        super.onStop()
-        beaconScanner.stopScanning()
-    }
+
+    private fun checkLocationEnabled() {
+        val locationRequest = LocationRequest.create()
+
+        val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
+        val client = LocationServices.getSettingsClient(this)
+        val task = client.checkLocationSettings(builder.build())
+
+        task.addOnFailureListener { exception ->
+            // Location settings are not satisfied, show dialog to enable location services
+            val statusCode = (exception as ApiException).statusCode
+            if (statusCode == LocationSettingsStatusCodes.RESOLUTION_REQUIRED) {
+                try {
+                    // Show the dialog by calling startResolutionForResult(),
+                    // and check the result in onActivityResult()
+                    val resolvable = exception as ResolvableApiException
+                    resolvable.startResolutionForResult(this, Constants.REQUEST_ENABLE_LOCATION)
+                } catch (e: IntentSender.SendIntentException) {
+                    // Error occurred while trying to show the dialog
+                }
+            }
+        }
 
     override fun onDestroy() {
         super.onDestroy()
         beaconScanner.disconnect()
         qrCodeScanner.stop()
     }
-    
 
-    //BLUETOOTH METHODS
     private fun promptEnableBluetooth() {
         // Check if bluetooth is not enabled
         if (!bluetoothAdapter.isEnabled) {
@@ -77,25 +94,32 @@ class NavigationActivity : AppCompatActivity() {
             try {
                 @Suppress("DEPRECATION")
                 startActivityForResult(enableBtIntent, Constants.ENABLE_BLUETOOTH_REQUEST_CODE)
-            } catch(ex: SecurityException) {
+            } catch (ex: SecurityException) {
                 throw RuntimeException(ex)
             }
         }
     }
-    
+
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            Constants.ENABLE_BLUETOOTH_REQUEST_CODE -> {
-                if (resultCode != Activity.RESULT_OK) {
-                    promptEnableBluetooth()
-                }
+        if(requestCode == Constants.ENABLE_BLUETOOTH_REQUEST_CODE) {
+            if (resultCode != Activity.RESULT_OK) {
+                promptEnableBluetooth()
+            }
+        }
+        if (requestCode == Constants.REQUEST_ENABLE_LOCATION) {
+            if (resultCode != Activity.RESULT_OK) {
+                checkLocationEnabled()
             }
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+        beaconScanner.stopScanning()
+    }
 
     //--------------------------------------
     //--------------MENU--------------------
