@@ -1,6 +1,5 @@
 package it.unipi.dii.indoornavigatorassistant.scanners
 
-import android.R
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -23,6 +22,11 @@ class BeaconScanner(private val navigationActivity: WeakReference<NavigationActi
     private val proximityManager = ProximityManagerFactory.create(navigationActivity.get()!!)
     private val beaconInfoProvider = BeaconInfoProvider.getInstance(navigationActivity.get()!!)
     private val regionManager = BLERegionManager()
+
+    init {
+        //textview initialization
+        binding.textViewCurrentRegion.text = BEACON_INFO_MESSAGE
+    }
 
     fun startScanning() {
         Log.d(Constants.LOG_TAG, "BeaconScanner::startScanning - scanning started")
@@ -69,7 +73,11 @@ class BeaconScanner(private val navigationActivity: WeakReference<NavigationActi
     private fun displayBeaconRegionInfo(regionId : String){
         Log.d(Constants.LOG_TAG, "BeaconScanner::onIBeaconsUpdated " +
                 "- Region scanned: $regionId")
-        binding.textViewCurrentRegion.text = BEACON_INFO_MESSAGE + "$regionId"
+        binding.textViewCurrentRegion.text = navigationActivity.get()!!
+            .resources
+            .getString(
+                it.unipi.dii.indoornavigatorassistant.R.string.navigation_activity_beacon_region_message,
+                regionId)
     }
 
     /**
@@ -88,13 +96,13 @@ class BeaconScanner(private val navigationActivity: WeakReference<NavigationActi
             val beaconListView = binding.POIBeacons
             arrayAdapter = ArrayAdapter(
                 navigationActivity.get()!!,
-                R.layout.simple_list_item_1,
+                android.R.layout.simple_list_item_1,
                 pointsOfInterest
             )
             beaconListView.adapter = arrayAdapter
         }
         else{
-            binding.POIBeacons.adapter = null;
+            binding.POIBeacons.adapter = null
         }
     }
 
