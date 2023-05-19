@@ -38,7 +38,7 @@ class NavigationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityNavigationBinding.inflate(layoutInflater)
-        Log.i(Constants.LOG_TAG, "NavigationActivity::onCreate - Navigation Activity created")
+        Log.d(Constants.LOG_TAG, "NavigationActivity::onCreate - Navigation Activity created")
         setContentView(binding.root)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -53,6 +53,7 @@ class NavigationActivity : AppCompatActivity() {
 
         beaconScanner.startScanning()
         qrCodeScanner.start()
+        
         if (!bluetoothAdapter.isEnabled) {
             promptEnableBluetooth()
         }
@@ -60,6 +61,20 @@ class NavigationActivity : AppCompatActivity() {
             checkLocationEnabled()
         }
     }
+    
+    override fun onStop() {
+        super.onStop()
+        beaconScanner.stopScanning()
+    }
+    
+    override fun onDestroy() {
+        super.onDestroy()
+        beaconScanner.disconnect()
+        qrCodeScanner.stop()
+    }
+    // TODO gestire meglio create/start/stop/destroy dell'activity (by Riccardo)
+    
+    
 
     private fun checkLocationEnabled() {
         val locationRequest = LocationRequest.create()
@@ -83,46 +98,63 @@ class NavigationActivity : AppCompatActivity() {
             }
         }
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        beaconScanner.disconnect()
-        qrCodeScanner.stop()
-    }
-
+    
+    
+    /**
+     * Prompt the user with a request to enable Bluetooth
+     */
     private fun promptEnableBluetooth() {
-            val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-            try {
-                @Suppress("DEPRECATION")
-                startActivityForResult(enableBtIntent, Constants.ENABLE_BLUETOOTH_REQUEST_CODE)
-            } catch (ex: SecurityException) {
-                throw RuntimeException(ex)
-            }
+        // Send a request to the smartphone's bluetooth adapter to prompt the user
+        // by starting an activity
+        val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+        try {
+            @Suppress("DEPRECATION")
+            startActivityForResult(enableBtIntent, Constants.ENABLE_BLUETOOTH_REQUEST_CODE)
+        } catch (ex: SecurityException) {
+            // Only thrown if Bluetooth permissions have not been granted.
+            // This should never happen since permissions are handled in MainActivity
+            throw RuntimeException(ex)
+        }
     }
-
+    
+    
+    /**
+     * Handle the reception of the result from another activity.
+     *
+     * @param requestCode code of the request
+     * @param resultCode code of the result
+     * @param data data returned by activity
+     */
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == Constants.ENABLE_BLUETOOTH_REQUEST_CODE) {
-            if (resultCode != Activity.RESULT_OK) {
-                promptEnableBluetooth()
-            } else {
-                checkLocationEnabled()
+        
+        when(requestCode) {
+            // Bluetooth activation
+            Constants.ENABLE_BLUETOOTH_REQUEST_CODE -> {
+                if (resultCode != Activity.RESULT_OK) {
+                    // Bluetooth is mandatory, so ask again
+                    promptEnableBluetooth()
+                }
+                else {
+                    // If BT is enabled, next step is to enable GPS
+                    checkLocationEnabled()
+                }
             }
-        }
-        if (requestCode == Constants.REQUEST_ENABLE_LOCATION) {
-            if (resultCode != Activity.RESULT_OK) {
-                checkLocationEnabled()
+            
+            // GPS activation
+            Constants.REQUEST_ENABLE_LOCATION -> {
+                if (resultCode != Activity.RESULT_OK) {
+                    // GPS is mandatory, so ask again
+                    checkLocationEnabled()
+                }
             }
         }
     }
-
-    override fun onStop() {
-        super.onStop()
-        beaconScanner.stopScanning()
-    }
-
+    
+    
+    
     //--------------------------------------
     //--------------MENU--------------------
     //--------------------------------------
