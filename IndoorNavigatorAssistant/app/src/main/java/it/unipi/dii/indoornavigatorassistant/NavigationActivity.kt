@@ -6,7 +6,9 @@ import android.bluetooth.BluetoothManager
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
+import android.location.LocationManager
 import android.os.Bundle
+import android.util.AndroidException
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -48,17 +50,27 @@ class NavigationActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        beaconScanner = BeaconScanner(WeakReference(this),binding)
-        qrCodeScanner = QRCodeScanner(WeakReference(this), binding)
-
-        beaconScanner.startScanning()
-        qrCodeScanner.start()
-        if (!bluetoothAdapter.isEnabled) {
+        if (bluetoothAdapter.isEnabled && isLocationEnabled(this)) {
+            startScanners()
+        } else if (!bluetoothAdapter.isEnabled) {
             promptEnableBluetooth()
         }
         else {
             checkLocationEnabled()
         }
+    }
+
+    private fun startScanners() {
+        beaconScanner = BeaconScanner(WeakReference(this))
+        qrCodeScanner = QRCodeScanner(WeakReference(this), binding)
+
+        beaconScanner.startScanning()
+        qrCodeScanner.start()
+    }
+
+    private fun isLocationEnabled(context: Context): Boolean {
+        val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
     }
 
     private fun checkLocationEnabled() {
@@ -78,7 +90,7 @@ class NavigationActivity : AppCompatActivity() {
                     val resolvable = exception as ResolvableApiException
                     resolvable.startResolutionForResult(this, Constants.REQUEST_ENABLE_LOCATION)
                 } catch (e: IntentSender.SendIntentException) {
-                    // Error occurred while trying to show the dialog
+                    throw AndroidException(e)
                 }
             }
         }
@@ -91,13 +103,13 @@ class NavigationActivity : AppCompatActivity() {
     }
 
     private fun promptEnableBluetooth() {
-            val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-            try {
-                @Suppress("DEPRECATION")
-                startActivityForResult(enableBtIntent, Constants.ENABLE_BLUETOOTH_REQUEST_CODE)
-            } catch (ex: SecurityException) {
-                throw RuntimeException(ex)
-            }
+        val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+        try {
+            @Suppress("DEPRECATION")
+            startActivityForResult(enableBtIntent, Constants.ENABLE_BLUETOOTH_REQUEST_CODE)
+        } catch (ex: SecurityException) {
+            throw RuntimeException(ex)
+        }
     }
 
     @Deprecated("Deprecated in Java")
@@ -108,12 +120,18 @@ class NavigationActivity : AppCompatActivity() {
             if (resultCode != Activity.RESULT_OK) {
                 promptEnableBluetooth()
             } else {
-                checkLocationEnabled()
+                if (!isLocationEnabled(this)) {
+                    checkLocationEnabled()
+                } else {
+                    startScanners()
+                }
             }
         }
         if (requestCode == Constants.REQUEST_ENABLE_LOCATION) {
             if (resultCode != Activity.RESULT_OK) {
                 checkLocationEnabled()
+            } else {
+                startScanners()
             }
         }
     }
