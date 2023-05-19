@@ -56,7 +56,9 @@ class NavigationActivity : AppCompatActivity() {
         if (!bluetoothAdapter.isEnabled) {
             promptEnableBluetooth()
         }
-        checkLocationEnabled()
+        else {
+            checkLocationEnabled()
+        }
     }
 
     private fun checkLocationEnabled() {
@@ -89,8 +91,6 @@ class NavigationActivity : AppCompatActivity() {
     }
 
     private fun promptEnableBluetooth() {
-        // Check if bluetooth is not enabled
-        if (!bluetoothAdapter.isEnabled) {
             val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
             try {
                 @Suppress("DEPRECATION")
@@ -98,7 +98,6 @@ class NavigationActivity : AppCompatActivity() {
             } catch (ex: SecurityException) {
                 throw RuntimeException(ex)
             }
-        }
     }
 
     @Deprecated("Deprecated in Java")
@@ -108,6 +107,8 @@ class NavigationActivity : AppCompatActivity() {
         if(requestCode == Constants.ENABLE_BLUETOOTH_REQUEST_CODE) {
             if (resultCode != Activity.RESULT_OK) {
                 promptEnableBluetooth()
+            } else {
+                checkLocationEnabled()
             }
         }
         if (requestCode == Constants.REQUEST_ENABLE_LOCATION) {
