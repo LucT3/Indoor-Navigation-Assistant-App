@@ -44,7 +44,6 @@ class TextToSpeechContainer(context: Context) : TextToSpeech.OnInitListener {
      */
     fun speak(text: String, queueMode: Int) {
         textToSpeech.speak(text, queueMode, null, "")
-        
     }
     
 }
