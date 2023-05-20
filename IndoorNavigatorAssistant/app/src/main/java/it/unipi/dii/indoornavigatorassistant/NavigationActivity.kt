@@ -89,18 +89,7 @@ class NavigationActivity : AppCompatActivity() {
         super.onDestroy()
     }
     // TODO gestire meglio create/start/stop/destroy dell'activity (by Riccardo)
-
-//    override fun onBackPressed() {
-//        if (isCameraShowing) {
-//            isCameraShowing = false
-//            setCamera()
-//            setIcon(menu?.findItem(R.id.action_switch_layout))
-//        } else {
-//            super.onBackPressed()
-//        }
-//    }
-
-
+    
     private fun startScanners() {
         beaconScanner = BeaconScanner(WeakReference(this),binding)
         qrCodeScanner = QRCodeScanner(WeakReference(this), binding)
