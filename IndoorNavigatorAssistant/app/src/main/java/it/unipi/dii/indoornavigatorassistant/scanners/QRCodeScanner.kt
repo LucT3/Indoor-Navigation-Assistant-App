@@ -1,6 +1,5 @@
 package it.unipi.dii.indoornavigatorassistant.scanners
 
-import android.graphics.Point
 import android.util.Log
 import androidx.camera.mlkit.vision.MlKitAnalyzer
 import androidx.camera.view.CameraController
@@ -31,6 +30,9 @@ class QRCodeScanner (private val navigationActivity : WeakReference<NavigationAc
             .setBarcodeFormats(Barcode.FORMAT_QR_CODE)
             .build()
         barcodeScanner = BarcodeScanning.getClient(options)
+
+        //text view initialization
+        binding.textViewQrCode.text = QR_CODE_INFO_MESSAGE
     }
     
     fun start() {
@@ -74,10 +76,9 @@ class QRCodeScanner (private val navigationActivity : WeakReference<NavigationAc
         Log.d(Constants.LOG_TAG, "QrCodeScanner::start " +
                 "- Point of interest: $pointOfInterest")
         if (pointOfInterest != null) {
-            binding.textViewQrCode.text = QR_CODE_INFO_MESSAGE + "$pointOfInterest"
-        }
-        else{
-            binding.textViewQrCode.text = QR_CODE_INFO_MESSAGE
+            binding.textViewQrCode.text = navigationActivity.get()!!
+                .resources
+                .getString(R.string.navigation_activity_qr_code_point, pointOfInterest)
         }
     }
     
