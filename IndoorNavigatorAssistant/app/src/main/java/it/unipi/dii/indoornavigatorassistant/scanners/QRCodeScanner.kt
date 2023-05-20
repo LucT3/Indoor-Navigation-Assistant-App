@@ -86,9 +86,6 @@ class QRCodeScanner (private val navigationActivity : WeakReference<NavigationAc
                 R.string.navigation_activity_qr_code_not_found
             )
         }
-        else{
-            binding.textViewQrCode.text = Constants.QR_CODE_INFO_MESSAGE
-        }
     }
 
     
