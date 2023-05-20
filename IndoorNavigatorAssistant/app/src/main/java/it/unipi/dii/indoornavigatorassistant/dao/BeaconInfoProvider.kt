@@ -1,17 +1,19 @@
 package it.unipi.dii.indoornavigatorassistant.dao
 
 import android.content.Context
+import android.util.Log
 import com.fasterxml.jackson.core.type.TypeReference
 import it.unipi.dii.indoornavigatorassistant.R
 import it.unipi.dii.indoornavigatorassistant.model.BLEAreaBeforeCurveJson
 import it.unipi.dii.indoornavigatorassistant.model.BLECurveInfo
 import it.unipi.dii.indoornavigatorassistant.model.BLECurveJson
 import it.unipi.dii.indoornavigatorassistant.model.BLERegionJson
+import it.unipi.dii.indoornavigatorassistant.util.Constants
 import it.unipi.dii.indoornavigatorassistant.util.JsonParser
 
 class BeaconInfoProvider private constructor(context: Context) {
     
-    private var bleRegions: MutableMap<String, List<String>> = mutableMapOf()
+    private var bleRegions: MutableMap<String, MutableMap<String, List<String>>> = mutableMapOf()
     private var bleCurves: MutableSet<String> = mutableSetOf()
     private var bleAreasBeforeCurves: MutableMap<String, BLECurveInfo> = mutableMapOf()
     
@@ -37,7 +39,11 @@ class BeaconInfoProvider private constructor(context: Context) {
             context.resources.getString(R.string.ble_regions_file),
             object: TypeReference<List<BLERegionJson>>(){}
         )
-        bleRegionJsonList.forEach { x -> bleRegions[x.id] = x.pointsOfInterest }
+        bleRegionJsonList.forEach { x ->
+            val PoiMap : MutableMap<String, List<String>> = mutableMapOf()
+            PoiMap.put(x.name, x.pointsOfInterest)
+            bleRegions.put(x.id, PoiMap)
+        }
         
         // Load data of BLE curves
         val bleCurveJsonList = JsonParser.loadFromJsonAsset(
@@ -84,9 +90,11 @@ class BeaconInfoProvider private constructor(context: Context) {
      * @param regionId id of the region
      * @return list of strings which describes the points of interest if the region is valid, null otherwise
      */
-    fun getBLERegionInfo(regionId: String): List<String>? {
+    fun getBLERegionInfo(regionId: String): MutableMap<String, List<String>>? {
         return bleRegions[regionId]
     }
+
+
     
     /**
      * Check if a pair of BLE beacons delimits a curve.
@@ -106,8 +114,14 @@ class BeaconInfoProvider private constructor(context: Context) {
      * @return information about the curve if the selected region is just before a curve,
      *         null otherwise
      */
-    fun getAreaBeforeCurveInfo(regionId: String): BLECurveInfo? {
-        return bleAreasBeforeCurves[regionId]
+    fun getAreaBeforeCurveInfo(regionId: String): String? {
+        bleAreasBeforeCurves.forEach { item ->
+            val curveInfo = item.value
+            if (curveInfo.curve == regionId){
+                return curveInfo.direction.toString()
+            }
+        }
+        return null
     }
     
 }

@@ -1,7 +1,12 @@
 [
   {
-    "id": "aaaa",
-    "curve" : "MKoUmipj",
+    "id": "Prova1",
+    "curve" : "XZW9ekuu",
     "direction" : "LEFT"
+  },
+  {
+    "id": "Prova2",
+    "curve" : "aUZKekuu",
+    "direction" : "RIGHT"
   }
 ]

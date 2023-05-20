@@ -1,5 +1,6 @@
 package it.unipi.dii.indoornavigatorassistant.scanners
 
+import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -12,6 +13,7 @@ import it.unipi.dii.indoornavigatorassistant.BLERegionManager
 import it.unipi.dii.indoornavigatorassistant.NavigationActivity
 import it.unipi.dii.indoornavigatorassistant.dao.BeaconInfoProvider
 import it.unipi.dii.indoornavigatorassistant.databinding.ActivityNavigationBinding
+import it.unipi.dii.indoornavigatorassistant.speech.TextToSpeechContainer
 import it.unipi.dii.indoornavigatorassistant.util.Constants
 import java.lang.ref.WeakReference
 
@@ -22,10 +24,14 @@ class BeaconScanner(private val navigationActivity: WeakReference<NavigationActi
     private val proximityManager = ProximityManagerFactory.create(navigationActivity.get()!!)
     private val beaconInfoProvider = BeaconInfoProvider.getInstance(navigationActivity.get()!!)
     private val regionManager = BLERegionManager()
+    private var textToSpeechInstance : TextToSpeechContainer
 
     init {
         //textview initialization
         binding.textViewCurrentRegion.text = Constants.BEACON_INFO_MESSAGE
+
+        //text to speech initialization
+        textToSpeechInstance = TextToSpeechContainer(navigationActivity.get()!!)
     }
 
     fun startScanning() {
@@ -59,12 +65,17 @@ class BeaconScanner(private val navigationActivity: WeakReference<NavigationActi
                         displayBeaconRegionInfo(regionId)
 
                         if (regionManager.isNewRegion(regionId)) {
+                            if (beaconInfoProvider.isCurve(regionId)){
+                                val curveDirection = beaconInfoProvider.getAreaBeforeCurveInfo(regionId)
+                                textToSpeechInstance.speak("You are in a curve to the $curveDirection",TextToSpeech.QUEUE_ADD)
+                                Log.d(Constants.LOG_TAG, "BeaconScanner::onIBeaconsUpdated - Curve Detected $curveDirection")
+                            }
+
                             // Get points of interest
                             val pointsOfInterest = beaconInfoProvider.getBLERegionInfo(regionId)
                             displayPointsOfInterestInfo(pointsOfInterest)
                         }
                     }
-
                 }
             }
         }
@@ -90,29 +101,38 @@ class BeaconScanner(private val navigationActivity: WeakReference<NavigationActi
      *
      * @param pointsOfInterest
      */
-    private fun displayPointsOfInterestInfo(pointsOfInterest: List<String>?){
+    private fun displayPointsOfInterestInfo(pointsOfInterest: MutableMap<String, List<String>>?){
         Log.d(Constants.LOG_TAG, "BeaconScanner::onIBeaconsUpdated " +
-                "- Points of interest: $pointsOfInterest")
+                "- Points of interest: ${pointsOfInterest?.values}")
         Toast.makeText(
             navigationActivity.get()!!,
-            "BLE Points Of Interest: " + pointsOfInterest.toString(),
+            "BLE Points Of Interest: " + pointsOfInterest?.values.toString(),
             Toast.LENGTH_SHORT).show()
 
         //display region points of interest
         if(pointsOfInterest != null) {
-            val arrayAdapter: ArrayAdapter<*>
-            val beaconListView = binding.POIBeacons
-            arrayAdapter = ArrayAdapter(
-                navigationActivity.get()!!,
-                android.R.layout.simple_list_item_1,
-                pointsOfInterest
-            )
-            beaconListView.adapter = arrayAdapter
+
+            val regionName : String = pointsOfInterest.keys.first().toString()
+            textToSpeechInstance.speak("You Are in the ${regionName}", TextToSpeech.QUEUE_ADD)
+            textToSpeechInstance.speak("In this region there is : ${pointsOfInterest.values}", TextToSpeech.QUEUE_ADD)
+
+            for (key in pointsOfInterest.keys) {
+                val POIList : List<String>? = pointsOfInterest[key]
+                val arrayAdapter: ArrayAdapter<*>
+                val beaconListView = binding.POIBeacons
+                arrayAdapter = ArrayAdapter(
+                    navigationActivity.get()!!,
+                    android.R.layout.simple_list_item_1,
+                    POIList!!
+                )
+                beaconListView.adapter = arrayAdapter
+            }
         }
         else{
             binding.POIBeacons.adapter = null
         }
     }
+
 
 
     fun stopScanning() {

@@ -1,5 +1,6 @@
 package it.unipi.dii.indoornavigatorassistant.scanners
 
+import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.widget.Toast
 import androidx.camera.mlkit.vision.MlKitAnalyzer
@@ -14,6 +15,7 @@ import it.unipi.dii.indoornavigatorassistant.NavigationActivity
 import it.unipi.dii.indoornavigatorassistant.R
 import it.unipi.dii.indoornavigatorassistant.dao.QrCodeInfoProvider
 import it.unipi.dii.indoornavigatorassistant.databinding.ActivityNavigationBinding
+import it.unipi.dii.indoornavigatorassistant.speech.TextToSpeechContainer
 import it.unipi.dii.indoornavigatorassistant.util.Constants
 import java.lang.ref.WeakReference
 import java.util.concurrent.Executors
@@ -24,6 +26,7 @@ class QRCodeScanner (private val navigationActivity : WeakReference<NavigationAc
     private val barcodeScanner : BarcodeScanner
     private val qrCodeInfoProvider = QrCodeInfoProvider.getInstance(navigationActivity.get()!!)
     private val cameraExecutor = Executors.newSingleThreadExecutor()
+    private var textToSpeechInstance : TextToSpeechContainer
     
     init {
         // Initialize barcode scanner
@@ -34,6 +37,9 @@ class QRCodeScanner (private val navigationActivity : WeakReference<NavigationAc
 
         //text view initialization
         binding.textViewQrCode.text = Constants.QR_CODE_INFO_MESSAGE
+
+        //text to speech initialization
+        textToSpeechInstance = TextToSpeechContainer(navigationActivity.get()!!)
     }
     
     fun start() {
@@ -81,6 +87,7 @@ class QRCodeScanner (private val navigationActivity : WeakReference<NavigationAc
                 R.string.navigation_activity_qr_code_point,
                 pointOfInterest
             )
+            textToSpeechInstance.speak("There is the $pointOfInterest near you", TextToSpeech.QUEUE_ADD)
         } else {
             binding.textViewQrCode.text = navigationActivity.get()?.resources?.getString(
                 R.string.navigation_activity_qr_code_not_found

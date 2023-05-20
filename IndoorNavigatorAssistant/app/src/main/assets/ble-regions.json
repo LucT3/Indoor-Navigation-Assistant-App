@@ -1,13 +1,15 @@
 [
   {
     "id": "XZW9ekuu",
+    "name" : "hallway right wing, floor 2",
     "pointsOfInterest": [
-      "Bagno",
+      "Bathroom",
       "ADII1"
     ]
   },
   {
     "id": "Prova",
+    "name" : "hallway right wing floor 3",
     "pointsOfInterest": [
       "Aula Magna"
     ]
