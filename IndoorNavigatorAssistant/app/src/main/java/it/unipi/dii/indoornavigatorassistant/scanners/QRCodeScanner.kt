@@ -69,18 +69,24 @@ class QRCodeScanner (private val navigationActivity : WeakReference<NavigationAc
         previewView.controller = cameraController
     }
 
-    private fun displayQrInfo(barcodeResults : List<Barcode>){
-        val qrCodeId : String = barcodeResults[0].rawValue.toString()
+    private fun displayQrInfo(barcodeResults: List<Barcode>) {
+        val qrCodeId: String = barcodeResults.getOrNull(0)?.rawValue.orEmpty()
         val pointOfInterest = qrCodeInfoProvider.getQrCodeInfo(qrCodeId)
-        Log.d(Constants.LOG_TAG, "QrCodeScanner::start -  QR Code Id: $qrCodeId")
-        Log.d(Constants.LOG_TAG, "QrCodeScanner::start " +
-                "- Point of interest: $pointOfInterest")
+        Log.d(Constants.LOG_TAG, "QrCodeScanner::start - QR Code Id: $qrCodeId")
+        Log.d(Constants.LOG_TAG, "QrCodeScanner::start - Point of interest: $pointOfInterest")
+
         if (pointOfInterest != null) {
-            binding.textViewQrCode.text = navigationActivity.get()!!
-                .resources
-                .getString(R.string.navigation_activity_qr_code_point, pointOfInterest)
+            binding.textViewQrCode.text = navigationActivity.get()?.resources?.getString(
+                R.string.navigation_activity_qr_code_point,
+                pointOfInterest
+            )
+        } else {
+            binding.textViewQrCode.text = navigationActivity.get()?.resources?.getString(
+                R.string.navigation_activity_qr_code_not_found
+            )
         }
     }
+
     
     fun stop() {
         Log.i(Constants.LOG_TAG, "QrCodeScanner::stop - barCodeScanner instance closed")
