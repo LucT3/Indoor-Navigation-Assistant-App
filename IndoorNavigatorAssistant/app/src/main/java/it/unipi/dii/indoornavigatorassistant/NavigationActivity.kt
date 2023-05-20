@@ -70,6 +70,7 @@ class NavigationActivity : AppCompatActivity() {
     
     override fun onStop() {
         beaconScanner.stopScanning()
+        qrCodeScanner.stop()
         textToSpeech.stop()
         
         super.onStop()
