@@ -17,7 +17,7 @@
     <string name="dialog_location_not_enabled_message">We need location service enabled to use BLE features.</string>
     <string name="dialog_service_not_enabled_button">OK</string>
     <!--main activity strings-->
-    <string name="welcome_message">Welcome to Indoor Navigation Assistant, the navigation app for visual impaired people.</string>
+    <string name="welcome_message">Welcome to Indoor Navigation Assistant, the navigation app for visually impaired people.</string>
     <string name="main_button_text">Go to Navigation</string>
     
     <!--navigation activity strings-->
