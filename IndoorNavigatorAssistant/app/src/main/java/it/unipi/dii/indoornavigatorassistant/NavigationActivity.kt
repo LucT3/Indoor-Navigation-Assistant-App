@@ -67,24 +67,6 @@ class NavigationActivity : AppCompatActivity() {
             requestEnableLocation()
         }
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        beaconScanner.disconnect()
-        qrCodeScanner.stop()
-    }
-    override fun onStop() {
-        super.onStop()
-        beaconScanner.stopScanning()
-    }
-
-    private fun startScanners() {
-        beaconScanner = BeaconScanner(WeakReference(this),binding)
-        qrCodeScanner = QRCodeScanner(WeakReference(this), binding)
-
-        beaconScanner.startScanning()
-        qrCodeScanner.start()
-    }
     
     override fun onStop() {
         beaconScanner.stopScanning()
@@ -103,7 +85,15 @@ class NavigationActivity : AppCompatActivity() {
     // TODO gestire meglio create/start/stop/destroy dell'activity (by Riccardo)
     
     
-
+    private fun startScanners() {
+        beaconScanner = BeaconScanner(WeakReference(this),binding)
+        qrCodeScanner = QRCodeScanner(WeakReference(this), binding)
+        
+        beaconScanner.startScanning()
+        qrCodeScanner.start()
+    }
+    
+    
     private fun isLocationEnabled(context: Context): Boolean {
         val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
