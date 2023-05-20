@@ -90,7 +90,7 @@ class BeaconScanner(private val navigationActivity: WeakReference<NavigationActi
                 "- Points of interest: $pointsOfInterest")
         Toast.makeText(
             navigationActivity.get()!!,
-            "BLE Points Of Interest" + pointsOfInterest.toString(),
+            "BLE Points Of Interest: " + pointsOfInterest.toString(),
             Toast.LENGTH_SHORT).show()
 
         //display region points of interest
