@@ -23,17 +23,29 @@ class BeaconScanner(private val navigationActivity: WeakReference<NavigationActi
     private val beaconInfoProvider = BeaconInfoProvider.getInstance(navigationActivity.get()!!)
     private val regionManager = BLERegionManager()
 
+    /**
+     * Initializes the TextView for displaying beacon region information.
+     */
     init {
         //textview initialization
         binding.textViewCurrentRegion.text = Constants.BEACON_INFO_MESSAGE
     }
 
+    /**
+     * Starts the scanning of iBeacons.
+     */
     fun startScanning() {
         Log.d(Constants.LOG_TAG, "BeaconScanner::startScanning - scanning started")
         proximityManager.setIBeaconListener(createIBeaconListener())
         proximityManager.connect { proximityManager.startScanning() }
     }
 
+    /**
+     * Creates the IBeaconListener that listens for iBeacons and executes the subsequent logic
+     * if the checks are satisfied.
+     *
+     * @return The created IBeaconListener.
+     */
     private fun createIBeaconListener(): IBeaconListener {
         Log.d(Constants.LOG_TAG, "BeaconScanner::createIBeaconListener - beacon listener started")
         return object : SimpleIBeaconListener() {
@@ -114,12 +126,17 @@ class BeaconScanner(private val navigationActivity: WeakReference<NavigationActi
         }
     }
 
-
+    /**
+     * Stops the scanning of iBeacons.
+     */
     fun stopScanning() {
         proximityManager.stopScanning()
         Log.d(Constants.LOG_TAG, "BeaconScanner::stopScanning - scanning stopped")
     }
 
+    /**
+     * Disconnects the scanning service.
+     */
     fun disconnect() {
         proximityManager.disconnect()
         Log.d(Constants.LOG_TAG, "BeaconScanner::disconnect - scanning service disconnected")
