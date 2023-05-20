@@ -25,7 +25,7 @@ class BeaconScanner(private val navigationActivity: WeakReference<NavigationActi
 
     init {
         //textview initialization
-        binding.textViewCurrentRegion.text = BEACON_INFO_MESSAGE
+        binding.textViewCurrentRegion.text = Constants.BEACON_INFO_MESSAGE
     }
 
     fun startScanning() {
@@ -88,7 +88,10 @@ class BeaconScanner(private val navigationActivity: WeakReference<NavigationActi
     private fun displayPointsOfInterestInfo(pointsOfInterest: List<String>?){
         Log.d(Constants.LOG_TAG, "BeaconScanner::onIBeaconsUpdated " +
                 "- Points of interest: $pointsOfInterest")
-        Toast.makeText(navigationActivity.get()!!, pointsOfInterest.toString(), Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            navigationActivity.get()!!,
+            "BLE Points Of Interest: " + pointsOfInterest.toString(),
+            Toast.LENGTH_SHORT).show()
 
         //display region points of interest
         if(pointsOfInterest != null) {
@@ -115,13 +118,6 @@ class BeaconScanner(private val navigationActivity: WeakReference<NavigationActi
     fun disconnect() {
         proximityManager.disconnect()
         Log.d(Constants.LOG_TAG, "BeaconScanner::disconnect - scanning service disconnected")
-    }
-
-    /**
-     * Beacon Region Info Message
-     */
-    companion object{
-        const val BEACON_INFO_MESSAGE = "Current Region Detected: "
     }
 
 }

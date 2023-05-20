@@ -1,6 +1,7 @@
 package it.unipi.dii.indoornavigatorassistant.scanners
 
 import android.util.Log
+import android.widget.Toast
 import androidx.camera.mlkit.vision.MlKitAnalyzer
 import androidx.camera.view.CameraController
 import androidx.camera.view.LifecycleCameraController
@@ -32,7 +33,7 @@ class QRCodeScanner (private val navigationActivity : WeakReference<NavigationAc
         barcodeScanner = BarcodeScanning.getClient(options)
 
         //text view initialization
-        binding.textViewQrCode.text = QR_CODE_INFO_MESSAGE
+        binding.textViewQrCode.text = Constants.QR_CODE_INFO_MESSAGE
     }
     
     fun start() {
@@ -80,19 +81,15 @@ class QRCodeScanner (private val navigationActivity : WeakReference<NavigationAc
                 .resources
                 .getString(R.string.navigation_activity_qr_code_point, pointOfInterest)
         }
+        else{
+            binding.textViewQrCode.text = Constants.QR_CODE_INFO_MESSAGE
+        }
     }
     
     fun stop() {
         Log.i(Constants.LOG_TAG, "QrCodeScanner::stop - barCodeScanner instance closed")
         cameraExecutor.shutdown()
         barcodeScanner.close()
-    }
-
-    /**
-     * QR Code Info Message
-     */
-    companion object{
-        const val QR_CODE_INFO_MESSAGE = "Qr Code Point of Interest: "
     }
 
 }

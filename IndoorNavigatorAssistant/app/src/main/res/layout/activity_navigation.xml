@@ -7,12 +7,13 @@
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="216dp"
-        android:layout_height="38dp"
+        android:id="@+id/textViewWelcomeNavigation"
+        android:layout_width="242dp"
+        android:layout_height="43dp"
         android:layout_marginTop="24dp"
         android:text="@string/navigation_activity_welcome_message"
         android:textAlignment="center"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,14 +30,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.09"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewWelcomeNavigation" />
 
     <TextView
         android:id="@+id/textViewPointsOfInterest"
         android:layout_width="210dp"
         android:layout_height="23dp"
         android:layout_marginTop="24dp"
-        android:text="Points Of Interest"
+        android:text="@string/navigation_activity_beacon_points_of_interest"
         android:textAlignment="textStart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.008"
