@@ -37,7 +37,7 @@ class NavigationActivity : AppCompatActivity() {
     // Variables for GUI
     private lateinit var binding: ActivityNavigationBinding
     private var isCameraShowing = false
-    
+    private var menu : Menu? = null
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +55,7 @@ class NavigationActivity : AppCompatActivity() {
     
     override fun onStart() {
         super.onStart()
-        
+
         // Check Bluetooth and GPS services
         val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         if (bluetoothManager.adapter.isEnabled && isLocationEnabled(this)) {
@@ -67,28 +67,44 @@ class NavigationActivity : AppCompatActivity() {
             requestEnableLocation()
         }
     }
-    
+
     override fun onStop() {
-        beaconScanner.stopScanning()
+        if (::beaconScanner.isInitialized) {
+            beaconScanner.stopScanning()
+        }
         textToSpeech.stop()
-        
+
         super.onStop()
     }
-    
+
     override fun onDestroy() {
-        beaconScanner.disconnect()
-        qrCodeScanner.stop()
+        if (::beaconScanner.isInitialized) {
+            beaconScanner.disconnect()
+        }
+        if (::qrCodeScanner.isInitialized) {
+            qrCodeScanner.stop()
+        }
         textToSpeech.shutdown()
-    
+
         super.onDestroy()
     }
     // TODO gestire meglio create/start/stop/destroy dell'activity (by Riccardo)
-    
-    
+
+//    override fun onBackPressed() {
+//        if (isCameraShowing) {
+//            isCameraShowing = false
+//            setCamera()
+//            setIcon(menu?.findItem(R.id.action_switch_layout))
+//        } else {
+//            super.onBackPressed()
+//        }
+//    }
+
+
     private fun startScanners() {
         beaconScanner = BeaconScanner(WeakReference(this),binding)
         qrCodeScanner = QRCodeScanner(WeakReference(this), binding)
-        
+
         beaconScanner.startScanning()
         qrCodeScanner.start()
     }
@@ -192,7 +208,7 @@ class NavigationActivity : AppCompatActivity() {
      */
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.layout_menu, menu)
-
+        this.menu = menu
         val layoutButton = menu?.findItem(R.id.action_switch_layout)
         setIcon(layoutButton)
         return true
