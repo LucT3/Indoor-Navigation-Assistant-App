@@ -10,6 +10,7 @@ import com.kontakt.sdk.android.common.profile.IBeaconDevice
 import com.kontakt.sdk.android.common.profile.IBeaconRegion
 import it.unipi.dii.indoornavigatorassistant.BLERegionManager
 import it.unipi.dii.indoornavigatorassistant.NavigationActivity
+import it.unipi.dii.indoornavigatorassistant.R
 import it.unipi.dii.indoornavigatorassistant.dao.BeaconInfoProvider
 import it.unipi.dii.indoornavigatorassistant.databinding.ActivityNavigationBinding
 import it.unipi.dii.indoornavigatorassistant.model.BLERegionInfo
@@ -32,10 +33,14 @@ class BeaconScanner(
      * Initializes the TextView for displaying beacon region information.
      */
     init {
-        //textview initialization
-        binding.textViewCurrentRegion.text = Constants.BEACON_INFO_MESSAGE
+        // Initialize text view
+        binding.textViewCurrentRegion.text = navigationActivity.get()!!
+            .resources.getString(
+                R.string.navigation_activity_beacon_region_message,
+                ""
+            )
         
-        //text to speech initialization
+        // Initialize text-to-speech
         textToSpeechInstance = TextToSpeechContainer(navigationActivity.get()!!)
     }
     
@@ -151,7 +156,7 @@ class BeaconScanner(
         binding.textViewCurrentRegion.text = navigationActivity.get()!!
             .resources
             .getString(
-                it.unipi.dii.indoornavigatorassistant.R.string.navigation_activity_beacon_region_message,
+                R.string.navigation_activity_beacon_region_message,
                 regionId
             )
     }
