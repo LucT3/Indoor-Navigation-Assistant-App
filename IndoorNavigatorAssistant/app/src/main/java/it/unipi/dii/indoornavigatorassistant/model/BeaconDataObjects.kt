@@ -11,6 +11,7 @@ data class BLEAreaBeforeCurveJson(val id: String, val curve: String, val directi
 
 
 // Data class which stores information related to a curve
+data class BLERegionInfo(val name: String, val pointsOfInterest: List<String>): Serializable
 data class BLECurveInfo(val curve: String, val direction: Direction)
 
 

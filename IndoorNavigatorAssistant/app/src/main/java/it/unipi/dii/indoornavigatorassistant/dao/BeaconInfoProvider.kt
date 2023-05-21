@@ -6,12 +6,13 @@ import it.unipi.dii.indoornavigatorassistant.R
 import it.unipi.dii.indoornavigatorassistant.model.BLEAreaBeforeCurveJson
 import it.unipi.dii.indoornavigatorassistant.model.BLECurveInfo
 import it.unipi.dii.indoornavigatorassistant.model.BLECurveJson
+import it.unipi.dii.indoornavigatorassistant.model.BLERegionInfo
 import it.unipi.dii.indoornavigatorassistant.model.BLERegionJson
 import it.unipi.dii.indoornavigatorassistant.util.JsonParser
 
 class BeaconInfoProvider private constructor(context: Context) {
     
-    private var bleRegions: MutableMap<String, MutableMap<String, List<String>>> = mutableMapOf()
+    private var bleRegions: MutableMap<String, BLERegionInfo> = mutableMapOf()
     private var bleCurves: MutableSet<String> = mutableSetOf()
     private var bleAreasBeforeCurves: MutableMap<String, BLECurveInfo> = mutableMapOf()
     
@@ -35,27 +36,25 @@ class BeaconInfoProvider private constructor(context: Context) {
         val bleRegionJsonList = JsonParser.loadFromJsonAsset(
             context.assets,
             context.resources.getString(R.string.ble_regions_file),
-            object: TypeReference<List<BLERegionJson>>(){}
+            object : TypeReference<List<BLERegionJson>>() {}
         )
         bleRegionJsonList.forEach { x ->
-            val PoiMap : MutableMap<String, List<String>> = mutableMapOf()
-            PoiMap.put(x.name, x.pointsOfInterest)
-            bleRegions.put(x.id, PoiMap)
+            bleRegions[x.id] = BLERegionInfo(x.name, x.pointsOfInterest)
         }
         
         // Load data of BLE curves
         val bleCurveJsonList = JsonParser.loadFromJsonAsset(
             context.assets,
             context.resources.getString(R.string.ble_curves_file),
-            object: TypeReference<List<BLECurveJson>>(){}
+            object : TypeReference<List<BLECurveJson>>() {}
         )
         bleCurveJsonList.forEach { x -> bleCurves.add(x.id) }
-
+        
         // Load data of areas before curves
         val bleAreaBeforeCurveJsonList = JsonParser.loadFromJsonAsset(
             context.assets,
             context.resources.getString(R.string.ble_pre_curves_file),
-            object: TypeReference<List<BLEAreaBeforeCurveJson>>(){}
+            object : TypeReference<List<BLEAreaBeforeCurveJson>>() {}
         )
         bleAreaBeforeCurveJsonList.forEach { x ->
             bleAreasBeforeCurves[x.id] = BLECurveInfo(x.curve, x.direction)
@@ -78,7 +77,7 @@ class BeaconInfoProvider private constructor(context: Context) {
         } else {
             beacon2 + beacon1
         }
-
+        
     }
     
     /**
@@ -88,11 +87,10 @@ class BeaconInfoProvider private constructor(context: Context) {
      * @param regionId id of the region
      * @return list of strings which describes the points of interest if the region is valid, null otherwise
      */
-    fun getBLERegionInfo(regionId: String): MutableMap<String, List<String>>? {
+    fun getBLERegionInfo(regionId: String): BLERegionInfo? {
         return bleRegions[regionId]
     }
-
-
+    
     
     /**
      * Check if a pair of BLE beacons delimits a curve.
@@ -115,7 +113,7 @@ class BeaconInfoProvider private constructor(context: Context) {
     fun getAreaBeforeCurveInfo(regionId: String): String? {
         bleAreasBeforeCurves.forEach { item ->
             val curveInfo = item.value
-            if (curveInfo.curve == regionId){
+            if (curveInfo.curve == regionId) {
                 return curveInfo.direction.toString()
             }
         }
