@@ -1,14 +1,12 @@
 package it.unipi.dii.indoornavigatorassistant.dao
 
 import android.content.Context
-import android.util.Log
 import com.fasterxml.jackson.core.type.TypeReference
 import it.unipi.dii.indoornavigatorassistant.R
 import it.unipi.dii.indoornavigatorassistant.model.BLEAreaBeforeCurveJson
 import it.unipi.dii.indoornavigatorassistant.model.BLECurveInfo
 import it.unipi.dii.indoornavigatorassistant.model.BLECurveJson
 import it.unipi.dii.indoornavigatorassistant.model.BLERegionJson
-import it.unipi.dii.indoornavigatorassistant.util.Constants
 import it.unipi.dii.indoornavigatorassistant.util.JsonParser
 
 class BeaconInfoProvider private constructor(context: Context) {

@@ -3,7 +3,6 @@ package it.unipi.dii.indoornavigatorassistant.scanners
 import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import com.kontakt.sdk.android.ble.manager.ProximityManagerFactory
 import com.kontakt.sdk.android.ble.manager.listeners.IBeaconListener
 import com.kontakt.sdk.android.ble.manager.listeners.simple.SimpleIBeaconListener
@@ -116,10 +115,6 @@ class BeaconScanner(private val navigationActivity: WeakReference<NavigationActi
     private fun displayPointsOfInterestInfo(pointsOfInterest: MutableMap<String, List<String>>?){
         Log.d(Constants.LOG_TAG, "BeaconScanner::onIBeaconsUpdated " +
                 "- Points of interest: ${pointsOfInterest?.values}")
-        Toast.makeText(
-            navigationActivity.get()!!,
-            "BLE Points Of Interest: " + pointsOfInterest?.values.toString(),
-            Toast.LENGTH_SHORT).show()
 
         //display region points of interest
         if(pointsOfInterest != null) {

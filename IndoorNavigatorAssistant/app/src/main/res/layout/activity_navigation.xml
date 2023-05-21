@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp">
@@ -27,6 +26,7 @@
         android:layout_marginTop="20dp"
         android:text="@string/navigation_activity_beacon_region_message"
         android:textAlignment="textStart"
+        android:importantForAccessibility="noHideDescendants"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.09"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,6 +39,7 @@
         android:layout_marginTop="24dp"
         android:text="@string/navigation_activity_beacon_points_of_interest"
         android:textAlignment="textStart"
+        android:importantForAccessibility="noHideDescendants"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.008"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,6 +52,7 @@
         android:layout_marginTop="24dp"
         android:text="@string/navigation_activity_qr_code_point"
         android:textAlignment="textStart"
+        android:importantForAccessibility="noHideDescendants"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -61,6 +63,7 @@
         android:layout_width="298dp"
         android:layout_height="257dp"
         android:layout_marginTop="8dp"
+        android:importantForAccessibility="noHideDescendants"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -72,6 +75,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="8dp"
         android:visibility="invisible"
+        android:importantForAccessibility="noHideDescendants"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
