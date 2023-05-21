@@ -1,6 +1,14 @@
 [
   {
     "id": "MKoUmipj",
+    "name" : "hallway right wing, floor 1",
+    "pointsOfInterest": [
+      "Bathroom",
+      "ADII1"
+    ]
+  },
+  {
+    "id": "XZW9ekuu",
     "name" : "hallway right wing, floor 2",
     "pointsOfInterest": [
       "Bathroom",
@@ -8,7 +16,7 @@
     ]
   },
   {
-    "id": "Prova",
+    "id": "aUZKekuu",
     "name" : "hallway right wing floor 3",
     "pointsOfInterest": [
       "Aula Magna"

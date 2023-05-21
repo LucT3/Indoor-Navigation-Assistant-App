@@ -1,12 +1,12 @@
 [
   {
-    "id": "Prova1",
-    "curve" : "XZW9ekuu",
+    "id": "Pre-Curve-1-test",
+    "curve" : "Curve-1-test",
     "direction" : "LEFT"
   },
   {
-    "id": "Prova2",
-    "curve" : "aUZKekuu",
+    "id": "aUZK",
+    "curve" : "XZW9ekuu",
     "direction" : "RIGHT"
   }
 ]
