@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="camera_scanning_period_milliseconds">4000</integer>
+    <integer name="camera_scanning_period_milliseconds">5000</integer>
+    <integer name="beacon_scanning_times_for_update_region">2</integer>
 </resources>

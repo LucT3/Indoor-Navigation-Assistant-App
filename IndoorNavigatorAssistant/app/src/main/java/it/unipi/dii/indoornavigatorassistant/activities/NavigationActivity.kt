@@ -1,4 +1,4 @@
-package it.unipi.dii.indoornavigatorassistant
+package it.unipi.dii.indoornavigatorassistant.activities
 
 import android.app.Activity
 import android.bluetooth.BluetoothAdapter
@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
+import it.unipi.dii.indoornavigatorassistant.R
 import it.unipi.dii.indoornavigatorassistant.databinding.ActivityNavigationBinding
 import it.unipi.dii.indoornavigatorassistant.scanners.BeaconScanner
 import it.unipi.dii.indoornavigatorassistant.scanners.QRCodeScanner

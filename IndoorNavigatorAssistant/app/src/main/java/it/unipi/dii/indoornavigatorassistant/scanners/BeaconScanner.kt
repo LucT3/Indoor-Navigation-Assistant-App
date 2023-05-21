@@ -8,8 +8,7 @@ import com.kontakt.sdk.android.ble.manager.listeners.IBeaconListener
 import com.kontakt.sdk.android.ble.manager.listeners.simple.SimpleIBeaconListener
 import com.kontakt.sdk.android.common.profile.IBeaconDevice
 import com.kontakt.sdk.android.common.profile.IBeaconRegion
-import it.unipi.dii.indoornavigatorassistant.BLERegionManager
-import it.unipi.dii.indoornavigatorassistant.NavigationActivity
+import it.unipi.dii.indoornavigatorassistant.activities.NavigationActivity
 import it.unipi.dii.indoornavigatorassistant.R
 import it.unipi.dii.indoornavigatorassistant.dao.BeaconInfoProvider
 import it.unipi.dii.indoornavigatorassistant.databinding.ActivityNavigationBinding
@@ -83,23 +82,7 @@ class BeaconScanner(
                 val regionId = getCurrentRegionId(ibeacons) ?: return
                 
                 if (regionManager.isNewRegion(regionId)) {
-                    if (beaconInfoProvider.isPreCurve(regionId)){
-                        preCurveId = regionId
-                    }
-                    if (beaconInfoProvider.isCurve(regionId) && preCurveId != null){
-                        val preCurveInfo = beaconInfoProvider.getAreaBeforeCurveInfo(preCurveId)
-                        if ( preCurveInfo?.curve == regionId) {
-                            Log.d(
-                                Constants.LOG_TAG,
-                                "BeaconScanner::onIBeaconsUpdated - Curve Detected ${preCurveInfo.direction}"
-                            )
-                            textToSpeechInstance.speak(
-                                "You are in a curve to the ${preCurveInfo.direction}",
-                                TextToSpeech.QUEUE_FLUSH
-                            )
-                            preCurveId = null
-                        }
-                    }
+                    checkCurve(regionId)
 
                     // Get points of interest
                     val pointsOfInterest = beaconInfoProvider.getBLERegionInfo(regionId)
@@ -108,8 +91,34 @@ class BeaconScanner(
             }
         }
     }
-    
-    
+
+    /**
+     * Check if a region is a pre-curve or a curve, and warn the user if is inside the curve region.
+     * Display and send an audio message telling the direction of the curve
+     *
+     * @param regionId id of the current region
+     */
+    private fun checkCurve(regionId: String){
+        if (beaconInfoProvider.isPreCurve(regionId)){
+            preCurveId = regionId
+        }
+        if (beaconInfoProvider.isCurve(regionId) && preCurveId != null){
+            val preCurveInfo = beaconInfoProvider.getAreaBeforeCurveInfo(preCurveId)
+            if ( preCurveInfo?.curve == regionId) {
+                Log.d(
+                    Constants.LOG_TAG,
+                    "BeaconScanner::onIBeaconsUpdated - Curve Detected ${preCurveInfo.direction}"
+                )
+                textToSpeechInstance.speak(
+                    "You are in a curve to the ${preCurveInfo.direction}",
+                    TextToSpeech.QUEUE_FLUSH
+                )
+                preCurveId = null
+            }
+        }
+    }
+
+
     /**
      * Get id of the current BLE region
      *
@@ -124,8 +133,6 @@ class BeaconScanner(
         if (sortedBeacons.size < 2) {
             return null
         }
-        
-        // TODO filtrare beacons il cui RSSI è sotto una certa soglia?
         
         // Get the top 2 beacons
         val top2Beacons = sortedBeacons.take(2)
