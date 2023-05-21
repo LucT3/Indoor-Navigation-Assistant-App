@@ -90,17 +90,17 @@ class QRCodeScanner (private val navigationActivity : WeakReference<NavigationAc
                 R.string.navigation_activity_qr_code_point,
                 pointOfInterest
             )
-            textToSpeechInstance.speak("There is the $pointOfInterest near you", TextToSpeech.QUEUE_FLUSH)
+            textToSpeechInstance.speak("There is the $pointOfInterest nearby you", TextToSpeech.QUEUE_FLUSH)
         } else {
             binding.textViewQrCode.text = navigationActivity.get()?.resources?.getString(
                 R.string.navigation_activity_qr_code_not_found
             )
         }
     }
-
+    
     
     fun stop() {
-        Log.i(Constants.LOG_TAG, "QrCodeScanner::stop - barCodeScanner instance closed")
+        Log.d(Constants.LOG_TAG, "QrCodeScanner::stop - barCodeScanner instance closed")
         cameraExecutor.shutdown()
         barcodeScanner.close()
     }
