@@ -1,6 +1,7 @@
 package it.unipi.dii.indoornavigatorassistant.util
 
 import android.content.res.AssetManager
+import android.util.AndroidRuntimeException
 import android.util.Log
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -32,7 +33,7 @@ object JsonParser {
                 .bufferedReader()
                 .use { it.readText() }
         } catch (ex: IOException) {
-            throw RuntimeException(ex)
+            throw AndroidRuntimeException(ex)
         }
         Log.d(Constants.LOG_TAG, "JsonParser::loadFromJsonAsset - json read: $jsonString")
         

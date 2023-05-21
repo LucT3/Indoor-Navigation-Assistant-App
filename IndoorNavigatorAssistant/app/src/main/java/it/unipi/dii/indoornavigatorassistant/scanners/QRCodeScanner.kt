@@ -103,7 +103,7 @@ class QRCodeScanner (private val navigationActivity : WeakReference<NavigationAc
             )
             // Speak the point of interest message using TextToSpeech
             textToSpeechInstance.speak(
-                "There is the $pointOfInterest near you",
+                "There is the $pointOfInterest nearby you",
                 TextToSpeech.QUEUE_FLUSH
             )
         } else {
@@ -113,11 +113,10 @@ class QRCodeScanner (private val navigationActivity : WeakReference<NavigationAc
             )
         }
     }
-
-
+    
     
     fun stop() {
-        Log.i(Constants.LOG_TAG, "QrCodeScanner::stop - barCodeScanner instance closed")
+        Log.d(Constants.LOG_TAG, "QrCodeScanner::stop - barCodeScanner instance closed")
         cameraExecutor.shutdown()
         barcodeScanner.close()
     }

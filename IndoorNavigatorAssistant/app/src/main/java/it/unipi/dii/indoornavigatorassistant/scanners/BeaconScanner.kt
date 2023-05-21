@@ -23,12 +23,17 @@ class BeaconScanner(
     private val navigationActivity: WeakReference<NavigationActivity>,
     private val binding: ActivityNavigationBinding
 ) {
-    
+    // Bluetooth Low Energy
     private val proximityManager = ProximityManagerFactory.create(navigationActivity.get()!!)
     private val beaconInfoProvider = BeaconInfoProvider.getInstance(navigationActivity.get()!!)
+    
+    // Navigation state
     private val regionManager = BLERegionManager()
-    private val textToSpeechInstance: TextToSpeechContainer
     private var preCurveId : String? = null
+    
+    // Text-to-speech
+    private val textToSpeechInstance: TextToSpeechContainer
+    
     
     /**
      * Initializes the TextView for displaying beacon region information.
@@ -43,6 +48,9 @@ class BeaconScanner(
         
         // Initialize text-to-speech
         textToSpeechInstance = TextToSpeechContainer(navigationActivity.get()!!)
+        
+        // Configure proximity manager
+        proximityManager.setIBeaconListener(createIBeaconListener())
     }
     
     /**
@@ -50,7 +58,6 @@ class BeaconScanner(
      */
     fun startScanning() {
         Log.d(Constants.LOG_TAG, "BeaconScanner::startScanning - scanning started")
-        proximityManager.setIBeaconListener(createIBeaconListener())
         proximityManager.connect { proximityManager.startScanning() }
     }
     

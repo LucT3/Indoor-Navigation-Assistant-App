@@ -10,15 +10,28 @@ import it.unipi.dii.indoornavigatorassistant.model.BLERegionInfo
 import it.unipi.dii.indoornavigatorassistant.model.BLERegionJson
 import it.unipi.dii.indoornavigatorassistant.util.JsonParser
 
+/**
+ * Class which retrieve the data about the state of the beacons inside the
+ * building environment and provides them through public methods.
+ *
+ * It must be instantiated throw the [getInstance] method.
+ */
 class BeaconInfoProvider private constructor(context: Context) {
-    
+    // Structures which hold data about beacon environment configuration
     private var bleRegions: MutableMap<String, BLERegionInfo> = mutableMapOf()
     private var bleCurves: MutableSet<String> = mutableSetOf()
     private var bleAreasBeforeCurves: MutableMap<String, BLECurveInfo> = mutableMapOf()
     
     companion object {
+        // Singleton instance of the class
         private var instance: BeaconInfoProvider? = null
-        
+    
+        /**
+         * Get a singleton instance of the BeaconInfoProvider
+         *
+         * @param context context of the application environment
+         * @return an instance of BeaconInfoProvider
+         */
         fun getInstance(context: Context): BeaconInfoProvider {
             if (instance == null) {
                 instance = BeaconInfoProvider(context)
@@ -28,7 +41,7 @@ class BeaconInfoProvider private constructor(context: Context) {
     }
     
     /**
-     * Initializer block (primary constructor) of NavigationInfoProvider class.
+     * Primary constructor of the class.
      * Reads a json (to do for all JSONs) and put the json data into the BLE Region Map
      */
     init {
