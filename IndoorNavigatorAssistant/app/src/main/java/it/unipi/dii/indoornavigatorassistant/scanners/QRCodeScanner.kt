@@ -47,7 +47,7 @@ class QRCodeScanner (private val navigationActivity : WeakReference<NavigationAc
     
     fun start() {
         val cameraController = LifecycleCameraController(navigationActivity.get()!!)
-        val previewView: PreviewView = binding.viewFinder
+        val previewView: PreviewView = binding.previewView
 
         cameraController.setImageAnalysisAnalyzer(
             cameraExecutor,

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp">
-
+    
     <TextView
         android:id="@+id/textViewWelcomeNavigation"
         android:layout_width="242dp"
@@ -19,8 +19,8 @@
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-
+    
+    
     <TextView
         android:id="@+id/textViewCurrentRegion"
         android:layout_width="297dp"
@@ -34,7 +34,7 @@
         app:layout_constraintHorizontal_bias="0.026"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewWelcomeNavigation" />
-
+    
     <TextView
         android:id="@+id/textViewPointsOfInterest"
         android:layout_width="210dp"
@@ -48,7 +48,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewCurrentRegion" />
-
+    
     <TextView
         android:id="@+id/textViewQrCode"
         android:layout_width="319dp"
@@ -62,7 +62,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/POIBeacons" />
-
+    
     <ListView
         android:id="@+id/POIBeacons"
         android:layout_width="298dp"
@@ -73,9 +73,9 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewPointsOfInterest" />
-
+    
     <androidx.camera.view.PreviewView
-        android:id="@+id/viewFinder"
+        android:id="@+id/previewView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:importantForAccessibility="noHideDescendants"
@@ -83,8 +83,22 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.153"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </androidx.camera.view.PreviewView>
+        app:layout_constraintTop_toTopOf="parent"></androidx.camera.view.PreviewView>
+    
+    <ImageButton
+        android:id="@+id/switchCameraButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="2dp"
+        android:contentDescription="@string/action_switch_layout"
+        android:importantForAccessibility="no"
+        android:onClick="onClickSwitchLayout"
+        android:title="@string/action_switch_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/dont_show_img" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
