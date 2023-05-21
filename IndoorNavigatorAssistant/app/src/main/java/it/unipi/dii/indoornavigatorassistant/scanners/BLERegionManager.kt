@@ -1,7 +1,5 @@
 package it.unipi.dii.indoornavigatorassistant.scanners
 
-import it.unipi.dii.indoornavigatorassistant.R
-
 /**
  * Class to manage the detection of new BLE regions based on a consecutive occurrence threshold.
  */
