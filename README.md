@@ -14,3 +14,5 @@ Android Application to provide indoor navigation assistance to users with visual
 | XZW9 | EE:89:D2:1D:90:51 |
 | ekuu | D9:66:36:3E:F2:B6 |
 | aUZK | C4:EC:29:4D:5B:1B |
+| 6zLh | FC:73:37:59:B5:59 |
+| Sb2Z | FD:EA:D9:76:AA:CD |
