@@ -97,19 +97,21 @@ class BeaconScanner(
     
     
     /**
-     * TODO
+     * Get id of the current BLE region
      *
-     * @param iBeacons
-     * @return
+     * @param beacons list of detected BLE beacons
+     * @return id of the region if the two beacons with highest RSSI are an actual region, null otherwise
      */
-    private fun getCurrentRegionId(iBeacons: MutableList<IBeaconDevice>): String? {
+    private fun getCurrentRegionId(beacons: MutableList<IBeaconDevice>): String? {
         // Sort beacons by signal strength
-        val sortedBeacons = iBeacons.sortedByDescending { it.rssi }
-    
+        val sortedBeacons = beacons.sortedByDescending { it.rssi }
+        
         // Check if there are at least 2 beacons
         if (sortedBeacons.size < 2) {
             return null
         }
+        
+        // TODO filtrare beacons il cui RSSI è sotto una certa soglia?
         
         // Get the top 2 beacons
         val top2Beacons = sortedBeacons.take(2)
