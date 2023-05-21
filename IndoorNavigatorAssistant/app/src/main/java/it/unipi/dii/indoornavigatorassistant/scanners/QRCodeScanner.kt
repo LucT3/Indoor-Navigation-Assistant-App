@@ -79,19 +79,35 @@ class QRCodeScanner (private val navigationActivity : WeakReference<NavigationAc
         previewView.controller = cameraController
     }
 
+    /**
+     *
+     * @param barcodeResults The list of Barcode results from scanning the QR code.
+     */
     private fun displayQrInfo(barcodeResults: List<Barcode>) {
+        // Get the QR code ID from the first barcode result, or use an empty string if not available
         val qrCodeId: String = barcodeResults.getOrNull(0)?.rawValue.orEmpty()
+
+        // Get the point of interest using the QR code ID
         val pointOfInterest = qrCodeInfoProvider.getQrCodeInfo(qrCodeId)
+
+        // Log the QR code ID and the corresponding point of interest
         Log.d(Constants.LOG_TAG, "QrCodeScanner::start - QR Code Id: $qrCodeId")
         Log.d(Constants.LOG_TAG, "QrCodeScanner::start - Point of interest: $pointOfInterest")
 
+        // Display the point of interest information in the TextView and speak it out loud
         if (pointOfInterest != null) {
+            // Set the TextView text with the formatted point of interest message
             binding.textViewQrCode.text = navigationActivity.get()?.resources?.getString(
                 R.string.navigation_activity_qr_code_point,
                 pointOfInterest
             )
-            textToSpeechInstance.speak("There is the $pointOfInterest nearby you", TextToSpeech.QUEUE_FLUSH)
+            // Speak the point of interest message using TextToSpeech
+            textToSpeechInstance.speak(
+                "There is the $pointOfInterest nearby you",
+                TextToSpeech.QUEUE_FLUSH
+            )
         } else {
+            // Set the TextView text with the QR code not found message
             binding.textViewQrCode.text = navigationActivity.get()?.resources?.getString(
                 R.string.navigation_activity_qr_code_not_found
             )
