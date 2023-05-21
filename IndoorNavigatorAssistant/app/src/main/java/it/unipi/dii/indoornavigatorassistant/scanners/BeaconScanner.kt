@@ -157,7 +157,7 @@ class BeaconScanner(
     }
     
     /**
-     * display on Logcat and Navigation activity page the Points of interest of the current region
+     * Display on Logcat and Navigation activity page the Points of interest of the current region
      *
      * @param bleRegionInfo
      */
@@ -169,9 +169,9 @@ class BeaconScanner(
         
         // Display region points of interest
         if (bleRegionInfo != null) {
-            
+            // Notify user about points of interest by text-to-speech
             textToSpeechInstance.speak(
-                "You Are in the ${bleRegionInfo.name}",
+                "You are in the ${bleRegionInfo.name}",
                 TextToSpeech.QUEUE_ADD
             )
             textToSpeechInstance.speak(
@@ -179,6 +179,7 @@ class BeaconScanner(
                 TextToSpeech.QUEUE_ADD
             )
             
+            // Show points of interest on GUI
             val pointsOfInterest: List<String> = bleRegionInfo.pointsOfInterest
             val arrayAdapter = ArrayAdapter(
                 navigationActivity.get()!!,
@@ -193,7 +194,7 @@ class BeaconScanner(
     
     
     /**
-     * Stops the scanning of iBeacons.
+     * Stops scanning. Does not disconnect from backing service. Call [disconnect] to disconnect.
      */
     fun stopScanning() {
         proximityManager.stopScanning()

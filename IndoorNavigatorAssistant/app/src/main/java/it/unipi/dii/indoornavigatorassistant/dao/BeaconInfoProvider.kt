@@ -77,8 +77,8 @@ class BeaconInfoProvider private constructor(context: Context) {
         } else {
             beacon2 + beacon1
         }
-        
     }
+    
     
     /**
      * Get the list of points of interest within a BLE region,

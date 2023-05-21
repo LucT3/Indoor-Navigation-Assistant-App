@@ -26,9 +26,9 @@ class PermissionManager private constructor(private val activity: WeakReference<
     
     companion object {
         /**
-         * Generate a PermissionManager from an AppCompatActivity object
+         * Generate a PermissionManager from an AppCompatActivity object.
          *
-         * @param activity
+         * @param activity current activity
          */
         fun from(activity: AppCompatActivity) = PermissionManager(WeakReference(activity))
     }
@@ -37,10 +37,10 @@ class PermissionManager private constructor(private val activity: WeakReference<
     
     
     /**
-     * Set rationale for permission request
+     * Set rationale for permission request.
      *
-     * @param description
-     * @return
+     * @param description description of the rationale pop-up
+     * @return this PermissionManager
      */
     fun rationale(description: String): PermissionManager {
         rationale = description
@@ -48,10 +48,10 @@ class PermissionManager private constructor(private val activity: WeakReference<
     }
     
     /**
-     * Add new permissions to the list of permissions to be requested by the user
+     * Add new permissions to the list of permissions to be requested by the user.
      *
-     * @param permission
-     * @return
+     * @param permission permissions to add
+     * @return this PermissionManager
      */
     fun request(vararg permission: Permission): PermissionManager {
         requiredPermissions.addAll(permission)
@@ -59,9 +59,9 @@ class PermissionManager private constructor(private val activity: WeakReference<
     }
     
     /**
-     * Set the callback and request permissions to the user
+     * Set the callback and request permissions to the user.
      *
-     * @param callback
+     * @param callback callback function
      */
     fun checkPermission(callback: (Boolean) -> Unit) {
         this.callback = callback
@@ -88,7 +88,7 @@ class PermissionManager private constructor(private val activity: WeakReference<
     }
     
     /**
-     * Launch permission request
+     * Launch permission request.
      */
     private fun requestPermissions() {
         permissionCheck?.launch(getPermissionList())
@@ -96,9 +96,9 @@ class PermissionManager private constructor(private val activity: WeakReference<
     
     
     /**
-     * Display a pop-up to user which explains why we need the requested permission
+     * Display a pop-up to user which explains why we need the requested permission.
      *
-     * @param activity
+     * @param activity current activity
      */
     private fun displayRationale(activity: AppCompatActivity) {
         AlertDialog.Builder(activity)
@@ -112,16 +112,16 @@ class PermissionManager private constructor(private val activity: WeakReference<
     }
     
     /**
-     * Send a positive result (in case all permissions are already granted
+     * Send a positive result (in case all permissions are already granted.
      */
     private fun sendPositiveResult() {
         sendResultAndCleanUp(getPermissionList().associateWith { true })
     }
     
     /**
-     * Send result by calling the callback function and cleanup the PermissionManager
+     * Send result by calling the callback function and cleanup the PermissionManager.
      *
-     * @param grantResults
+     * @param grantResults map which shows for each permission if it has been granted
      */
     private fun sendResultAndCleanUp(grantResults: Map<String, Boolean>) {
         Log.d(Constants.LOG_TAG, "PermissionManager::sendResultAndCleanUp - grantResults=$grantResults")
@@ -130,7 +130,7 @@ class PermissionManager private constructor(private val activity: WeakReference<
     }
     
     /**
-     * Restore the state of the PermissionManager object
+     * Restore the state of the PermissionManager object.
      */
     private fun cleanUp() {
         requiredPermissions.clear()
