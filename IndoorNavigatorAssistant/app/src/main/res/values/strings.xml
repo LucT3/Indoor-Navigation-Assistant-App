@@ -22,7 +22,7 @@
     <string name="main_button_text">Go to Navigation</string>
     
     <!--navigation activity strings-->
-    <string name="navigation_activity_welcome_message">Welcome To The Navigation Page!</string>
+    <string name="navigation_activity_welcome_message">Welcome to the Navigation page!</string>
     <string name="navigation_activity_beacon_region_message">Current Region Detected: %s</string>
     <string name="navigation_activity_beacon_points_of_interest">Beacons Points Of Interest</string>
     <string name="navigation_activity_qr_code_point">Qr Code Point of Interest: %s</string>
