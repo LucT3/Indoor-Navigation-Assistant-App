@@ -1,4 +1,6 @@
-package it.unipi.dii.indoornavigatorassistant
+package it.unipi.dii.indoornavigatorassistant.scanners
+
+import it.unipi.dii.indoornavigatorassistant.R
 
 /**
  * Class to manage the detection of new BLE regions based on a consecutive occurrence threshold.
@@ -8,7 +10,7 @@ class BLERegionManager {
     private var currentRegion : String? = null
     private var lastRegionScanned : String? = null
     private var counter : Int = 0
-    private val threshold : Int = 3 // TODO configurare su file xml
+    private val threshold : Int = R.integer.beacon_scanning_times_for_update_region
 
     /**
      * Checks if the provided region is a new region based on the consecutive occurrence threshold.

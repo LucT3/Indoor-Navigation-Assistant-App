@@ -1,4 +1,4 @@
-package it.unipi.dii.indoornavigatorassistant
+package it.unipi.dii.indoornavigatorassistant.activities
 
 import android.app.AlertDialog
 import android.content.Intent
@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.kontakt.sdk.android.common.KontaktSDK
 import com.kontakt.sdk.android.common.log.LogLevel
 import com.kontakt.sdk.android.common.log.Logger
+import it.unipi.dii.indoornavigatorassistant.R
 import it.unipi.dii.indoornavigatorassistant.databinding.ActivityMainBinding
 import it.unipi.dii.indoornavigatorassistant.permissions.BluetoothPermissions
 import it.unipi.dii.indoornavigatorassistant.permissions.CameraPermissions

@@ -1,22 +1,26 @@
 [
   {
-    "id": "ekuu",
-    "pointOfInterest": "Bathroom"
+    "id": "ADII1a",
+    "pointOfInterest": "Room ADII1 front door"
+  },
+  {
+    "id": "ADII1b",
+    "pointOfInterest": "Room ADDI1 back door"
   },
   {
     "id": "A28a",
-    "pointOfInterest": "Room A28"
+    "pointOfInterest": "Room A28 front door"
   },
   {
-    "id": "6zLh",
-    "pointOfInterest": "Room A12"
+    "id": "A28b",
+    "pointOfInterest": "Room A28 back door"
   },
   {
-    "id": "SJG9",
-    "pointOfInterest": "Room ADII1"
+    "id": "BathroomF2RW",
+    "pointOfInterest": "Bathroom"
   },
   {
-    "id": "U9LQ",
-    "pointOfInterest": "Room A14"
+    "id": "FireEscF2RW",
+    "pointOfInterest": "Second floor Fire Escape Door"
   }
 ]
