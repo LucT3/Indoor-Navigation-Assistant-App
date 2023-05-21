@@ -10,6 +10,7 @@ import com.kontakt.sdk.android.common.profile.IBeaconDevice
 import com.kontakt.sdk.android.common.profile.IBeaconRegion
 import it.unipi.dii.indoornavigatorassistant.BLERegionManager
 import it.unipi.dii.indoornavigatorassistant.NavigationActivity
+import it.unipi.dii.indoornavigatorassistant.R
 import it.unipi.dii.indoornavigatorassistant.dao.BeaconInfoProvider
 import it.unipi.dii.indoornavigatorassistant.databinding.ActivityNavigationBinding
 import it.unipi.dii.indoornavigatorassistant.model.BLERegionInfo
@@ -33,10 +34,14 @@ class BeaconScanner(
      * Initializes the TextView for displaying beacon region information.
      */
     init {
-        //textview initialization
-        binding.textViewCurrentRegion.text = Constants.BEACON_INFO_MESSAGE
+        // Initialize text view
+        binding.textViewCurrentRegion.text = navigationActivity.get()!!
+            .resources.getString(
+                R.string.navigation_activity_beacon_region_message,
+                ""
+            )
         
-        //text to speech initialization
+        // Initialize text-to-speech
         textToSpeechInstance = TextToSpeechContainer(navigationActivity.get()!!)
     }
     
@@ -99,19 +104,21 @@ class BeaconScanner(
     
     
     /**
-     * TODO
+     * Get id of the current BLE region
      *
-     * @param iBeacons
-     * @return
+     * @param beacons list of detected BLE beacons
+     * @return id of the region if the two beacons with highest RSSI are an actual region, null otherwise
      */
-    private fun getCurrentRegionId(iBeacons: MutableList<IBeaconDevice>): String? {
+    private fun getCurrentRegionId(beacons: MutableList<IBeaconDevice>): String? {
         // Sort beacons by signal strength
-        val sortedBeacons = iBeacons.sortedByDescending { it.rssi }
-    
+        val sortedBeacons = beacons.sortedByDescending { it.rssi }
+        
         // Check if there are at least 2 beacons
         if (sortedBeacons.size < 2) {
             return null
         }
+        
+        // TODO filtrare beacons il cui RSSI è sotto una certa soglia?
         
         // Get the top 2 beacons
         val top2Beacons = sortedBeacons.take(2)
@@ -151,13 +158,13 @@ class BeaconScanner(
         binding.textViewCurrentRegion.text = navigationActivity.get()!!
             .resources
             .getString(
-                it.unipi.dii.indoornavigatorassistant.R.string.navigation_activity_beacon_region_message,
+                R.string.navigation_activity_beacon_region_message,
                 regionId
             )
     }
     
     /**
-     * display on Logcat and Navigation activity page the Points of interest of the current region
+     * Display on Logcat and Navigation activity page the Points of interest of the current region
      *
      * @param bleRegionInfo
      */
@@ -169,9 +176,9 @@ class BeaconScanner(
         
         // Display region points of interest
         if (bleRegionInfo != null) {
-            
+            // Notify user about points of interest by text-to-speech
             textToSpeechInstance.speak(
-                "You Are in the ${bleRegionInfo.name}",
+                "You are in the ${bleRegionInfo.name}",
                 TextToSpeech.QUEUE_ADD
             )
             textToSpeechInstance.speak(
@@ -179,6 +186,7 @@ class BeaconScanner(
                 TextToSpeech.QUEUE_ADD
             )
             
+            // Show points of interest on GUI
             val pointsOfInterest: List<String> = bleRegionInfo.pointsOfInterest
             val arrayAdapter = ArrayAdapter(
                 navigationActivity.get()!!,
@@ -193,7 +201,7 @@ class BeaconScanner(
     
     
     /**
-     * Stops the scanning of iBeacons.
+     * Stops scanning. Does not disconnect from backing service. Call [disconnect] to disconnect.
      */
     fun stopScanning() {
         proximityManager.stopScanning()

@@ -30,8 +30,13 @@ class QrCodeInfoProvider private constructor(context: Context) {
         )
         qrCodeInfoList.forEach { x -> qrInfoMap[x.id] = x.pointOfInterest }
     }
-
-
+    
+    /**
+     * Get the point of interest related to a QR code.
+     *
+     * @param qrCodeId id of the QR code
+     * @return name of the point of interest if the QR code is valid, null otherwise
+     */
     fun getQrCodeInfo(qrCodeId: String): String? {
         return qrInfoMap[qrCodeId]
     }

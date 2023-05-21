@@ -34,10 +34,14 @@ class QRCodeScanner (private val navigationActivity : WeakReference<NavigationAc
             .build()
         barcodeScanner = BarcodeScanning.getClient(options)
 
-        //text view initialization
-        binding.textViewQrCode.text = Constants.QR_CODE_INFO_MESSAGE
+        // Initialize text view
+        binding.textViewQrCode.text = navigationActivity.get()!!
+            .resources.getString(
+                R.string.navigation_activity_qr_code_point,
+                ""
+            )
 
-        //text to speech initialization
+        // Initialize TextToSpeech
         textToSpeechInstance = TextToSpeechContainer(navigationActivity.get()!!)
     }
     

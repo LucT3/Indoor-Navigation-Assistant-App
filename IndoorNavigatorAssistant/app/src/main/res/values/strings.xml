@@ -16,6 +16,7 @@
     <string name="dialog_bluetooth_not_enabled_message">We need bluetooth service enabled to use BLE features.</string>
     <string name="dialog_location_not_enabled_message">We need location service enabled to use BLE features.</string>
     <string name="dialog_service_not_enabled_button">OK</string>
+    
     <!--main activity strings-->
     <string name="welcome_message">Welcome to Indoor Navigator Assistant, the navigation app for visually impaired people.</string>
     <string name="main_button_text">Go to Navigation</string>
@@ -26,6 +27,6 @@
     <string name="navigation_activity_beacon_points_of_interest">Beacons Points Of Interest</string>
     <string name="navigation_activity_qr_code_point">Qr Code Point of Interest: %s</string>
     <string name="navigation_activity_qr_code_not_found">"Qr Code Point of Interest: No Point of Interest for this QR code</string>
-
+    
     <string name="action_switch_layout">Switch Layout</string>
 </resources>
