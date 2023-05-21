@@ -8,7 +8,7 @@ class BLERegionManager {
     private var currentRegion : String? = null
     private var lastRegionScanned : String? = null
     private var counter : Int = 0
-    private val threshold : Int = 3
+    private val threshold : Int = 3 // TODO configurare su file xml
 
     /**
      * Checks if the provided region is a new region based on the consecutive occurrence threshold.
