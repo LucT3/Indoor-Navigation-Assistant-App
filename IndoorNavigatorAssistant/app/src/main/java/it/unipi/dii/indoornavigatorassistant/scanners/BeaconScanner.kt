@@ -43,6 +43,9 @@ class BeaconScanner(
         
         // Initialize text-to-speech
         textToSpeechInstance = TextToSpeechContainer(navigationActivity.get()!!)
+        
+        // Configure proximity manager
+        proximityManager.setIBeaconListener(createIBeaconListener())
     }
     
     /**
@@ -50,7 +53,6 @@ class BeaconScanner(
      */
     fun startScanning() {
         Log.d(Constants.LOG_TAG, "BeaconScanner::startScanning - scanning started")
-        proximityManager.setIBeaconListener(createIBeaconListener())
         proximityManager.connect { proximityManager.startScanning() }
     }
     

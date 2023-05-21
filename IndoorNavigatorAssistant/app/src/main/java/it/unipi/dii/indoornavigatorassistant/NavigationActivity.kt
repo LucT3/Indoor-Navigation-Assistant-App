@@ -8,7 +8,7 @@ import android.content.Intent
 import android.content.IntentSender
 import android.location.LocationManager
 import android.os.Bundle
-import android.util.AndroidException
+import android.util.AndroidRuntimeException
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -37,7 +37,7 @@ class NavigationActivity : AppCompatActivity() {
     // Variables for GUI
     private lateinit var binding: ActivityNavigationBinding
     private var isCameraShowing = false
-    private var menu : Menu? = null
+    private var menu: Menu? = null
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +46,10 @@ class NavigationActivity : AppCompatActivity() {
         binding = ActivityNavigationBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setCamera()
+        
+        // Initialize scanners
+        beaconScanner = BeaconScanner(WeakReference(this), binding)
+        qrCodeScanner = QRCodeScanner(WeakReference(this), binding)
         
         // Configure Text-to-Speech functionality
         textToSpeech = TextToSpeechContainer(this)
@@ -56,56 +60,75 @@ class NavigationActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
-        // Check Bluetooth and GPS services
-        val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
-        if (bluetoothManager.adapter.isEnabled && isLocationEnabled(this)) {
-            startScanners()
-        } else if (!bluetoothManager.adapter.isEnabled) {
+        // Check if Bluetooth and GPS services are enabled
+        val isBluetoothEnabled = this.isBluetoothEnabled()
+        val isLocationEnabled = this.isLocationEnabled()
+        
+        if (!isBluetoothEnabled) {
             promptEnableBluetooth()
         }
+        else if (!isLocationEnabled) {
+            promptEnableLocation()
+        }
         else {
-            requestEnableLocation()
+            startScanners()
         }
     }
-
+    
     override fun onStop() {
-        if (::beaconScanner.isInitialized) {
-            beaconScanner.stopScanning()
-        }
+        // Stop scanners
+        beaconScanner.stopScanning()
+        qrCodeScanner.stop()
+        // Stop text-to-speech
         textToSpeech.stop()
 
         super.onStop()
     }
-
+    
     override fun onDestroy() {
-        if (::beaconScanner.isInitialized) {
-            beaconScanner.disconnect()
-        }
-        if (::qrCodeScanner.isInitialized) {
-            qrCodeScanner.stop()
-        }
+        // Disconnect scanner from BLE service
+        beaconScanner.disconnect()
+        // Shutdown text-to-speech
         textToSpeech.shutdown()
 
         super.onDestroy()
     }
-    // TODO gestire meglio create/start/stop/destroy dell'activity (by Riccardo)
     
+    
+    /**
+     * Start both beacon scanner and QR code scanner.
+     */
     private fun startScanners() {
-        beaconScanner = BeaconScanner(WeakReference(this),binding)
-        qrCodeScanner = QRCodeScanner(WeakReference(this), binding)
-
         beaconScanner.startScanning()
         qrCodeScanner.start()
     }
     
+    /**
+     * Check if Bluetooth is enabled
+     *
+     * @return true if Bluetooth is enabled, false otherwise
+     */
+    private fun isBluetoothEnabled(): Boolean {
+        val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+        return bluetoothManager.adapter.isEnabled
+    }
     
-    private fun isLocationEnabled(context: Context): Boolean {
-        val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    /**
+     * Check if localization services are enabled
+     *
+     * @return true if enabled, false otherwise
+     */
+    private fun isLocationEnabled(): Boolean {
+        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
                 locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
     }
-
-    private fun requestEnableLocation() {
+    
+    
+    /**
+     * Prompt the user with a request to enable GPS
+     */
+    private fun promptEnableLocation() {
         val locationRequest = LocationRequest.create()
 
         val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
@@ -122,7 +145,7 @@ class NavigationActivity : AppCompatActivity() {
                     val resolvable = exception as ResolvableApiException
                     resolvable.startResolutionForResult(this, Constants.REQUEST_ENABLE_LOCATION)
                 } catch (e: IntentSender.SendIntentException) {
-                    throw AndroidException(e)
+                    throw AndroidRuntimeException(e)
                 }
             }
         }
@@ -142,7 +165,7 @@ class NavigationActivity : AppCompatActivity() {
         } catch (ex: SecurityException) {
             // Only thrown if Bluetooth permissions have not been granted.
             // This should never happen since permissions are handled in MainActivity
-            throw RuntimeException(ex)
+            throw AndroidRuntimeException(ex)
         }
     }
     
@@ -167,8 +190,8 @@ class NavigationActivity : AppCompatActivity() {
                     promptEnableBluetooth()
                 } else {
                     // If BT is enabled, next step is to check if GPS is enabled
-                    if (!isLocationEnabled(this)) {
-                        requestEnableLocation()
+                    if (!isLocationEnabled()) {
+                        promptEnableLocation()
                     } else {
                         startScanners()
                     }
@@ -179,7 +202,7 @@ class NavigationActivity : AppCompatActivity() {
             Constants.REQUEST_ENABLE_LOCATION -> {
                 if (resultCode != Activity.RESULT_OK) {
                     // GPS is mandatory, so ask again
-                    requestEnableLocation()
+                    promptEnableLocation()
                 } else {
                     startScanners()
                 }
@@ -245,8 +268,5 @@ class NavigationActivity : AppCompatActivity() {
                 ContextCompat.getDrawable(this, R.drawable.show_img)
             else ContextCompat.getDrawable(this, R.drawable.dont_show_img)
     }
-    
-    
-    
     
 }
