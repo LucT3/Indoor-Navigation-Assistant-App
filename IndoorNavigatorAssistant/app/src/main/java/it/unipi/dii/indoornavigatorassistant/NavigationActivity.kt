@@ -10,11 +10,8 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.util.AndroidRuntimeException
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
@@ -37,7 +34,7 @@ class NavigationActivity : AppCompatActivity() {
     // Variables for GUI
     private lateinit var binding: ActivityNavigationBinding
     private var isCameraShowing = false
-    private var menu: Menu? = null
+    
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +42,7 @@ class NavigationActivity : AppCompatActivity() {
         // Set the activity layout
         binding = ActivityNavigationBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setCamera()
+        updateCameraVisibility()
         
         // Initialize scanners
         beaconScanner = BeaconScanner(WeakReference(this), binding)
@@ -129,8 +126,9 @@ class NavigationActivity : AppCompatActivity() {
      * Prompt the user with a request to enable GPS
      */
     private fun promptEnableLocation() {
+        @Suppress("DEPRECATION")
         val locationRequest = LocationRequest.create()
-
+        
         val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
         val client = LocationServices.getSettingsClient(this)
         val task = client.checkLocationSettings(builder.build())
@@ -215,58 +213,37 @@ class NavigationActivity : AppCompatActivity() {
     //--------------------------------------
     //--------------MENU--------------------
     //--------------------------------------
-    /**
-     * To inflate the options menu (set the current icon)
-     */
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.layout_menu, menu)
-        this.menu = menu
-        val layoutButton = menu?.findItem(R.id.action_switch_layout)
-        setIcon(layoutButton)
-        return true
-    }
-
-    /**
-     * Called when a menu layout is selected, it changes the current layout and
-     * update the menu choices
-     */
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_switch_layout -> {
-                isCameraShowing = !isCameraShowing
-                setCamera()
-                setIcon(item)
-                return true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
+    
     /**
      * It change the layout of the application (show/don't show camera)
      */
-    private fun setCamera() {
+    private fun updateCameraVisibility() {
         if (isCameraShowing) {
-            //turn camera on
-            binding.viewFinder.visibility = View.VISIBLE
+            // Turn camera on
+            binding.previewView.visibility = View.VISIBLE
         }
         else {
-            //turn camera off
-            binding.viewFinder.visibility = View.INVISIBLE
+            // Turn camera off
+            binding.previewView.visibility = View.INVISIBLE
         }
     }
-
+    
     /**
      * It change the icon menu, based on which layout is chosen (camera visible/non-visible)
      */
-    private fun setIcon(menuItem: MenuItem?) {
-        if (menuItem == null)
-            return
-
-        menuItem.icon =
-            if (isCameraShowing)
-                ContextCompat.getDrawable(this, R.drawable.show_img)
-            else ContextCompat.getDrawable(this, R.drawable.dont_show_img)
+    private fun updateCameraButton() {
+        if (isCameraShowing) {
+            binding.switchCameraButton.setImageResource(R.drawable.show_img)
+        }
+        else {
+            binding.switchCameraButton.setImageResource(R.drawable.dont_show_img)
+        }
+    }
+    
+    fun onClickSwitchLayout(view: View) {
+        isCameraShowing = !isCameraShowing
+        updateCameraVisibility()
+        updateCameraButton()
     }
     
 }
