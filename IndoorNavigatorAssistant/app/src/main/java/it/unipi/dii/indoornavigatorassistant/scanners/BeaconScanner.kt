@@ -27,6 +27,7 @@ class BeaconScanner(
     private val beaconInfoProvider = BeaconInfoProvider.getInstance(navigationActivity.get()!!)
     private val regionManager = BLERegionManager()
     private val textToSpeechInstance: TextToSpeechContainer
+    private var preCurveId : String? = null
     
     /**
      * Initializes the TextView for displaying beacon region information.
@@ -70,21 +71,22 @@ class BeaconScanner(
                 val regionId = getCurrentRegionId(ibeacons) ?: return
                 
                 if (regionManager.isNewRegion(regionId)) {
-                    // TODO rifare algoritmo
-                    
-                    // 1. controlla se area prima di curva => se sì,
-                    
-                    if (beaconInfoProvider.isCurve(regionId)) {
-                        val curveDirection =
-                            beaconInfoProvider.getAreaBeforeCurveInfo(regionId)
-                        textToSpeechInstance.speak(
-                            "You are in a curve to the $curveDirection",
-                            TextToSpeech.QUEUE_FLUSH
-                        )
-                        Log.d(
-                            Constants.LOG_TAG,
-                            "BeaconScanner::onIBeaconsUpdated - Curve Detected $curveDirection"
-                        )
+                    if (beaconInfoProvider.isPreCurve(regionId)){
+                        preCurveId = regionId
+                    }
+                    if (beaconInfoProvider.isCurve(regionId) && preCurveId != null){
+                        val preCurveInfo = beaconInfoProvider.getAreaBeforeCurveInfo(preCurveId)
+                        if ( preCurveInfo?.curve == regionId) {
+                            Log.d(
+                                Constants.LOG_TAG,
+                                "BeaconScanner::onIBeaconsUpdated - Curve Detected ${preCurveInfo.direction}"
+                            )
+                            textToSpeechInstance.speak(
+                                "You are in a curve to the ${preCurveInfo.direction}",
+                                TextToSpeech.QUEUE_FLUSH
+                            )
+                            preCurveId = null
+                        }
                     }
 
                     // Get points of interest
