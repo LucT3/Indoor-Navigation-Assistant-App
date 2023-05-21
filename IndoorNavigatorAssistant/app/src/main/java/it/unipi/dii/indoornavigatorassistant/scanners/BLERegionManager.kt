@@ -10,7 +10,7 @@ class BLERegionManager {
     private var currentRegion : String? = null
     private var lastRegionScanned : String? = null
     private var counter : Int = 0
-    private val threshold : Int = R.integer.beacon_scanning_times_for_update_region
+    private val threshold : Int = 2
 
     /**
      * Checks if the provided region is a new region based on the consecutive occurrence threshold.
