@@ -78,7 +78,7 @@ class BeaconScanner(private val navigationActivity: WeakReference<NavigationActi
                         if (regionManager.isNewRegion(regionId)) {
                             if (beaconInfoProvider.isCurve(regionId)){
                                 val curveDirection = beaconInfoProvider.getAreaBeforeCurveInfo(regionId)
-                                textToSpeechInstance.speak("You are in a curve to the $curveDirection",TextToSpeech.QUEUE_ADD)
+                                textToSpeechInstance.speak("You are in a curve to the $curveDirection",TextToSpeech.QUEUE_FLUSH)
                                 Log.d(Constants.LOG_TAG, "BeaconScanner::onIBeaconsUpdated - Curve Detected $curveDirection")
                             }
 

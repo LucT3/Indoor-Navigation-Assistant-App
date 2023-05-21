@@ -86,7 +86,7 @@ class QRCodeScanner (private val navigationActivity : WeakReference<NavigationAc
                 R.string.navigation_activity_qr_code_point,
                 pointOfInterest
             )
-            textToSpeechInstance.speak("There is the $pointOfInterest near you", TextToSpeech.QUEUE_ADD)
+            textToSpeechInstance.speak("There is the $pointOfInterest near you", TextToSpeech.QUEUE_FLUSH)
         } else {
             binding.textViewQrCode.text = navigationActivity.get()?.resources?.getString(
                 R.string.navigation_activity_qr_code_not_found
