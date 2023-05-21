@@ -101,6 +101,10 @@ class BeaconInfoProvider private constructor(context: Context) {
     fun isCurve(regionId: String): Boolean {
         return bleCurves.contains(regionId)
     }
+
+    fun isPreCurve (regionId: String): Boolean {
+        return bleAreasBeforeCurves.contains(regionId)
+    }
     
     /**
      * Given the id of a BLE beacons pair which delimits an area next to a curve,
@@ -110,14 +114,8 @@ class BeaconInfoProvider private constructor(context: Context) {
      * @return information about the curve if the selected region is just before a curve,
      *         null otherwise
      */
-    fun getAreaBeforeCurveInfo(regionId: String): String? {
-        bleAreasBeforeCurves.forEach { item ->
-            val curveInfo = item.value
-            if (curveInfo.curve == regionId) {
-                return curveInfo.direction.toString()
-            }
-        }
-        return null
+    fun getAreaBeforeCurveInfo(regionId: String?): BLECurveInfo? {
+        return bleAreasBeforeCurves[regionId]
     }
     
 }
