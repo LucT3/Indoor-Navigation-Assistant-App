@@ -16,7 +16,7 @@ class QRCodeState (private val navigationActivity: WeakReference<NavigationActiv
                    private val binding: ActivityNavigationBinding) {
     
     companion object {
-        private const val PERIOD = 5000
+        private const val PERIOD_IN_MILLISECONDS = 10000
     }
     
     // State of QR code scanner
@@ -33,25 +33,30 @@ class QRCodeState (private val navigationActivity: WeakReference<NavigationActiv
      * @param qrCode
      */
     fun notifyQrCode(qrCode: String?) {
-        if (qrCode == null) {
-            clear()
-            return
-        }
-        if (qrCode != lastQrCode) {
+        // New QR code?
+        if (qrCode != null && qrCode != lastQrCode) {
             lastQrCode = qrCode
             lastTimestamp = LocalDateTime.now()
             displayCurrentQrCode()
             return
         }
         
-        val duration = Duration.between(lastTimestamp, LocalDateTime.now())
-        if (duration.seconds >= PERIOD) {
+        // Did a whole period of time (10s) elapsed?
+        if (isRefreshNeeded()) {
             lastTimestamp = LocalDateTime.now()
-            displayCurrentQrCode()
+            if (qrCode != null) {
+                displayCurrentQrCode()
+            }
+            else {
+                // Clear interface
+                clear()
+            }
         }
-        else {
-            clear()
-        }
+    }
+    
+    private fun isRefreshNeeded(): Boolean {
+        val duration = Duration.between(lastTimestamp, LocalDateTime.now())
+        return duration.toMillis() >= PERIOD_IN_MILLISECONDS
     }
     
     /**
