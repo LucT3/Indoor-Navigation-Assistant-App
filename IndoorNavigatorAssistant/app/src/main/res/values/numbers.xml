@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="camera_scanning_period_milliseconds">5000</integer>
+    <integer name="camera_scanning_period_milliseconds">500</integer>
 </resources>
