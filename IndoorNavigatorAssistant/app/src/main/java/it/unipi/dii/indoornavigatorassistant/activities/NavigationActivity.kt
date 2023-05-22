@@ -48,7 +48,8 @@ class NavigationActivity : AppCompatActivity() {
         // Initialize scanners
         beaconScanner = BeaconScanner(WeakReference(this), binding)
         qrCodeScanner = QRCodeScanner(WeakReference(this), binding)
-        
+        qrCodeScanner.start()
+
         // Configure Text-to-Speech functionality
         textToSpeech = TextToSpeechContainer(this)
         
@@ -76,7 +77,7 @@ class NavigationActivity : AppCompatActivity() {
     override fun onStop() {
         // Stop scanners
         beaconScanner.stopScanning()
-        qrCodeScanner.stop()
+//        qrCodeScanner.stop()
         // Stop text-to-speech
         textToSpeech.stop()
 
@@ -86,6 +87,9 @@ class NavigationActivity : AppCompatActivity() {
     override fun onDestroy() {
         // Disconnect scanner from BLE service
         beaconScanner.disconnect()
+
+        qrCodeScanner.stop()
+
         // Shutdown text-to-speech
         textToSpeech.shutdown()
 
@@ -98,7 +102,7 @@ class NavigationActivity : AppCompatActivity() {
      */
     private fun startScanners() {
         beaconScanner.startScanning()
-        qrCodeScanner.start()
+//        qrCodeScanner.start()
     }
     
     /**

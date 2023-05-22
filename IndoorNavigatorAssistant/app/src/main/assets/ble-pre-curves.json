@@ -3,5 +3,10 @@
     "id": "MKoUekuu",
     "curve" : "XZW9ekuu",
     "direction" : "LEFT"
+  },
+  {
+    "id": "XZW9mipj",
+    "curve": "XZW9ekuu",
+    "direction": "RIGHT"
   }
 ]

@@ -1,12 +1,5 @@
 [
   {
-    "id": "MKoUmipj",
-    "name" : "hallway right wing, floor 2",
-    "pointsOfInterest": [
-      "ADII1"
-    ]
-  },
-  {
     "id": "MKoUekuu",
     "name" : "hallway right wing, floor 2",
     "pointsOfInterest": [
@@ -17,7 +10,14 @@
     "id": "XZW9ekuu",
     "name" : "hallway right wing, floor 2",
     "pointsOfInterest": [
-      "A28"
+      "A28", "ADII1"
+    ]
+  },
+  {
+    "id": "XZW9mipj",
+    "name" : "hallway right wing, floor 2",
+    "pointsOfInterest": [
+      "A28", "Bathroom", "Fire escape"
     ]
   }
 ]
