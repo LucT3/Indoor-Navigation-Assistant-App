@@ -48,7 +48,7 @@ class NavigationActivity : AppCompatActivity() {
         // Initialize scanners
         beaconScanner = BeaconScanner(WeakReference(this), binding)
         qrCodeScanner = QRCodeScanner(WeakReference(this), binding)
-        qrCodeScanner.start()
+        qrCodeScanner.create()
 
         // Configure Text-to-Speech functionality
         textToSpeech = TextToSpeechContainer(this)
@@ -70,14 +70,13 @@ class NavigationActivity : AppCompatActivity() {
             promptEnableLocation()
         }
         else {
-            startScanners()
+            startScanner()
         }
     }
     
     override fun onStop() {
         // Stop scanners
         beaconScanner.stopScanning()
-//        qrCodeScanner.stop()
         // Stop text-to-speech
         textToSpeech.stop()
 
@@ -88,7 +87,8 @@ class NavigationActivity : AppCompatActivity() {
         // Disconnect scanner from BLE service
         beaconScanner.disconnect()
 
-        qrCodeScanner.stop()
+        // Stop QR code scanner
+        qrCodeScanner.destroy()
 
         // Shutdown text-to-speech
         textToSpeech.shutdown()
@@ -100,9 +100,8 @@ class NavigationActivity : AppCompatActivity() {
     /**
      * Start both beacon scanner and QR code scanner.
      */
-    private fun startScanners() {
+    private fun startScanner() {
         beaconScanner.startScanning()
-//        qrCodeScanner.start()
     }
     
     /**
@@ -196,7 +195,7 @@ class NavigationActivity : AppCompatActivity() {
                     if (!isLocationEnabled()) {
                         promptEnableLocation()
                     } else {
-                        startScanners()
+                        startScanner()
                     }
                 }
             }
@@ -207,7 +206,7 @@ class NavigationActivity : AppCompatActivity() {
                     // GPS is mandatory, so ask again
                     promptEnableLocation()
                 } else {
-                    startScanners()
+                    startScanner()
                 }
             }
         }

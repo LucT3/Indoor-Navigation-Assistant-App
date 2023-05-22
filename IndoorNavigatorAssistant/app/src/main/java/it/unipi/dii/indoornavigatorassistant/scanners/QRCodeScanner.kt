@@ -45,7 +45,7 @@ class QRCodeScanner (private val navigationActivity : WeakReference<NavigationAc
         textToSpeechInstance = TextToSpeechContainer(navigationActivity.get()!!)
     }
     
-    fun start() {
+    fun create() {
         val cameraController = LifecycleCameraController(navigationActivity.get()!!)
         val previewView: PreviewView = binding.previewView
 
@@ -115,7 +115,7 @@ class QRCodeScanner (private val navigationActivity : WeakReference<NavigationAc
     }
     
     
-    fun stop() {
+    fun destroy() {
         Log.d(Constants.LOG_TAG, "QrCodeScanner::stop - barCodeScanner instance closed")
         cameraExecutor.shutdown()
         barcodeScanner.close()
