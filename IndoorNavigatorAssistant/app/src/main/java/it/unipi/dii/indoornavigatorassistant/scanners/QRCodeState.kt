@@ -20,15 +20,15 @@ class QRCodeState (private val navigationActivity: WeakReference<NavigationActiv
     }
     
     // State of QR code scanner
-    private var lastQrCode: String = ""
-    private var lastTimestamp: LocalDateTime? = null
+    private var lastQrCode = ""
+    private var lastTimestamp = LocalDateTime.now()
     
     // Helper objects
     private val qrCodeInfoProvider = QrCodeInfoProvider.getInstance(navigationActivity.get()!!)
     private val textToSpeech = TextToSpeechContainer(navigationActivity.get()!!)
     
     /**
-     * TODO
+     * TODO 
      *
      * @param qrCode
      */

@@ -78,7 +78,7 @@ class QRCodeScanner(private val navigationActivity: WeakReference<NavigationActi
      */
     private fun displayQrInfo(barcodeResults: List<Barcode>) {
         // Get the QR code ID from the first barcode result, or use an empty string if not available
-        val qrCodeId: String? = barcodeResults.getOrNull(0)?.rawValue
+        val qrCodeId: String? = barcodeResults[0].rawValue
         qrCodeState.notifyQrCode(qrCodeId)
     }
     
