@@ -19,5 +19,12 @@
     "pointsOfInterest": [
       "A28", "Bathroom", "Fire escape"
     ]
+  },
+  {
+    "id": "aUZKmipj",
+    "name": "hallway right wing, floor 2",
+    "pointsOfInterest": [
+      "Elevator"
+    ]
   }
 ]
