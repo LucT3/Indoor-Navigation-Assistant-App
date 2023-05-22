@@ -16,6 +16,7 @@ class TextToSpeechContainer(context: Context) : TextToSpeech.OnInitListener {
      * @param status [TextToSpeech.SUCCESS] or [TextToSpeech.ERROR].
      */
     override fun onInit(status: Int) {
+        textToSpeech.setSpeechRate(0.7F)
         if (status == TextToSpeech.SUCCESS) {
             val result = textToSpeech.setLanguage(Locale.US)
             
