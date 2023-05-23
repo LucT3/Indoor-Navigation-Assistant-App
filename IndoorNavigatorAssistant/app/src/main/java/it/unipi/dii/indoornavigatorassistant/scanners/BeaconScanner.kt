@@ -106,15 +106,15 @@ class BeaconScanner(
         if (beaconInfoProvider.isCurve(regionId) && preCurveId != null){
             val curveInfo = beaconInfoProvider.getCurveInfo(regionId)
             val direction = when (preCurveId){
-                curveInfo?.preCurveLeft -> "left"
-                else -> "right"
+                curveInfo?.preCurveLeft -> navigationActivity.get()?.getString(R.string.curve_direction_left)
+                else -> navigationActivity.get()?.getString(R.string.curve_direction_right)
             }
             Log.d(
                 Constants.LOG_TAG,
                 "BeaconScanner::onIBeaconsUpdated - Curve Detected $direction"
             )
             textToSpeechInstance.speak(
-                "You are in a curve to the $direction",
+                "${navigationActivity.get()?.getString(R.string.curve_indication)} + $direction",
                 TextToSpeech.QUEUE_FLUSH
             )
             preCurveId = null
@@ -197,19 +197,19 @@ class BeaconScanner(
                 preRegionName = bleRegionInfo.name
                 // Notify user about region name if it's the first encountered
                 textToSpeechInstance.speak(
-                    "You are in the ${bleRegionInfo.name}",
+                    "${navigationActivity.get()?.getString(R.string.region_name_info)} + ${bleRegionInfo.name}",
                     TextToSpeech.QUEUE_ADD
                 )
             } else if (preRegionName != bleRegionInfo.name) {
                 // Notify user about region name if it's different from the previous one
                 textToSpeechInstance.speak(
-                    "You are in the ${bleRegionInfo.name}",
+                    "${navigationActivity.get()?.getString(R.string.region_name_info)} ${bleRegionInfo.name}",
                     TextToSpeech.QUEUE_ADD
                 )
             }
             // Notify user about points of interest
             textToSpeechInstance.speak(
-                "In this region there is : ${bleRegionInfo.pointsOfInterest}",
+                "${navigationActivity.get()?.getString(R.string.region_points_of_interest)} ${bleRegionInfo.pointsOfInterest}",
                 TextToSpeech.QUEUE_ADD
             )
             
