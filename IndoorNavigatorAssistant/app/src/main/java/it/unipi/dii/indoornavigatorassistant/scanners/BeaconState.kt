@@ -3,7 +3,7 @@ package it.unipi.dii.indoornavigatorassistant.scanners
 /**
  * Class to manage the detection of new BLE regions based on a consecutive occurrence threshold.
  */
-class BLERegionManager {
+class BeaconState {
 
     private var currentRegion : String? = null
     private var lastRegionScanned : String? = null

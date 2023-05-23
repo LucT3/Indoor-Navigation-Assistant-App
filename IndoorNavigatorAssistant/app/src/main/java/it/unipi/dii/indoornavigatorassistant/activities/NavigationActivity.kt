@@ -48,8 +48,10 @@ class NavigationActivity : AppCompatActivity() {
         // Initialize scanners
         beaconScanner = BeaconScanner(WeakReference(this), binding)
         qrCodeScanner = QRCodeScanner(WeakReference(this), binding)
-        qrCodeScanner.create()
-
+        
+        // Start QR code scanner
+        qrCodeScanner.startCamera()
+        
         // Configure Text-to-Speech functionality
         textToSpeech = TextToSpeechContainer(this)
         
@@ -70,20 +72,23 @@ class NavigationActivity : AppCompatActivity() {
             promptEnableLocation()
         }
         else {
-            startScanner()
+            // Start beacon scanning
+            beaconScanner.startScanning()
         }
     }
     
     override fun onStop() {
+        super.onStop()
+        
         // Stop scanners
         beaconScanner.stopScanning()
         // Stop text-to-speech
         textToSpeech.stop()
-
-        super.onStop()
     }
     
     override fun onDestroy() {
+        super.onDestroy()
+        
         // Disconnect scanner from BLE service
         beaconScanner.disconnect()
 
@@ -92,17 +97,9 @@ class NavigationActivity : AppCompatActivity() {
 
         // Shutdown text-to-speech
         textToSpeech.shutdown()
-
-        super.onDestroy()
     }
     
     
-    /**
-     * Start both beacon scanner and QR code scanner.
-     */
-    private fun startScanner() {
-        beaconScanner.startScanning()
-    }
     
     /**
      * Check if Bluetooth is enabled
@@ -195,7 +192,7 @@ class NavigationActivity : AppCompatActivity() {
                     if (!isLocationEnabled()) {
                         promptEnableLocation()
                     } else {
-                        startScanner()
+                        beaconScanner.startScanning()
                     }
                 }
             }
@@ -206,7 +203,7 @@ class NavigationActivity : AppCompatActivity() {
                     // GPS is mandatory, so ask again
                     promptEnableLocation()
                 } else {
-                    startScanner()
+                    beaconScanner.startScanning()
                 }
             }
         }

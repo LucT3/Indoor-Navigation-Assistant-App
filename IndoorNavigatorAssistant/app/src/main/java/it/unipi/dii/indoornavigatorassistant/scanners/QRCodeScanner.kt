@@ -16,8 +16,10 @@ import it.unipi.dii.indoornavigatorassistant.util.Constants
 import java.lang.ref.WeakReference
 import java.util.concurrent.Executors
 
-class QRCodeScanner(private val navigationActivity: WeakReference<NavigationActivity>,
-                    private val binding: ActivityNavigationBinding) {
+class QRCodeScanner(
+    private val navigationActivity: WeakReference<NavigationActivity>,
+    private val binding: ActivityNavigationBinding
+) {
     
     private val barcodeScanner: BarcodeScanner
     private val cameraExecutor = Executors.newSingleThreadExecutor()
@@ -38,7 +40,15 @@ class QRCodeScanner(private val navigationActivity: WeakReference<NavigationActi
             )
     }
     
-    fun create() {
+    
+    /**
+     * Create and configure a controller to analyze QR codes from camera
+     * and display the corresponding data on screen.
+     *
+     * The camera controller is bound to the NavigationActivity lifecycle and it
+     * must be called inside the `onCreate` method of the activity.
+     */
+    fun startCamera() {
         val cameraController = LifecycleCameraController(navigationActivity.get()!!)
         val previewView: PreviewView = binding.previewView
         
@@ -57,7 +67,9 @@ class QRCodeScanner(private val navigationActivity: WeakReference<NavigationActi
                     return@MlKitAnalyzer
                 }
                 
-                displayQrInfo(barcodeResults)
+                // Get the QR code ID from the first barcode result and notify new reading
+                val qrCodeId: String? = barcodeResults[0].rawValue
+                qrCodeState.notifyQrCode(qrCodeId)
             }
         )
         
@@ -65,21 +77,15 @@ class QRCodeScanner(private val navigationActivity: WeakReference<NavigationActi
         previewView.controller = cameraController
     }
     
+    
     /**
-     * TODO
-     * @param barcodeResults The list of Barcode results from scanning the QR code.
+     * Close the QR code scanner.
+     * It must be called inside the `onDestroy` method of the activity.
      */
-    private fun displayQrInfo(barcodeResults: List<Barcode>) {
-        // Get the QR code ID from the first barcode result, or use an empty string if not available
-        val qrCodeId: String? = barcodeResults[0].rawValue
-        qrCodeState.notifyQrCode(qrCodeId)
-    }
-    
-    
     fun destroy() {
         Log.d(Constants.LOG_TAG, "QrCodeScanner::stop - barCodeScanner instance closed")
-        cameraExecutor.shutdown()
         barcodeScanner.close()
+        cameraExecutor.shutdown()
     }
     
 }
