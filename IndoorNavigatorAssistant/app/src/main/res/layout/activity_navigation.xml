@@ -12,11 +12,11 @@
         android:layout_height="43dp"
         android:layout_marginTop="20dp"
         android:text="@string/navigation_activity_welcome_message"
-        android:textAlignment="center"
+        android:textAlignment="textStart"
         android:textColor="#000000"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.029"
+        app:layout_constraintHorizontal_bias="0.005"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -75,8 +75,8 @@
 
     <androidx.camera.view.PreviewView
         android:id="@+id/previewView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:importantForAccessibility="noHideDescendants"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
