@@ -58,13 +58,6 @@ class QRCodeScanner(private val navigationActivity: WeakReference<NavigationActi
                 }
                 
                 displayQrInfo(barcodeResults)
-                
-                Thread.sleep(
-                    navigationActivity.get()!!
-                        .resources
-                        .getInteger(R.integer.camera_scanning_period_milliseconds)
-                        .toLong()
-                )
             }
         )
         

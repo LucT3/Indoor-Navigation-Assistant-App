@@ -6,6 +6,8 @@ import it.unipi.dii.indoornavigatorassistant.R
 import it.unipi.dii.indoornavigatorassistant.activities.NavigationActivity
 import it.unipi.dii.indoornavigatorassistant.dao.QrCodeInfoProvider
 import it.unipi.dii.indoornavigatorassistant.databinding.ActivityNavigationBinding
+import it.unipi.dii.indoornavigatorassistant.model.QrCodeInfo
+import it.unipi.dii.indoornavigatorassistant.model.QrCodeType
 import it.unipi.dii.indoornavigatorassistant.speech.TextToSpeechContainer
 import it.unipi.dii.indoornavigatorassistant.util.Constants
 import java.lang.ref.WeakReference
@@ -28,7 +30,8 @@ class QRCodeState(
     companion object {
         // Refresh period (the app will wait at least [PERIOD_IN_MILLISECONDS]
         // to repeat the same QR code)
-        private const val PERIOD_IN_MILLISECONDS = 10000
+        private const val FLOOR_PERIOD_IN_MILLISECONDS = 10 * 10000
+        private const val DOOR_PERIOD_IN_MILLISECONDS = 4 * 1000
     }
     
     // State of QR code scanner
@@ -42,26 +45,45 @@ class QRCodeState(
     /**
      * Notify the scanning of a QR code from the camera.
      *
-     * @param qrCode id of the QR code
+     * @param qrCodeId id of the QR code
      */
-    fun notifyQrCode(qrCode: String?) {
-        // New QR code?
-        if (qrCode != null && qrCode != lastQrCode) {
-            lastQrCode = qrCode
-            lastTimestamp = LocalDateTime.now()
-            displayQrCode()
+    fun notifyQrCode(qrCodeId: String?) {
+        // No QR code?
+        if (qrCodeId == null) {
+            // Check if a GUI refresh is required
+            if (isRefreshNeeded(FLOOR_PERIOD_IN_MILLISECONDS)) {
+                lastQrCode = ""
+                lastTimestamp = LocalDateTime.now()
+                displayNotFound()
+            }
             return
         }
         
-        // Did a whole period of time (10s) elapsed?
-        if (isRefreshNeeded()) {
+        // Get info about QR code
+        val info = qrCodeInfoProvider.getQrCodeInfo(qrCodeId)
+        if (info == null) {
+            // Qr code invalid
+            displayNotFound()
+            return
+        }
+        
+        // New QR code?
+        if (qrCodeId != lastQrCode) {
+            lastQrCode = qrCodeId
             lastTimestamp = LocalDateTime.now()
-            if (qrCode != null) {
-                displayQrCode()
-            } else {
-                // Show NOT FOUND message
-                displayNotFound()
-            }
+            displayQrCode(info)
+            return
+        }
+        
+        // Refresh required?
+        val refreshPeriod = when (info.type) {
+            QrCodeType.DOOR -> DOOR_PERIOD_IN_MILLISECONDS
+            QrCodeType.FLOOR -> FLOOR_PERIOD_IN_MILLISECONDS
+        }
+        
+        if (isRefreshNeeded(refreshPeriod)) {
+            lastTimestamp = LocalDateTime.now()
+            displayQrCode(info)
         }
     }
     
@@ -69,45 +91,41 @@ class QRCodeState(
     /**
      * Check if enough time has elapsed to refresh the current QR code.
      *
+     * @param period
+     *
      * @return true if refresh is needed, false otherwise
      */
-    private fun isRefreshNeeded(): Boolean {
+    private fun isRefreshNeeded(period: Int): Boolean {
         val duration = Duration.between(lastTimestamp, LocalDateTime.now())
-        return duration.toMillis() >= PERIOD_IN_MILLISECONDS
+        return duration.toMillis() >= period
     }
     
     
     /**
      * Display the data concerning the current QR code.
      */
-    private fun displayQrCode() {
-        // Get the point of interest using the QR code ID
-        val pointOfInterest = qrCodeInfoProvider.getQrCodeInfo(lastQrCode)
-        
+    private fun displayQrCode(qrCodeInfo: QrCodeInfo) {
         Log.d(
             Constants.LOG_TAG,
             "QRCodeState::displayQrCode - QR code id: $lastQrCode; " +
-                    "point of interest: $pointOfInterest"
+                    "point of interest: ${qrCodeInfo.pointOfInterest}"
         )
-        
-        // Check if point of interest exists
-        if (pointOfInterest == null) {
-            displayNotFound()
-            return
-        }
         
         // Display the point of interest information in the TextView and speak it out loud
         // Set the TextView text with the formatted point of interest message
         binding.textViewQrCode.text = navigationActivity.get()?.resources?.getString(
             R.string.navigation_activity_qr_code_point,
-            pointOfInterest
+            qrCodeInfo.pointOfInterest
         )
+        
+        val text = when (qrCodeInfo.type) {
+            QrCodeType.FLOOR -> "${qrCodeInfo.pointOfInterest} nearby you"
+            QrCodeType.DOOR -> "${qrCodeInfo.pointOfInterest} ahead"
+        }
         // Say aloud the point of interest message using TextToSpeech
-        textToSpeech.speak(
-            "There is the $pointOfInterest nearby you",
-            TextToSpeech.QUEUE_FLUSH
-        )
+        textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH)
     }
+    
     
     /**
      * Display NOT FOUND message on GUI.

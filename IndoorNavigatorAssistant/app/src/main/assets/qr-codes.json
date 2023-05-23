@@ -1,26 +1,62 @@
 [
   {
     "id": "ADII1a",
-    "pointOfInterest": "Room ADII1 front door"
+    "pointOfInterest": "Room ADII1 front door",
+    "type": "FLOOR"
   },
   {
     "id": "ADII1b",
-    "pointOfInterest": "Room ADII1 back door"
+    "pointOfInterest": "Room ADII1 back door",
+    "type": "FLOOR"
   },
   {
     "id": "A28a",
-    "pointOfInterest": "Room A28 front door"
+    "pointOfInterest": "Room A28 front door",
+    "type": "FLOOR"
   },
   {
     "id": "A28b",
-    "pointOfInterest": "Room A28 back door"
+    "pointOfInterest": "Room A28 back door",
+    "type": "FLOOR"
   },
   {
     "id": "BathroomF2RW",
-    "pointOfInterest": "Bathroom"
+    "pointOfInterest": "Bathroom",
+    "type": "FLOOR"
   },
   {
     "id": "FireEscF2RW",
-    "pointOfInterest": "Second floor Fire Escape Door"
+    "pointOfInterest": "Fire Escape Door",
+    "type": "FLOOR"
+  },
+  {
+    "id": "DoorADII1a",
+    "pointOfInterest": "Room ADII1 front door",
+    "type": "DOOR"
+  },
+  {
+    "id": "DoorADII1b",
+    "pointOfInterest": "Room ADII1 back door",
+    "type": "DOOR"
+  },
+  {
+    "id": "DoorA28a",
+    "pointOfInterest": "Room A28 front door",
+    "type": "DOOR"
+  },
+  {
+    "id": "DoorA28b",
+    "pointOfInterest": "Room A28 back door",
+    "type": "DOOR"
+  },
+  {
+    "id": "DoorBathroomF2RW",
+    "pointOfInterest": "Bathroom",
+    "type": "DOOR"
+  },
+  {
+    "id": "DoorFireEscF2RW",
+    "pointOfInterest": "Fire Escape Door",
+    "type": "DOOR"
   }
 ]
