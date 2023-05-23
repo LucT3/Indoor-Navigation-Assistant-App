@@ -195,18 +195,19 @@ class BeaconScanner(
         if (bleRegionInfo != null) {
             if (preRegionName == null) {
                 preRegionName = bleRegionInfo.name
-                // Notify user about points of interest by text-to-speech
+                // Notify user about region name if it's the first encountered
                 textToSpeechInstance.speak(
                     "You are in the ${bleRegionInfo.name}",
                     TextToSpeech.QUEUE_ADD
                 )
             } else if (preRegionName != bleRegionInfo.name) {
-                // Notify user about points of interest by text-to-speech
+                // Notify user about region name if it's different from the previous one
                 textToSpeechInstance.speak(
                     "You are in the ${bleRegionInfo.name}",
                     TextToSpeech.QUEUE_ADD
                 )
             }
+            // Notify user about points of interest
             textToSpeechInstance.speak(
                 "In this region there is : ${bleRegionInfo.pointsOfInterest}",
                 TextToSpeech.QUEUE_ADD
