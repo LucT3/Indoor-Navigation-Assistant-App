@@ -1,12 +1,12 @@
 [
   {
     "id": "XZW9ekuu",
-    "pre-curve-right": "XZW9mipj",
-    "pre-curve-left": "MKoUekuu"
+    "preCurveRight": "XZW9mipj",
+    "preCurveLeft": "MKoUekuu"
   },
   {
     "id": "aUZKmipj",
-    "pre-curve-right": "XZW9mipj",
-    "pre-curve-left": ""
+    "preCurveRight": "XZW9mipj",
+    "preCurveLeft": ""
   }
 ]
