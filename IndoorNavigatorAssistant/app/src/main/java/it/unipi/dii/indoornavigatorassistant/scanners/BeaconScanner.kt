@@ -17,7 +17,12 @@ import it.unipi.dii.indoornavigatorassistant.speech.TextToSpeechContainer
 import it.unipi.dii.indoornavigatorassistant.util.Constants
 import java.lang.ref.WeakReference
 
-
+/**
+ * Class for scanning beacons using KontaktSDK and show the corresponding data to user.
+ *
+ * @property navigationActivity the navigation activity
+ * @property binding the ViewBinding object of navigation activity
+ */
 class BeaconScanner(
     private val navigationActivity: WeakReference<NavigationActivity>,
     private val binding: ActivityNavigationBinding
@@ -28,8 +33,8 @@ class BeaconScanner(
     
     // Navigation state
     private val regionManager = BeaconState()
-    private var preCurveId : String? = null
-    private var preRegionName : String? = null
+    private var preCurveId: String? = null
+    private var preRegionName: String? = null
     
     // Text-to-speech
     private val textToSpeechInstance: TextToSpeechContainer
@@ -77,14 +82,15 @@ class BeaconScanner(
                 )
             }
             
-            override fun onIBeaconsUpdated(ibeacons: MutableList<IBeaconDevice>,
-                                           region: IBeaconRegion)
-            {
+            override fun onIBeaconsUpdated(
+                ibeacons: MutableList<IBeaconDevice>,
+                region: IBeaconRegion
+            ) {
                 val regionId = getCurrentRegionId(ibeacons) ?: return
                 
                 if (regionManager.isNewRegion(regionId)) {
                     checkCurve(regionId)
-
+                    
                     // Get points of interest
                     val pointsOfInterest = beaconInfoProvider.getBLERegionInfo(regionId)
                     displayPointsOfInterestInfo(pointsOfInterest)
@@ -92,21 +98,23 @@ class BeaconScanner(
             }
         }
     }
-
+    
     /**
      * Check if a region is a pre-curve or a curve, and warn the user if is inside the curve region.
      * Display and send an audio message telling the direction of the curve
      *
      * @param regionId id of the current region
      */
-    private fun checkCurve(regionId: String){
-        if (beaconInfoProvider.isPreCurve(regionId)){
+    private fun checkCurve(regionId: String) {
+        if (beaconInfoProvider.isPreCurve(regionId)) {
             preCurveId = regionId
         }
-        if (beaconInfoProvider.isCurve(regionId) && preCurveId != null){
+        if (beaconInfoProvider.isCurve(regionId) && preCurveId != null) {
             val curveInfo = beaconInfoProvider.getCurveInfo(regionId)
-            val direction = when (preCurveId){
-                curveInfo?.preCurveLeft -> navigationActivity.get()?.getString(R.string.curve_direction_left)
+            val direction = when (preCurveId) {
+                curveInfo?.preCurveLeft -> navigationActivity.get()
+                    ?.getString(R.string.curve_direction_left)
+                
                 else -> navigationActivity.get()?.getString(R.string.curve_direction_right)
             }
             Log.d(
@@ -114,14 +122,14 @@ class BeaconScanner(
                 "BeaconScanner::onIBeaconsUpdated - Curve Detected $direction"
             )
             textToSpeechInstance.speak(
-                "${navigationActivity.get()?.getString(R.string.curve_indication)} + $direction",
+                "${navigationActivity.get()?.getString(R.string.curve_indication)} $direction",
                 TextToSpeech.QUEUE_FLUSH
             )
             preCurveId = null
         }
     }
-
-
+    
+    
     /**
      * Get id of the current BLE region
      *
@@ -154,16 +162,14 @@ class BeaconScanner(
             )
             displayBeaconRegionInfo(regionId)
             return regionId
-        }
-        else {
+        } else {
             return null
         }
     }
     
     
-    
     /**
-     * display on Logcat and Navigation activity page the current Beacon Region where the user is
+     * Display on Logcat and Navigation activity page the current Beacon Region where the user is.
      *
      * @param regionId id of current region
      */
@@ -181,7 +187,7 @@ class BeaconScanner(
     }
     
     /**
-     * Display on Logcat and Navigation activity page the Points of interest of the current region
+     * Display on Logcat and Navigation activity page the Points of interest of the current region.
      *
      * @param bleRegionInfo
      */
@@ -197,7 +203,7 @@ class BeaconScanner(
                 preRegionName = bleRegionInfo.name
                 // Notify user about region name if it's the first encountered
                 textToSpeechInstance.speak(
-                    "${navigationActivity.get()?.getString(R.string.region_name_info)} + ${bleRegionInfo.name}",
+                    "${navigationActivity.get()?.getString(R.string.region_name_info)} ${bleRegionInfo.name}",
                     TextToSpeech.QUEUE_ADD
                 )
             } else if (preRegionName != bleRegionInfo.name) {
@@ -221,7 +227,8 @@ class BeaconScanner(
                 pointsOfInterest
             )
             binding.POIBeacons.adapter = arrayAdapter
-        } else {
+        }
+        else {
             binding.POIBeacons.adapter = null
         }
     }

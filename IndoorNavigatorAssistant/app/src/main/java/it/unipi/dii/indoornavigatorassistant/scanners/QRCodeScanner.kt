@@ -16,14 +16,23 @@ import it.unipi.dii.indoornavigatorassistant.util.Constants
 import java.lang.ref.WeakReference
 import java.util.concurrent.Executors
 
+/**
+ * Class for scanning QR codes using MLKit library and show the corresponding data to user.
+ *
+ * @property navigationActivity the navigation activity
+ * @property binding the ViewBinding object of navigation activity
+ */
 class QRCodeScanner(
     private val navigationActivity: WeakReference<NavigationActivity>,
     private val binding: ActivityNavigationBinding
 ) {
-    
+    // Barcode scanner
     private val barcodeScanner: BarcodeScanner
-    private val cameraExecutor = Executors.newSingleThreadExecutor()
+    // Object which holds the state of the seen QR codes
     private val qrCodeState = QRCodeState(navigationActivity, binding)
+    // Thread for analyzing the frames from the camera
+    private val cameraExecutor = Executors.newSingleThreadExecutor()
+    
     
     init {
         // Initialize barcode scanner

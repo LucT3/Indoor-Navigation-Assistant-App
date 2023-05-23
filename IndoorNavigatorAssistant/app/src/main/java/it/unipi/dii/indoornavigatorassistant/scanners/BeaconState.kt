@@ -4,12 +4,21 @@ package it.unipi.dii.indoornavigatorassistant.scanners
  * Class to manage the detection of new BLE regions based on a consecutive occurrence threshold.
  */
 class BeaconState {
-
-    private var currentRegion : String? = null
-    private var lastRegionScanned : String? = null
-    private var counter : Int = 0
-    private val threshold : Int = 2
-
+    // Region currently show to user
+    private var currentRegion: String? = null
+    
+    // Last region scanned
+    private var lastRegionScanned: String? = null
+    
+    // How many times the lastRegionScanned has been scanned in consecutive times
+    private var counter: Int = 0
+    
+    companion object {
+        // How many times a region must be scanned before consider it as the "current region"
+        private const val THRESHOLD: Int = 2
+    }
+    
+    
     /**
      * Checks if the provided region is a new region based on the consecutive occurrence threshold.
      *
@@ -25,8 +34,8 @@ class BeaconState {
                 // Increment counter (region scanned is the same)
                 counter++
             }
-
-            if (counter == threshold) {
+            
+            if (counter == THRESHOLD) {
                 // The region has changed consecutively for the specified number of times.
                 // Update the currentRegion, reset the counter, and update the lastRegionScanned.
                 currentRegion = regionScanned
@@ -39,10 +48,10 @@ class BeaconState {
             // reset the counter as the consecutive sequence is broken.
             counter = 0
         }
-
+        
         // Update the lastRegionScanned
         lastRegionScanned = regionScanned
         return false
     }
-
+    
 }
