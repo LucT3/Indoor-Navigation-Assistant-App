@@ -27,7 +27,7 @@ class BeaconScanner(
     private val beaconInfoProvider = BeaconInfoProvider.getInstance(navigationActivity.get()!!)
     
     // Navigation state
-    private val regionManager = BLERegionManager()
+    private val regionManager = BeaconState()
     private var preCurveId : String? = null
     private var preRegionName : String? = null
     
