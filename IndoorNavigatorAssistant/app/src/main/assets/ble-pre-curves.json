@@ -1,17 +1,11 @@
 [
   {
-    "id": "MKoUekuu",
-    "curve" : "XZW9ekuu",
-    "direction" : "LEFT"
+    "id": "MKoUekuu"
   },
   {
-    "id": "XZW9mipj",
-    "curve": "XZW9ekuu",
-    "direction": "RIGHT"
+    "id": "XZW9mipj"
   },
   {
-    "id": "XZW9mipj",
-    "curve": "aUZKmipj",
-    "direction": "RIGHT"
+    "id": "XZW9mipj"
   }
 ]

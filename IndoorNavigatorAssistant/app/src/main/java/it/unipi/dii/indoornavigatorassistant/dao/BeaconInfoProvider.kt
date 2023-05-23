@@ -19,8 +19,8 @@ import it.unipi.dii.indoornavigatorassistant.util.JsonParser
 class BeaconInfoProvider private constructor(context: Context) {
     // Structures which hold data about beacon environment configuration
     private var bleRegions: MutableMap<String, BLERegionInfo> = mutableMapOf()
-    private var bleCurves: MutableSet<String> = mutableSetOf()
-    private var bleAreasBeforeCurves: MutableMap<String, BLECurveInfo> = mutableMapOf()
+    private var bleCurves: MutableMap<String, BLECurveInfo> = mutableMapOf()
+    private var bleAreasBeforeCurves: MutableSet<String> = mutableSetOf()
     
     companion object {
         // Singleton instance of the class
@@ -61,7 +61,7 @@ class BeaconInfoProvider private constructor(context: Context) {
             context.resources.getString(R.string.ble_curves_file),
             object : TypeReference<List<BLECurveJson>>() {}
         )
-        bleCurveJsonList.forEach { x -> bleCurves.add(x.id) }
+        bleCurveJsonList.forEach { x -> bleCurves[x.id] = BLECurveInfo(x.preCurveRight, x.preCurveLeft) }
         
         // Load data of areas before curves
         val bleAreaBeforeCurveJsonList = JsonParser.loadFromJsonAsset(
@@ -70,7 +70,7 @@ class BeaconInfoProvider private constructor(context: Context) {
             object : TypeReference<List<BLEAreaBeforeCurveJson>>() {}
         )
         bleAreaBeforeCurveJsonList.forEach { x ->
-            bleAreasBeforeCurves[x.id] = BLECurveInfo(x.curve, x.direction)
+            bleAreasBeforeCurves.add(x.id)
         }
     }
     
@@ -127,8 +127,8 @@ class BeaconInfoProvider private constructor(context: Context) {
      * @return information about the curve if the selected region is just before a curve,
      *         null otherwise
      */
-    fun getAreaBeforeCurveInfo(regionId: String?): BLECurveInfo? {
-        return bleAreasBeforeCurves[regionId]
+    fun getCurveInfo(regionId: String?): BLECurveInfo? {
+        return bleCurves[regionId]
     }
     
 }

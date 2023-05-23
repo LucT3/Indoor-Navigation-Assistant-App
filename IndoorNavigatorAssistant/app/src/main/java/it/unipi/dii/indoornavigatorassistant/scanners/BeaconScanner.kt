@@ -103,18 +103,20 @@ class BeaconScanner(
             preCurveId = regionId
         }
         if (beaconInfoProvider.isCurve(regionId) && preCurveId != null){
-            val preCurveInfo = beaconInfoProvider.getAreaBeforeCurveInfo(preCurveId)
-            if ( preCurveInfo?.curve == regionId) {
-                Log.d(
-                    Constants.LOG_TAG,
-                    "BeaconScanner::onIBeaconsUpdated - Curve Detected ${preCurveInfo.direction}"
-                )
-                textToSpeechInstance.speak(
-                    "You are in a curve to the ${preCurveInfo.direction}",
-                    TextToSpeech.QUEUE_FLUSH
-                )
-                preCurveId = null
+            val curveInfo = beaconInfoProvider.getCurveInfo(regionId)
+            val direction = when (preCurveId){
+                curveInfo?.preCurveLeft -> "left"
+                else -> "right"
             }
+            Log.d(
+                Constants.LOG_TAG,
+                "BeaconScanner::onIBeaconsUpdated - Curve Detected $direction"
+            )
+            textToSpeechInstance.speak(
+                "You are in a curve to the $direction",
+                TextToSpeech.QUEUE_FLUSH
+            )
+            preCurveId = null
         }
     }
 
