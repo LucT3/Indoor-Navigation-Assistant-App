@@ -31,7 +31,7 @@ class QRCodeState(
         // Refresh period (the app will wait at least [PERIOD_IN_MILLISECONDS]
         // to repeat the same QR code)
         private const val FLOOR_PERIOD_IN_MILLISECONDS = 10 * 10000
-        private const val DOOR_PERIOD_IN_MILLISECONDS = 1000
+        private const val DOOR_PERIOD_IN_MILLISECONDS = 4 * 1000
     }
     
     // State of QR code scanner
