@@ -8,6 +8,7 @@
     
     <!-- dialog pop-up when users doesn't grant permissions -->
     <string name="dialog_permission_not_granted_title">Permissions not granted!</string>
+    <string name="dialog_pemission_request">We need location permissions to use BLE features</string>
     <string name="dialog_permission_not_granted_message">We need location permissions to use BLE features. The application will stop</string>
     <string name="dialog_permissions_not_granted_button">OK</string>
 
@@ -29,4 +30,9 @@
     <string name="navigation_activity_qr_code_not_found">"Qr Code Point of Interest: No Point of Interest for this QR code</string>
     
     <string name="action_switch_layout">Switch Layout</string>
+    <string name="curve_direction_left">Left</string>
+    <string name="curve_direction_right">Right</string>
+    <string name="curve_indication">You are in a curve to the</string>
+    <string name="region_name_info">You are in the</string>
+    <string name="region_points_of_interest">"In this region there is :"</string>
 </resources>

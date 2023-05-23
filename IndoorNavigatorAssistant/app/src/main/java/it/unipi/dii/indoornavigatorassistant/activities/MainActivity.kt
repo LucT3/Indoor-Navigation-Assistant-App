@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
         // Check which permissions are not granted and request them
         PermissionManager.from(this)
             .request(BluetoothPermissions, CameraPermissions)
-            .rationale("We need location permissions to use BLE features")
+            .rationale(this.getString(R.string.dialog_pemission_request))
             .checkPermission { granted: Boolean ->
                 if (granted) {
                     Log.d(
