@@ -99,7 +99,7 @@ class BeaconInfoProvider private constructor(context: Context) {
         // Compute the regionId using the uniqueIds of the first and third beacons
         regionId = computeBLERegionId(
             beaconsList.getOrNull(0)?.uniqueId,
-            beaconsList.getOrNull(1)?.uniqueId
+            beaconsList.getOrNull(2)?.uniqueId
         )
         if (bleRegions.containsKey(regionId)) {
             return regionId
