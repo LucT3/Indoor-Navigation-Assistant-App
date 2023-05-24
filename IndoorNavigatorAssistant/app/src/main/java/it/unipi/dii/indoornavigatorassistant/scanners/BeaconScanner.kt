@@ -3,6 +3,8 @@ package it.unipi.dii.indoornavigatorassistant.scanners
 import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.widget.ArrayAdapter
+import com.kontakt.sdk.android.ble.configuration.ScanMode
+import com.kontakt.sdk.android.ble.configuration.ScanPeriod
 import com.kontakt.sdk.android.ble.manager.ProximityManagerFactory
 import com.kontakt.sdk.android.ble.manager.listeners.IBeaconListener
 import com.kontakt.sdk.android.ble.manager.listeners.simple.SimpleIBeaconListener
@@ -32,8 +34,8 @@ class BeaconScanner(
     private val beaconInfoProvider = BeaconInfoProvider.getInstance(navigationActivity.get()!!)
     
     // Navigation state
-    private val regionManager = BeaconState()
-    private var preCurveId: String? = null
+    private val beaconState = BeaconState()
+    private var preCurveId: String? = null // TODO integrare dentro BeaconState?
     private var preRegionName: String? = null
     
     // Text-to-speech
@@ -55,6 +57,9 @@ class BeaconScanner(
         textToSpeechInstance = TextToSpeechContainer(navigationActivity.get()!!)
         
         // Configure proximity manager
+        proximityManager.configuration()
+            .scanMode(ScanMode.LOW_LATENCY)
+            .scanPeriod(ScanPeriod.RANGING)
         proximityManager.setIBeaconListener(createIBeaconListener())
     }
     
@@ -88,7 +93,7 @@ class BeaconScanner(
             ) {
                 val regionId = getCurrentRegionId(ibeacons) ?: return
                 
-                if (regionManager.isNewRegion(regionId)) {
+                if (beaconState.isNewRegion(regionId)) {
                     checkCurve(regionId)
                     
                     // Get points of interest
