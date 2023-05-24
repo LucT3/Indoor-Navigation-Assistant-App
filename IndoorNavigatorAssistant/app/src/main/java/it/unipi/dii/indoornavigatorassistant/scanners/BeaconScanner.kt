@@ -1,8 +1,6 @@
 package it.unipi.dii.indoornavigatorassistant.scanners
 
-import android.speech.tts.TextToSpeech
 import android.util.Log
-import android.widget.ArrayAdapter
 import com.kontakt.sdk.android.ble.configuration.ScanMode
 import com.kontakt.sdk.android.ble.configuration.ScanPeriod
 import com.kontakt.sdk.android.ble.manager.ProximityManagerFactory
@@ -10,12 +8,10 @@ import com.kontakt.sdk.android.ble.manager.listeners.IBeaconListener
 import com.kontakt.sdk.android.ble.manager.listeners.simple.SimpleIBeaconListener
 import com.kontakt.sdk.android.common.profile.IBeaconDevice
 import com.kontakt.sdk.android.common.profile.IBeaconRegion
-import it.unipi.dii.indoornavigatorassistant.activities.NavigationActivity
 import it.unipi.dii.indoornavigatorassistant.R
+import it.unipi.dii.indoornavigatorassistant.activities.NavigationActivity
 import it.unipi.dii.indoornavigatorassistant.dao.BeaconInfoProvider
 import it.unipi.dii.indoornavigatorassistant.databinding.ActivityNavigationBinding
-import it.unipi.dii.indoornavigatorassistant.model.BLERegionInfo
-import it.unipi.dii.indoornavigatorassistant.speech.TextToSpeechContainer
 import it.unipi.dii.indoornavigatorassistant.util.Constants
 import java.lang.ref.WeakReference
 
@@ -34,12 +30,7 @@ class BeaconScanner(
     private val beaconInfoProvider = BeaconInfoProvider.getInstance(navigationActivity.get()!!)
     
     // Navigation state
-    private val beaconState = BeaconState()
-    private var preCurveId: String? = null // TODO integrare dentro BeaconState?
-    private var preRegionName: String? = null
-    
-    // Text-to-speech
-    private val textToSpeechInstance: TextToSpeechContainer
+    private val beaconState = BeaconState(navigationActivity, binding)
     
     
     /**
@@ -52,9 +43,6 @@ class BeaconScanner(
                 R.string.navigation_activity_beacon_region_message,
                 ""
             )
-        
-        // Initialize text-to-speech
-        textToSpeechInstance = TextToSpeechContainer(navigationActivity.get()!!)
         
         // Configure proximity manager
         proximityManager.configuration()
@@ -94,45 +82,17 @@ class BeaconScanner(
                 val regionId = getCurrentRegionId(ibeacons) ?: return
                 
                 if (beaconState.isNewRegion(regionId)) {
-                    checkCurve(regionId)
+                    beaconState.handleCurve(regionId)
                     
                     // Get points of interest
                     val pointsOfInterest = beaconInfoProvider.getBLERegionInfo(regionId)
-                    displayPointsOfInterestInfo(pointsOfInterest)
+                    beaconState.displayPointsOfInterestInfo(pointsOfInterest)
                 }
             }
         }
     }
     
-    /**
-     * Check if a region is a pre-curve or a curve, and warn the user if is inside the curve region.
-     * Display and send an audio message telling the direction of the curve
-     *
-     * @param regionId id of the current region
-     */
-    private fun checkCurve(regionId: String) {
-        if (beaconInfoProvider.isPreCurve(regionId)) {
-            preCurveId = regionId
-        }
-        if (beaconInfoProvider.isCurve(regionId) && preCurveId != null) {
-            val curveInfo = beaconInfoProvider.getCurveInfo(regionId)
-            val direction = when (preCurveId) {
-                curveInfo?.preCurveLeft -> navigationActivity.get()
-                    ?.getString(R.string.curve_direction_left)
-                
-                else -> navigationActivity.get()?.getString(R.string.curve_direction_right)
-            }
-            Log.d(
-                Constants.LOG_TAG,
-                "BeaconScanner::onIBeaconsUpdated - Curve Detected $direction"
-            )
-            textToSpeechInstance.speak(
-                "${navigationActivity.get()?.getString(R.string.curve_indication)} $direction",
-                TextToSpeech.QUEUE_FLUSH
-            )
-            preCurveId = null
-        }
-    }
+    
     
     
     /**
@@ -189,53 +149,6 @@ class BeaconScanner(
                 R.string.navigation_activity_beacon_region_message,
                 regionId
             )
-    }
-    
-    /**
-     * Display on Logcat and Navigation activity page the Points of interest of the current region.
-     *
-     * @param bleRegionInfo
-     */
-    private fun displayPointsOfInterestInfo(bleRegionInfo: BLERegionInfo?) {
-        Log.d(
-            Constants.LOG_TAG, "BeaconScanner::displayPointsOfInterestInfo " +
-                    "- Points of interest: ${bleRegionInfo?.pointsOfInterest}"
-        )
-        
-        // Display region points of interest
-        if (bleRegionInfo != null) {
-            if (preRegionName == null) {
-                preRegionName = bleRegionInfo.name
-                // Notify user about region name if it's the first encountered
-                textToSpeechInstance.speak(
-                    "${navigationActivity.get()?.getString(R.string.region_name_info)} ${bleRegionInfo.name}",
-                    TextToSpeech.QUEUE_ADD
-                )
-            } else if (preRegionName != bleRegionInfo.name) {
-                // Notify user about region name if it's different from the previous one
-                textToSpeechInstance.speak(
-                    "${navigationActivity.get()?.getString(R.string.region_name_info)} ${bleRegionInfo.name}",
-                    TextToSpeech.QUEUE_ADD
-                )
-            }
-            // Notify user about points of interest
-            textToSpeechInstance.speak(
-                "${navigationActivity.get()?.getString(R.string.region_points_of_interest)} ${bleRegionInfo.pointsOfInterest}",
-                TextToSpeech.QUEUE_ADD
-            )
-            
-            // Show points of interest on GUI
-            val pointsOfInterest: List<String> = bleRegionInfo.pointsOfInterest
-            val arrayAdapter = ArrayAdapter(
-                navigationActivity.get()!!,
-                android.R.layout.simple_list_item_1,
-                pointsOfInterest
-            )
-            binding.POIBeacons.adapter = arrayAdapter
-        }
-        else {
-            binding.POIBeacons.adapter = null
-        }
     }
     
     
