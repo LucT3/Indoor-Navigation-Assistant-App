@@ -1,0 +1,37 @@
+[
+  {
+    "id": "MKoUekuu",
+    "name" : "hallway second floor, department of information engineering",
+    "pointsOfInterest": [
+      "ADII1"
+    ]
+  },
+  {
+    "id": "XZW9ekuu",
+    "name" : "hallway second floor, department of information engineering",
+    "pointsOfInterest": [
+      "A28", "ADII1"
+    ]
+  },
+  {
+    "id": "XZW9mipj",
+    "name" : "hallway second floor, department of information engineering",
+    "pointsOfInterest": [
+      "A28", "Bathroom", "Fire escape"
+    ]
+  },
+  {
+    "id": "aUZKmipj",
+    "name": "hallway second floor, department of information engineering",
+    "pointsOfInterest": [
+      "Elevator"
+    ]
+  },
+  {
+    "id": "SJG9aUZK",
+    "name": "hallway second floor, department of information engineering",
+    "pointsOfInterest": [
+      "Elevator", "Meeting room"
+    ]
+  }
+]

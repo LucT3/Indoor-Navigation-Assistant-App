@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ble_regions_file">ble-regions.json</string>
+    <string name="ble_curves_file">ble-curves.json</string>
+    <string name="ble_pre_curves_file">ble-pre-curves.json</string>
+    <string name="qr_codes_info_file">qr-codes.json</string>
+</resources>

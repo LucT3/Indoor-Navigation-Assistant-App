@@ -1,3 +1,38 @@
 <resources>
     <string name="app_name">IndoorNavigatorAssistant</string>
+    
+    <!-- dialog pop-up when application requires permissions -->
+    <string name="dialog_request_permission_title">Permission required</string>
+    <string name="dialog_request_permission_default_message">Default message</string>
+    <string name="dialog_request_permission_button_positive">OK</string>
+    
+    <!-- dialog pop-up when users doesn't grant permissions -->
+    <string name="dialog_permission_not_granted_title">Permissions not granted!</string>
+    <string name="dialog_pemission_request">We need location permissions to use BLE features</string>
+    <string name="dialog_permission_not_granted_message">We need location permissions to use BLE features. The application will stop</string>
+    <string name="dialog_permissions_not_granted_button">OK</string>
+
+    <!-- dialog pop-up when user doesn't enable services -->
+    <string name="dialog_service_not_enabled_title">Service not enabled!</string>
+    <string name="dialog_bluetooth_not_enabled_message">We need bluetooth service enabled to use BLE features.</string>
+    <string name="dialog_location_not_enabled_message">We need location service enabled to use BLE features.</string>
+    <string name="dialog_service_not_enabled_button">OK</string>
+    
+    <!--main activity strings-->
+    <string name="welcome_message">Welcome to Indoor Navigator Assistant, the navigation app for visually impaired people.</string>
+    <string name="main_button_text">Go to Navigation</string>
+    
+    <!--navigation activity strings-->
+    <string name="navigation_activity_welcome_message">Welcome to the Navigation page!</string>
+    <string name="navigation_activity_beacon_region_message">Current Region Detected: %s</string>
+    <string name="navigation_activity_beacon_points_of_interest">Beacons Points Of Interest</string>
+    <string name="navigation_activity_qr_code_point">Qr Code Point of Interest: %s</string>
+    <string name="navigation_activity_qr_code_not_found">"Qr Code Point of Interest: No Point of Interest for this QR code</string>
+    
+    <string name="action_switch_layout">Switch Layout</string>
+    <string name="curve_direction_left">Left</string>
+    <string name="curve_direction_right">Right</string>
+    <string name="curve_indication">You are in a curve to the</string>
+    <string name="region_name_info">You are in the</string>
+    <string name="region_points_of_interest">"In this region there is :"</string>
 </resources>

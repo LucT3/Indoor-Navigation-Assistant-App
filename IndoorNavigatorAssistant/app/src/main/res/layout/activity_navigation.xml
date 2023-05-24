@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+
+    <TextView
+        android:id="@+id/textViewWelcomeNavigation"
+        android:layout_width="242dp"
+        android:layout_height="43dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/navigation_activity_welcome_message"
+        android:textAlignment="textStart"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.005"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewCurrentRegion"
+        android:layout_width="297dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="20dp"
+        android:importantForAccessibility="noHideDescendants"
+        android:text="@string/navigation_activity_beacon_region_message"
+        android:textAlignment="textStart"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.026"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewWelcomeNavigation" />
+    
+    <TextView
+        android:id="@+id/textViewPointsOfInterest"
+        android:layout_width="210dp"
+        android:layout_height="23dp"
+        android:layout_marginTop="32dp"
+        android:importantForAccessibility="noHideDescendants"
+        android:text="@string/navigation_activity_beacon_points_of_interest"
+        android:textAlignment="textStart"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCurrentRegion" />
+    
+    <TextView
+        android:id="@+id/textViewQrCode"
+        android:layout_width="319dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="24dp"
+        android:importantForAccessibility="noHideDescendants"
+        android:text="@string/navigation_activity_qr_code_point"
+        android:textAlignment="textStart"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/POIBeacons" />
+    
+    <ListView
+        android:id="@+id/POIBeacons"
+        android:layout_width="298dp"
+        android:layout_height="257dp"
+        android:layout_marginTop="8dp"
+        android:importantForAccessibility="noHideDescendants"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewPointsOfInterest" />
+
+    <androidx.camera.view.PreviewView
+        android:id="@+id/previewView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:importantForAccessibility="noHideDescendants"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.153"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/switchCameraButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="9dp"
+        android:layout_marginEnd="2dp"
+        android:contentDescription="@string/action_switch_layout"
+        android:importantForAccessibility="no"
+        android:onClick="onClickSwitchLayout"
+        android:title="@string/action_switch_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.961"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/dont_show_img" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
