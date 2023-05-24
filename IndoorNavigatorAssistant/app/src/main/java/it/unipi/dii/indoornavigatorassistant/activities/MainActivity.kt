@@ -49,8 +49,8 @@ class MainActivity : AppCompatActivity() {
         // Initialize Bluetooth beacons API
         KontaktSDK.initialize(this)
         // Initialize logger
-        Logger.setDebugLoggingEnabled(true)
-        Logger.setLogLevelEnabled(LogLevel.DEBUG, true)
+//        Logger.setDebugLoggingEnabled(true)
+//        Logger.setLogLevelEnabled(LogLevel.DEBUG, true)
     }
     
     
