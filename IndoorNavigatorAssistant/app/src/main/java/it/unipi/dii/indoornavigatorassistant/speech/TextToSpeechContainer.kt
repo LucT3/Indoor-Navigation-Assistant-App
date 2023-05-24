@@ -2,10 +2,16 @@ package it.unipi.dii.indoornavigatorassistant.speech
 
 import android.content.Context
 import android.speech.tts.TextToSpeech
+import android.util.AndroidRuntimeException
 import android.util.Log
 import it.unipi.dii.indoornavigatorassistant.util.Constants
 import java.util.Locale
 
+/**
+ * Wrapper for [TextToSpeech] object.
+ *
+ * @param context application context
+ */
 class TextToSpeechContainer(context: Context) : TextToSpeech.OnInitListener {
     
     private var textToSpeech: TextToSpeech = TextToSpeech(context, this)
@@ -16,20 +22,41 @@ class TextToSpeechContainer(context: Context) : TextToSpeech.OnInitListener {
      * @param status [TextToSpeech.SUCCESS] or [TextToSpeech.ERROR].
      */
     override fun onInit(status: Int) {
-        textToSpeech.setSpeechRate(0.7F)
         if (status == TextToSpeech.SUCCESS) {
-            val result = textToSpeech.setLanguage(Locale.US)
+            // Set speech rate
+            var result = textToSpeech.setSpeechRate(0.7F)
+            if (result == TextToSpeech.ERROR) {
+                Log.e(Constants.LOG_TAG, "TextToSpeechContainer::onInit - Failed to set the speech rate!")
+                throw AndroidRuntimeException("Failed to set the speech rate!")
+            }
             
+            // Set language
+            result = textToSpeech.setLanguage(Locale.US)
             if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                Log.e(Constants.LOG_TAG, "The language is not supported!")
+                Log.e(Constants.LOG_TAG, "TextToSpeechContainer::onInit - Language ${Locale.US} is not supported!")
+                throw AndroidRuntimeException("Language ${Locale.US} is not supported!")
             }
         }
     }
     
-    fun stop() {
-        textToSpeech.stop()
+    
+    /**
+     * Interrupts the current utterance (whether played or rendered to file)
+     * and discards other utterances in the queue.
+     *
+     * @return [TextToSpeech.ERROR] or [TextToSpeech.SUCCESS]
+     */
+    fun stop(): Int {
+        return textToSpeech.stop()
     }
     
+    
+    /**
+     * Releases the resources used by the TextToSpeech engine.
+     * It is good practice for instance to call this method in the
+     * onDestroy() method of an Activity so the TextToSpeech engine
+     * can be cleanly stopped.
+     */
     fun shutdown() {
         textToSpeech.shutdown()
     }
