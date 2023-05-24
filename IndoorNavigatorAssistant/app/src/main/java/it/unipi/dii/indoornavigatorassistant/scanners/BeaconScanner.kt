@@ -10,7 +10,6 @@ import com.kontakt.sdk.android.common.profile.IBeaconDevice
 import com.kontakt.sdk.android.common.profile.IBeaconRegion
 import it.unipi.dii.indoornavigatorassistant.R
 import it.unipi.dii.indoornavigatorassistant.activities.NavigationActivity
-import it.unipi.dii.indoornavigatorassistant.dao.BeaconInfoProvider
 import it.unipi.dii.indoornavigatorassistant.databinding.ActivityNavigationBinding
 import it.unipi.dii.indoornavigatorassistant.util.Constants
 import java.lang.ref.WeakReference
@@ -27,7 +26,6 @@ class BeaconScanner(
 ) {
     // Bluetooth Low Energy
     private val proximityManager = ProximityManagerFactory.create(navigationActivity.get()!!)
-    private val beaconInfoProvider = BeaconInfoProvider.getInstance(navigationActivity.get()!!)
     
     // Navigation state
     private val beaconState = BeaconState(navigationActivity, binding)
@@ -68,86 +66,41 @@ class BeaconScanner(
     private fun createIBeaconListener(): IBeaconListener {
         Log.d(Constants.LOG_TAG, "BeaconScanner::createIBeaconListener - beacon listener started")
         return object : SimpleIBeaconListener() {
-
+            
             private val beaconsList = mutableListOf<IBeaconDevice>()
-
-            override fun onIBeaconDiscovered(ibeacon: IBeaconDevice, region: IBeaconRegion) {
+            
+            override fun onIBeaconDiscovered(beacon: IBeaconDevice, region: IBeaconRegion) {
                 Log.d(
                     Constants.LOG_TAG,
-                    "BeaconScanner::onIBeaconDiscovered - beacon discovered: $ibeacon"
+                    "BeaconScanner::onIBeaconDiscovered - beacon discovered: $beacon"
                 )
-                beaconsList.add(ibeacon)
-                updateBeaconRegion(beaconsList)
+                beaconsList.add(beacon)
+                beaconState.updateBeaconRegion(beaconsList)
             }
             
             override fun onIBeaconsUpdated(
-                ibeacons: MutableList<IBeaconDevice>,
+                beacons: MutableList<IBeaconDevice>,
                 region: IBeaconRegion
             ) {
+                Log.d(
+                    Constants.LOG_TAG,
+                    "BeaconScanner::onIBeaconsUpdated - beacons update: $beacons"
+                )
                 beaconsList.clear()
-                beaconsList.addAll(ibeacons)
-                updateBeaconRegion(beaconsList)
-
+                beaconsList.addAll(beacons)
+                beaconState.updateBeaconRegion(beaconsList)
+                
             }
-
-            override fun onIBeaconLost(ibeacon: IBeaconDevice?, region: IBeaconRegion?) {
-                beaconsList.remove(ibeacon)
-                updateBeaconRegion(beaconsList)
+            
+            override fun onIBeaconLost(beacon: IBeaconDevice?, region: IBeaconRegion?) {
+                Log.d(
+                    Constants.LOG_TAG,
+                    "BeaconScanner::onIBeaconLost - beacon discovered: $beacon"
+                )
+                beaconsList.remove(beacon)
+                beaconState.updateBeaconRegion(beaconsList)
             }
         }
-    }
-
-    fun updateBeaconRegion(ibeacons: MutableList<IBeaconDevice>) {
-        val regionId = getCurrentRegionId(ibeacons) ?: return
-
-        if (beaconState.isNewRegion(regionId)) {
-            beaconState.handleCurve(regionId)
-
-            // Get points of interest
-            val pointsOfInterest = beaconInfoProvider.getBLERegionInfo(regionId)
-            beaconState.displayPointsOfInterestInfo(pointsOfInterest)
-        }
-    }
-    
-    /**
-     * Get id of the current BLE region
-     *
-     * @param beacons list of detected BLE beacons
-     * @return id of the region if the two beacons with highest RSSI are an actual region, null otherwise
-     */
-    private fun getCurrentRegionId(beacons: MutableList<IBeaconDevice>): String? {
-        // Sort beacons by signal strength
-        val sortedBeacons = beacons.sortedByDescending { it.rssi }
-
-        // Check if there are at least 2 beacons
-        if (sortedBeacons.size < 2) {
-            return null
-        }
-        // Get regionId
-        val regionId = beaconInfoProvider.checkBLERegionId(sortedBeacons)
-        if (regionId != null) {
-            displayBeaconRegionInfo(regionId)
-        }
-        return regionId
-}
-    
-    
-    /**
-     * Display on Logcat and Navigation activity page the current Beacon Region where the user is.
-     *
-     * @param regionId id of current region
-     */
-    private fun displayBeaconRegionInfo(regionId: String) {
-        Log.d(
-            Constants.LOG_TAG, "BeaconScanner::onIBeaconsUpdated " +
-                    "- Region scanned: $regionId"
-        )
-        binding.textViewCurrentRegion.text = navigationActivity.get()!!
-            .resources
-            .getString(
-                R.string.navigation_activity_beacon_region_message,
-                regionId
-            )
     }
     
     
