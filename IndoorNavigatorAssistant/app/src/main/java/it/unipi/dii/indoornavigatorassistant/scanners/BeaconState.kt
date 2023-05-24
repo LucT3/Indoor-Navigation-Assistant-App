@@ -52,6 +52,7 @@ class BeaconState(
      */
     fun updateBeaconRegion(beacons: MutableList<IBeaconDevice>) {
         val regionId = getCurrentRegionId(beacons) ?: return
+        displayBeaconRegionInfo(regionId)
         
         if (isNewRegion(regionId)) {
             handleCurve(regionId)
@@ -64,10 +65,11 @@ class BeaconState(
     
     
     /**
-     * Get id of the current BLE region
+     * Get the id of the current BLE region.
      *
      * @param beacons list of detected BLE beacons
-     * @return id of the region if the two beacons with highest RSSI are an actual region, null otherwise
+     * @return id of the region if a valid region can be extracted from the list
+     *         of the detected beacons, null otherwise
      */
     private fun getCurrentRegionId(beacons: MutableList<IBeaconDevice>): String? {
         // Sort beacons by signal strength
@@ -77,12 +79,9 @@ class BeaconState(
         if (sortedBeacons.size < 2) {
             return null
         }
-        // Get regionId
-        val regionId = beaconInfoProvider.checkBLERegionId(sortedBeacons)
-        if (regionId != null) {
-            displayBeaconRegionInfo(regionId)
-        }
-        return regionId
+        
+        // Get region id
+        return beaconInfoProvider.getBLERegionId(sortedBeacons)
     }
     
     

@@ -80,29 +80,42 @@ class BeaconInfoProvider private constructor(context: Context) {
     
     
     /**
-     * Check if the obtained region is present in the bleRegions Map
+     * From the list of the detected BLE beacons, get the id of the current region id.
+     * The returned id is guaranteed to be valid inside the bleRegions map.
      *
      * @param beaconsList list of the beacons discovered ordered by descending rssi
-     * @return the id of the BLE region
+     * @return the id of the BLE region if a valid region can be identified, null otherwise
      */
-    fun checkBLERegionId(beaconsList: List<IBeaconDevice>): String? {
+    fun getBLERegionId(beaconsList: List<IBeaconDevice>): String? {
         // Compute the regionId using the uniqueIds of the first and second beacons
-        var regionId = computeBLERegionId(beaconsList[0].uniqueId, beaconsList[1].uniqueId)
+        var regionId = computeBLERegionId(
+            beaconsList.getOrNull(0)?.uniqueId,
+            beaconsList.getOrNull(1)?.uniqueId
+        )
         if (bleRegions.containsKey(regionId)) {
             return regionId
         }
+        
         // Compute the regionId using the uniqueIds of the first and third beacons
-        regionId = computeBLERegionId(beaconsList[0].uniqueId, beaconsList[2].uniqueId)
+        regionId = computeBLERegionId(
+            beaconsList.getOrNull(0)?.uniqueId,
+            beaconsList.getOrNull(1)?.uniqueId
+        )
         if (bleRegions.containsKey(regionId)) {
             return regionId
         }
+        
         // Compute the regionId using the uniqueIds of the second and third beacons
-        regionId = computeBLERegionId(beaconsList[1].uniqueId, beaconsList[2].uniqueId)
+        regionId = computeBLERegionId(
+            beaconsList.getOrNull(1)?.uniqueId,
+            beaconsList.getOrNull(2)?.uniqueId
+        )
         if (bleRegions.containsKey(regionId)) {
             return regionId
         }
         return null
     }
+    
     
     /**
      * Compute the `id` of a **BLE region** from the `id` of the two corresponding beacons.
@@ -123,6 +136,7 @@ class BeaconInfoProvider private constructor(context: Context) {
             beacon2 + beacon1
         }
     }
+    
     
     /**
      * Get the list of points of interest within a BLE region,
