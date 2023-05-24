@@ -2,6 +2,7 @@ package it.unipi.dii.indoornavigatorassistant.dao
 
 import android.content.Context
 import com.fasterxml.jackson.core.type.TypeReference
+import com.kontakt.sdk.android.common.profile.IBeaconDevice
 import it.unipi.dii.indoornavigatorassistant.R
 import it.unipi.dii.indoornavigatorassistant.model.BLEAreaBeforeCurveJson
 import it.unipi.dii.indoornavigatorassistant.model.BLECurveInfo
@@ -76,22 +77,49 @@ class BeaconInfoProvider private constructor(context: Context) {
     
     
     /**
+     * Check if the obtained region is present in the bleRegions Map
+     *
+     * @param beaconsList list of the beacons discovered ordered by descending rssi
+     * @return the id of the BLE region
+     */
+    fun checkBLERegionId(beaconsList: List<IBeaconDevice>) : String? {
+        // Compute the regionId using the uniqueIds of the first and second beacons
+        var regionId = computeBLERegionId(beaconsList[0].uniqueId, beaconsList[1].uniqueId)
+        if (bleRegions.containsKey(regionId)) {
+            return regionId
+        }
+        // Compute the regionId using the uniqueIds of the first and third beacons
+        regionId = computeBLERegionId(beaconsList[0].uniqueId, beaconsList[2].uniqueId)
+        if (bleRegions.containsKey(regionId)) {
+            return regionId
+        }
+        // Compute the regionId using the uniqueIds of the second and third beacons
+        regionId = computeBLERegionId(beaconsList[1].uniqueId, beaconsList[2].uniqueId)
+        if (bleRegions.containsKey(regionId)) {
+            return regionId
+        }
+        return null
+    }
+
+    /**
      * Compute the `id` of a **BLE region** from the `id` of the two corresponding beacons.
      *
      * The `region id` is computed by concatenating the `id` of the beacons in lexicographic order.
      *
      * @param beacon1 id of the first beacon
-     * @param beacon2 id of the second beacon
+     * @param beacon2 id of the first beacon
      * @return the id of the BLE region
      */
-    fun computeBLERegionId(beacon1: String, beacon2: String): String {
+    private fun computeBLERegionId (beacon1 : String?, beacon2: String?) : String {
+        if (beacon1 == null || beacon2 == null) {
+            return ""
+        }
         return if (beacon1 <= beacon2) {
             beacon1 + beacon2
         } else {
             beacon2 + beacon1
         }
     }
-    
     
     /**
      * Get the list of points of interest within a BLE region,
