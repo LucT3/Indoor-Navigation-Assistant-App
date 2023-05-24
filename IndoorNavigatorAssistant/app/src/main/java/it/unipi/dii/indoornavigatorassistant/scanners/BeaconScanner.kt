@@ -46,7 +46,7 @@ class BeaconScanner(
         
         // Configure proximity manager
         proximityManager.configuration()
-            .scanMode(ScanMode.LOW_LATENCY)
+            .scanMode(ScanMode.BALANCED)
             .scanPeriod(ScanPeriod.RANGING)
         proximityManager.setIBeaconListener(createIBeaconListener())
     }
@@ -68,32 +68,46 @@ class BeaconScanner(
     private fun createIBeaconListener(): IBeaconListener {
         Log.d(Constants.LOG_TAG, "BeaconScanner::createIBeaconListener - beacon listener started")
         return object : SimpleIBeaconListener() {
+
+            private val beaconsList = mutableListOf<IBeaconDevice>()
+
             override fun onIBeaconDiscovered(ibeacon: IBeaconDevice, region: IBeaconRegion) {
                 Log.d(
                     Constants.LOG_TAG,
                     "BeaconScanner::onIBeaconDiscovered - beacon discovered: $ibeacon"
                 )
+                beaconsList.add(ibeacon)
+                updateBeaconRegion(beaconsList)
             }
             
             override fun onIBeaconsUpdated(
                 ibeacons: MutableList<IBeaconDevice>,
                 region: IBeaconRegion
             ) {
-                val regionId = getCurrentRegionId(ibeacons) ?: return
-                
-                if (beaconState.isNewRegion(regionId)) {
-                    beaconState.handleCurve(regionId)
-                    
-                    // Get points of interest
-                    val pointsOfInterest = beaconInfoProvider.getBLERegionInfo(regionId)
-                    beaconState.displayPointsOfInterestInfo(pointsOfInterest)
-                }
+                beaconsList.clear()
+                beaconsList.addAll(ibeacons)
+                updateBeaconRegion(beaconsList)
+
+            }
+
+            override fun onIBeaconLost(ibeacon: IBeaconDevice?, region: IBeaconRegion?) {
+                beaconsList.remove(ibeacon)
+                updateBeaconRegion(beaconsList)
             }
         }
     }
-    
-    
-    
+
+    fun updateBeaconRegion(ibeacons: MutableList<IBeaconDevice>) {
+        val regionId = getCurrentRegionId(ibeacons) ?: return
+
+        if (beaconState.isNewRegion(regionId)) {
+            beaconState.handleCurve(regionId)
+
+            // Get points of interest
+            val pointsOfInterest = beaconInfoProvider.getBLERegionInfo(regionId)
+            beaconState.displayPointsOfInterestInfo(pointsOfInterest)
+        }
+    }
     
     /**
      * Get id of the current BLE region
