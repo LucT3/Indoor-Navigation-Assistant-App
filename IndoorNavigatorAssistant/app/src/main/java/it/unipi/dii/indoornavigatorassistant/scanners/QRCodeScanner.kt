@@ -68,12 +68,23 @@ class QRCodeScanner(
                 CameraController.COORDINATE_SYSTEM_VIEW_REFERENCED,
                 cameraExecutor
             ) { result: MlKitAnalyzer.Result? ->
+                // Clear overlay
+                previewView.overlay.clear()
+                
+                // Get barcodes
                 val barcodeResults = result?.getValue(barcodeScanner)
                 if ((barcodeResults == null)
                     || (barcodeResults.size == 0)
                     || (barcodeResults.first() == null)
                 ) {
                     return@MlKitAnalyzer
+                }
+                
+                // Draw rectangles around QR codes
+                barcodeResults.forEach {
+                    previewView.overlay.add(
+                        QrCodeDrawable(it)
+                    )
                 }
                 
                 // Get the QR code ID from the first barcode result and notify new reading
