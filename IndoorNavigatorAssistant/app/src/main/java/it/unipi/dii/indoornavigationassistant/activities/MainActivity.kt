@@ -1,4 +1,4 @@
-package it.unipi.dii.indoornavigatorassistant.activities
+package it.unipi.dii.indoornavigationassistant.activities
 
 import android.app.AlertDialog
 import android.content.Intent
@@ -6,12 +6,12 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.kontakt.sdk.android.common.KontaktSDK
-import it.unipi.dii.indoornavigatorassistant.R
-import it.unipi.dii.indoornavigatorassistant.databinding.ActivityMainBinding
-import it.unipi.dii.indoornavigatorassistant.permissions.BluetoothPermissions
-import it.unipi.dii.indoornavigatorassistant.permissions.CameraPermissions
-import it.unipi.dii.indoornavigatorassistant.permissions.PermissionManager
-import it.unipi.dii.indoornavigatorassistant.util.Constants
+import it.unipi.dii.indoornavigationassistant.R
+import it.unipi.dii.indoornavigationassistant.databinding.ActivityMainBinding
+import it.unipi.dii.indoornavigationassistant.permissions.BluetoothPermissions
+import it.unipi.dii.indoornavigationassistant.permissions.CameraPermissions
+import it.unipi.dii.indoornavigationassistant.permissions.PermissionManager
+import it.unipi.dii.indoornavigationassistant.util.Constants
 
 
 class MainActivity : AppCompatActivity() {
@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         // Check which permissions are not granted and request them
         PermissionManager.from(this)
             .request(BluetoothPermissions, CameraPermissions)
-            .rationale(this.getString(R.string.dialog_pemission_request))
+            .rationale(this.getString(R.string.dialog_permission_request))
             .checkPermission { granted: Boolean ->
                 if (granted) {
                     Log.d(

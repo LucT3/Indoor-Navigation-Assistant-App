@@ -1,4 +1,4 @@
-package it.unipi.dii.indoornavigatorassistant.scanners
+package it.unipi.dii.indoornavigationassistant.scanners
 
 import android.util.Log
 import com.kontakt.sdk.android.ble.configuration.ScanMode
@@ -8,10 +8,10 @@ import com.kontakt.sdk.android.ble.manager.listeners.IBeaconListener
 import com.kontakt.sdk.android.ble.manager.listeners.simple.SimpleIBeaconListener
 import com.kontakt.sdk.android.common.profile.IBeaconDevice
 import com.kontakt.sdk.android.common.profile.IBeaconRegion
-import it.unipi.dii.indoornavigatorassistant.R
-import it.unipi.dii.indoornavigatorassistant.activities.NavigationActivity
-import it.unipi.dii.indoornavigatorassistant.databinding.ActivityNavigationBinding
-import it.unipi.dii.indoornavigatorassistant.util.Constants
+import it.unipi.dii.indoornavigationassistant.R
+import it.unipi.dii.indoornavigationassistant.activities.NavigationActivity
+import it.unipi.dii.indoornavigationassistant.databinding.ActivityNavigationBinding
+import it.unipi.dii.indoornavigationassistant.util.Constants
 import java.lang.ref.WeakReference
 
 /**

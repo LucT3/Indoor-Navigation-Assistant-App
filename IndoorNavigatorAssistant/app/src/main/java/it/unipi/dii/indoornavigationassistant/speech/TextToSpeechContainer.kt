@@ -1,10 +1,10 @@
-package it.unipi.dii.indoornavigatorassistant.speech
+package it.unipi.dii.indoornavigationassistant.speech
 
 import android.content.Context
 import android.speech.tts.TextToSpeech
 import android.util.AndroidRuntimeException
 import android.util.Log
-import it.unipi.dii.indoornavigatorassistant.util.Constants
+import it.unipi.dii.indoornavigationassistant.util.Constants
 import java.util.Locale
 
 /**

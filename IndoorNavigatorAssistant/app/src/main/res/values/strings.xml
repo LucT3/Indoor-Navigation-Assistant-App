@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">IndoorNavigatorAssistant</string>
+    <string name="app_name">IndoorNavigationAssistant</string>
     
     <!-- dialog pop-up when application requires permissions -->
     <string name="dialog_request_permission_title">Permission required</string>
@@ -8,7 +8,7 @@
     
     <!-- dialog pop-up when users doesn't grant permissions -->
     <string name="dialog_permission_not_granted_title">Permissions not granted!</string>
-    <string name="dialog_pemission_request">We need location permissions to use BLE features</string>
+    <string name="dialog_permission_request">We need location permissions to use BLE features</string>
     <string name="dialog_permission_not_granted_message">We need location permissions to use BLE features. The application will stop</string>
     <string name="dialog_permissions_not_granted_button">OK</string>
 
@@ -19,7 +19,7 @@
     <string name="dialog_service_not_enabled_button">OK</string>
     
     <!--main activity strings-->
-    <string name="welcome_message">Welcome to Indoor Navigator Assistant, the navigation app for visually impaired people.</string>
+    <string name="welcome_message">Welcome to Indoor Navigation Assistant, the navigation app for visually impaired people.</string>
     <string name="main_button_text">Go to Navigation</string>
     
     <!--navigation activity strings-->

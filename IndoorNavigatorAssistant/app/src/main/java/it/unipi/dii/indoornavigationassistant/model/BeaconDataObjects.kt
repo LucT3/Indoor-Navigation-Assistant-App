@@ -1,4 +1,4 @@
-package it.unipi.dii.indoornavigatorassistant.model
+package it.unipi.dii.indoornavigationassistant.model
 
 import java.io.Serializable
 

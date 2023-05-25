@@ -1,16 +1,16 @@
-package it.unipi.dii.indoornavigatorassistant.scanners
+package it.unipi.dii.indoornavigationassistant.scanners
 
 import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.widget.ArrayAdapter
 import com.kontakt.sdk.android.common.profile.IBeaconDevice
-import it.unipi.dii.indoornavigatorassistant.R
-import it.unipi.dii.indoornavigatorassistant.activities.NavigationActivity
-import it.unipi.dii.indoornavigatorassistant.dao.BeaconInfoProvider
-import it.unipi.dii.indoornavigatorassistant.databinding.ActivityNavigationBinding
-import it.unipi.dii.indoornavigatorassistant.model.BLERegionInfo
-import it.unipi.dii.indoornavigatorassistant.speech.TextToSpeechContainer
-import it.unipi.dii.indoornavigatorassistant.util.Constants
+import it.unipi.dii.indoornavigationassistant.R
+import it.unipi.dii.indoornavigationassistant.activities.NavigationActivity
+import it.unipi.dii.indoornavigationassistant.dao.BeaconInfoProvider
+import it.unipi.dii.indoornavigationassistant.databinding.ActivityNavigationBinding
+import it.unipi.dii.indoornavigationassistant.model.BLERegionInfo
+import it.unipi.dii.indoornavigationassistant.speech.TextToSpeechContainer
+import it.unipi.dii.indoornavigationassistant.util.Constants
 import java.lang.ref.WeakReference
 
 /**
