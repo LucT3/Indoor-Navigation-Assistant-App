@@ -24,15 +24,17 @@
     
     <!--navigation activity strings-->
     <string name="navigation_activity_welcome_message">Welcome to the Navigation page!</string>
-    <string name="navigation_activity_beacon_region_message">Current Region: %s (%s)</string>
-    <string name="navigation_activity_beacon_points_of_interest">Beacons Points Of Interest</string>
-    <string name="navigation_activity_qr_code_point">Qr Code Point of Interest: %s</string>
-    <string name="navigation_activity_qr_code_not_found">"Qr Code Point of Interest: No Point of Interest for this QR code</string>
-    
+    <string name="navigation_activity_beacon_region_message">CURRENT BEACON REGION\n%s    (%s)</string>
+    <string name="navigation_activity_beacon_region_message_default">No region detected</string>
+    <string name="navigation_activity_beacon_points_of_interest">Points of interest in your region</string>
+    <string name="navigation_activity_qr_code_point">QR-CODE POINT OF INTEREST\n%s</string>
+    <string name="navigation_activity_qr_code_not_found">"QR-CODE POINT OF INTEREST\nNo point of interest for this QR code</string>
     <string name="action_switch_layout">Switch Layout</string>
+    
+    <!-- Text to speech -->
     <string name="curve_direction_left">Left</string>
     <string name="curve_direction_right">Right</string>
     <string name="curve_indication">You are in a curve to the</string>
     <string name="region_name_info">You are in the</string>
-    <string name="region_points_of_interest">"In this region there is :"</string>
+    <string name="region_points_of_interest">"In this region there is:"</string>
 </resources>

@@ -38,8 +38,7 @@ class BeaconScanner(
         // Initialize text view
         binding.textViewCurrentRegion.text = navigationActivity.get()!!
             .resources.getString(
-                R.string.navigation_activity_beacon_region_message,
-                "", ""
+                R.string.navigation_activity_beacon_region_message_default
             )
         
         // Configure proximity manager
