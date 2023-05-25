@@ -44,7 +44,7 @@ class BeaconScanner(
         
         // Configure proximity manager
         proximityManager.configuration()
-            .scanMode(ScanMode.BALANCED)
+            .scanMode(ScanMode.LOW_LATENCY)
             .scanPeriod(ScanPeriod.RANGING)
         proximityManager.setIBeaconListener(createIBeaconListener())
     }
