@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace 'it.unipi.dii.indoornavigatorassistant'
+    namespace 'it.unipi.dii.indoornavigationassistant'
     compileSdk 33
 
     defaultConfig {
-        applicationId "it.unipi.dii.indoornavigatorassistant"
+        applicationId "it.unipi.dii.indoornavigationassistant"
         minSdk 26
         targetSdk 33
         versionCode 1

@@ -1,11 +1,11 @@
-package it.unipi.dii.indoornavigatorassistant.dao
+package it.unipi.dii.indoornavigationassistant.dao
 
 import android.content.Context
 import com.fasterxml.jackson.core.type.TypeReference
-import it.unipi.dii.indoornavigatorassistant.R
-import it.unipi.dii.indoornavigatorassistant.model.QrCodeInfo
-import it.unipi.dii.indoornavigatorassistant.model.QrCodeJson
-import it.unipi.dii.indoornavigatorassistant.util.JsonParser
+import it.unipi.dii.indoornavigationassistant.R
+import it.unipi.dii.indoornavigationassistant.model.QrCodeInfo
+import it.unipi.dii.indoornavigationassistant.model.QrCodeJson
+import it.unipi.dii.indoornavigationassistant.util.JsonParser
 
 class QrCodeInfoProvider private constructor(context: Context) {
 

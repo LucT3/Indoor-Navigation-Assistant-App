@@ -1,4 +1,4 @@
-package it.unipi.dii.indoornavigatorassistant.permissions
+package it.unipi.dii.indoornavigationassistant.permissions
 
 import android.app.AlertDialog
 import android.content.pm.PackageManager
@@ -6,8 +6,8 @@ import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts.RequestMultiplePermissions
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import it.unipi.dii.indoornavigatorassistant.R
-import it.unipi.dii.indoornavigatorassistant.util.Constants
+import it.unipi.dii.indoornavigationassistant.R
+import it.unipi.dii.indoornavigationassistant.util.Constants
 import java.lang.ref.WeakReference
 
 class PermissionManager private constructor(private val activity: WeakReference<AppCompatActivity>) {

@@ -1,4 +1,4 @@
-package it.unipi.dii.indoornavigatorassistant.model
+package it.unipi.dii.indoornavigationassistant.model
 
 data class QrCodeJson(val id: String, val type: QrCodeType, val pointOfInterest: String)
 

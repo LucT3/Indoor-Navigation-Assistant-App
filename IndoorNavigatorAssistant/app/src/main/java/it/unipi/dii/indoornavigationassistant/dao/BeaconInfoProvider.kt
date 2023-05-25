@@ -1,21 +1,21 @@
-package it.unipi.dii.indoornavigatorassistant.dao
+package it.unipi.dii.indoornavigationassistant.dao
 
 import android.content.Context
 import com.fasterxml.jackson.core.type.TypeReference
 import com.kontakt.sdk.android.common.profile.IBeaconDevice
-import it.unipi.dii.indoornavigatorassistant.R
-import it.unipi.dii.indoornavigatorassistant.model.BLEAreaBeforeCurveJson
-import it.unipi.dii.indoornavigatorassistant.model.BLECurveInfo
-import it.unipi.dii.indoornavigatorassistant.model.BLECurveJson
-import it.unipi.dii.indoornavigatorassistant.model.BLERegionInfo
-import it.unipi.dii.indoornavigatorassistant.model.BLERegionJson
-import it.unipi.dii.indoornavigatorassistant.util.JsonParser
+import it.unipi.dii.indoornavigationassistant.R
+import it.unipi.dii.indoornavigationassistant.model.BLEAreaBeforeCurveJson
+import it.unipi.dii.indoornavigationassistant.model.BLECurveInfo
+import it.unipi.dii.indoornavigationassistant.model.BLECurveJson
+import it.unipi.dii.indoornavigationassistant.model.BLERegionInfo
+import it.unipi.dii.indoornavigationassistant.model.BLERegionJson
+import it.unipi.dii.indoornavigationassistant.util.JsonParser
 
 /**
- * Class which retrieve the data about the state of the beacons inside the
+ * Class which retrieves the data about the state of the beacons inside the
  * building environment and provides them through public methods.
  *
- * It must be instantiated throw the [getInstance] method.
+ * It must be instantiated through the [getInstance] method.
  */
 class BeaconInfoProvider private constructor(context: Context) {
     

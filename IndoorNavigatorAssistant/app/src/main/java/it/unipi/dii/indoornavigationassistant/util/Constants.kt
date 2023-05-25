@@ -1,4 +1,4 @@
-package it.unipi.dii.indoornavigatorassistant.util
+package it.unipi.dii.indoornavigationassistant.util
 
 object Constants {
     const val LOG_TAG = "MSSS"

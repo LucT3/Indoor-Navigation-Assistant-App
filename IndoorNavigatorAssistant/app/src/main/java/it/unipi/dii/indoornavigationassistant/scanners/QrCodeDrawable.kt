@@ -1,4 +1,4 @@
-package it.unipi.dii.indoornavigatorassistant.scanners
+package it.unipi.dii.indoornavigationassistant.scanners
 
 import android.graphics.*
 import android.graphics.drawable.Drawable

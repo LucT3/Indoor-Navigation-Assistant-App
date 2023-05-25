@@ -1,4 +1,4 @@
-package it.unipi.dii.indoornavigatorassistant.permissions
+package it.unipi.dii.indoornavigationassistant.permissions
 
 import android.Manifest.permission.*
 import android.os.Build

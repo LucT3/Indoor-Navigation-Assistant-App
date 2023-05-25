@@ -1,4 +1,4 @@
-package it.unipi.dii.indoornavigatorassistant.util
+package it.unipi.dii.indoornavigationassistant.util
 
 import android.content.res.AssetManager
 import android.util.AndroidRuntimeException
