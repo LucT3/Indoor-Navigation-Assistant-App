@@ -39,7 +39,7 @@ class BeaconScanner(
         binding.textViewCurrentRegion.text = navigationActivity.get()!!
             .resources.getString(
                 R.string.navigation_activity_beacon_region_message,
-                ""
+                "", ""
             )
         
         // Configure proximity manager
@@ -64,7 +64,7 @@ class BeaconScanner(
      * @return The created IBeaconListener.
      */
     private fun createIBeaconListener(): IBeaconListener {
-        Log.d(Constants.LOG_TAG, "BeaconScanner::createIBeaconListener - beacon listener started")
+        Log.d(Constants.LOG_TAG, "BeaconScanner::createIBeaconListener - beacon listener created")
         return object : SimpleIBeaconListener() {
             
             private val beaconsList = mutableListOf<IBeaconDevice>()

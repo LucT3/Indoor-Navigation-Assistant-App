@@ -52,9 +52,13 @@ class BeaconState(
      */
     fun updateBeaconRegion(beacons: MutableList<IBeaconDevice>) {
         val regionId = getCurrentRegionId(beacons) ?: return
-        displayBeaconRegionInfo(regionId)
+        val regionInfo = beaconInfoProvider.getBLERegionInfo(regionId) ?: return
         
         if (isNewRegion(regionId)) {
+            // Display information on screen
+            displayBeaconRegionInfo(regionInfo.name, regionId)
+            
+            // Handle the case if it's a curve
             handleCurve(regionId)
             
             // Get points of interest
@@ -209,18 +213,19 @@ class BeaconState(
     /**
      * Display on Logcat and Navigation activity page the current Beacon Region where the user is.
      *
-     * @param regionId id of current region
+     * @param regionName name of current region
+     * @param regionId id of the current region
      */
-    private fun displayBeaconRegionInfo(regionId: String) {
+    private fun displayBeaconRegionInfo(regionName: String, regionId: String) {
         Log.d(
             Constants.LOG_TAG, "BeaconScanner::onIBeaconsUpdated " +
-                    "- Region scanned: $regionId"
+                    "- Region notified $regionName - $regionId"
         )
         binding.textViewCurrentRegion.text = navigationActivity.get()!!
             .resources
             .getString(
                 R.string.navigation_activity_beacon_region_message,
-                regionId
+                regionName, regionId
             )
     }
     

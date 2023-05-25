@@ -24,7 +24,7 @@ class TextToSpeechContainer(context: Context) : TextToSpeech.OnInitListener {
     override fun onInit(status: Int) {
         if (status == TextToSpeech.SUCCESS) {
             // Set speech rate
-            var result = textToSpeech.setSpeechRate(0.7F)
+            var result = textToSpeech.setSpeechRate(0.8F)
             if (result == TextToSpeech.ERROR) {
                 Log.e(Constants.LOG_TAG, "TextToSpeechContainer::onInit - Failed to set the speech rate!")
                 throw AndroidRuntimeException("Failed to set the speech rate!")
