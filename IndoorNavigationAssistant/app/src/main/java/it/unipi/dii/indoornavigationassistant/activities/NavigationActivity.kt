@@ -241,10 +241,10 @@ class NavigationActivity : AppCompatActivity() {
         }
     }
     
-    fun onClickSwitchLayout() {
+    fun onClickSwitchLayout(view: View) {
         isCameraShowing = !isCameraShowing
         updateCameraVisibility()
         updateCameraButton()
     }
-    
+
 }
