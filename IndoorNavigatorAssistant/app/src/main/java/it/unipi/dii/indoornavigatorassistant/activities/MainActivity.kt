@@ -6,8 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.kontakt.sdk.android.common.KontaktSDK
-import com.kontakt.sdk.android.common.log.LogLevel
-import com.kontakt.sdk.android.common.log.Logger
 import it.unipi.dii.indoornavigatorassistant.R
 import it.unipi.dii.indoornavigatorassistant.databinding.ActivityMainBinding
 import it.unipi.dii.indoornavigatorassistant.permissions.BluetoothPermissions
@@ -48,9 +46,6 @@ class MainActivity : AppCompatActivity() {
     private fun initDependencies() {
         // Initialize Bluetooth beacons API
         KontaktSDK.initialize(this)
-        // Initialize logger
-//        Logger.setDebugLoggingEnabled(true)
-//        Logger.setLogLevelEnabled(LogLevel.DEBUG, true)
     }
     
     

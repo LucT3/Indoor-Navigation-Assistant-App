@@ -3,6 +3,7 @@ package it.unipi.dii.indoornavigatorassistant.scanners
 import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.widget.ArrayAdapter
+import com.kontakt.sdk.android.common.profile.IBeaconDevice
 import it.unipi.dii.indoornavigatorassistant.R
 import it.unipi.dii.indoornavigatorassistant.activities.NavigationActivity
 import it.unipi.dii.indoornavigatorassistant.dao.BeaconInfoProvider
@@ -45,12 +46,53 @@ class BeaconState(
     
     
     /**
+     * TODO
+     *
+     * @param beacons
+     */
+    fun updateBeaconRegion(beacons: MutableList<IBeaconDevice>) {
+        val regionId = getCurrentRegionId(beacons) ?: return
+        displayBeaconRegionInfo(regionId)
+        
+        if (isNewRegion(regionId)) {
+            handleCurve(regionId)
+            
+            // Get points of interest
+            val pointsOfInterest = beaconInfoProvider.getBLERegionInfo(regionId)
+            displayPointsOfInterestInfo(pointsOfInterest)
+        }
+    }
+    
+    
+    /**
+     * Get the id of the current BLE region.
+     *
+     * @param beacons list of detected BLE beacons
+     * @return id of the region if a valid region can be extracted from the list
+     *         of the detected beacons, null otherwise
+     */
+    private fun getCurrentRegionId(beacons: MutableList<IBeaconDevice>): String? {
+        // Sort beacons by signal strength
+        val sortedBeacons = beacons.sortedByDescending { it.rssi }
+        
+        // Check if there are at least 2 beacons
+        if (sortedBeacons.size < 2) {
+            return null
+        }
+        
+        // Get region id
+        return beaconInfoProvider.getBLERegionId(sortedBeacons)
+    }
+    
+    
+    
+    /**
      * Checks if the provided region is a new region based on the consecutive occurrence threshold.
      *
      * @param regionScanned The last region that was detected.
      * @return True if the region is new, false otherwise.
      */
-    fun isNewRegion(regionScanned: String): Boolean {
+    private fun isNewRegion(regionScanned: String): Boolean {
         if (currentRegion != regionScanned) {
             if (regionScanned != lastRegionScanned) {
                 // Reset the counter to 1 (new consecutive sequence)
@@ -79,13 +121,14 @@ class BeaconState(
         return false
     }
     
+    
     /**
      * Check if a region is a pre-curve or a curve, and warn the user if is inside the curve region.
      * Display and send an audio message telling the direction of the curve
      *
      * @param regionId id of the current region
      */
-    fun handleCurve(regionId: String) {
+    private fun handleCurve(regionId: String) {
         if (beaconInfoProvider.isPreCurve(regionId)) {
             preCurveId = regionId
         }
@@ -115,7 +158,7 @@ class BeaconState(
      *
      * @param bleRegionInfo information about BLE region
      */
-    fun displayPointsOfInterestInfo(bleRegionInfo: BLERegionInfo?) {
+    private fun displayPointsOfInterestInfo(bleRegionInfo: BLERegionInfo?) {
         Log.d(
             Constants.LOG_TAG, "BeaconScanner::displayPointsOfInterestInfo " +
                     "- Points of interest: ${bleRegionInfo?.pointsOfInterest}"
@@ -160,6 +203,25 @@ class BeaconState(
         } else {
             binding.POIBeacons.adapter = null
         }
+    }
+    
+    
+    /**
+     * Display on Logcat and Navigation activity page the current Beacon Region where the user is.
+     *
+     * @param regionId id of current region
+     */
+    private fun displayBeaconRegionInfo(regionId: String) {
+        Log.d(
+            Constants.LOG_TAG, "BeaconScanner::onIBeaconsUpdated " +
+                    "- Region scanned: $regionId"
+        )
+        binding.textViewCurrentRegion.text = navigationActivity.get()!!
+            .resources
+            .getString(
+                R.string.navigation_activity_beacon_region_message,
+                regionId
+            )
     }
     
 }
