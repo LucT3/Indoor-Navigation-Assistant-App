@@ -24,7 +24,7 @@
     
     <!--navigation activity strings-->
     <string name="navigation_activity_welcome_message">Welcome to the Navigation page!</string>
-    <string name="navigation_activity_beacon_region_message">CURRENT BEACON REGION\n%s    (%s)</string>
+    <string name="navigation_activity_beacon_region_message">CURRENT BEACON REGION\n%s\n[%s]</string>
     <string name="navigation_activity_beacon_region_message_default">No region detected</string>
     <string name="navigation_activity_beacon_points_of_interest">Points of interest in your region</string>
     <string name="navigation_activity_qr_code_point">QR-CODE POINT OF INTEREST\n%s</string>
