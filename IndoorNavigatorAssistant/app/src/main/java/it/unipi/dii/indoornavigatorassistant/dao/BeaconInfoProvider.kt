@@ -2,6 +2,7 @@ package it.unipi.dii.indoornavigatorassistant.dao
 
 import android.content.Context
 import com.fasterxml.jackson.core.type.TypeReference
+import com.kontakt.sdk.android.common.profile.IBeaconDevice
 import it.unipi.dii.indoornavigatorassistant.R
 import it.unipi.dii.indoornavigatorassistant.model.BLEAreaBeforeCurveJson
 import it.unipi.dii.indoornavigatorassistant.model.BLECurveInfo
@@ -17,6 +18,7 @@ import it.unipi.dii.indoornavigatorassistant.util.JsonParser
  * It must be instantiated throw the [getInstance] method.
  */
 class BeaconInfoProvider private constructor(context: Context) {
+    
     // Structures which hold data about beacon environment configuration
     private var bleRegions: MutableMap<String, BLERegionInfo> = mutableMapOf()
     private var bleCurves: MutableMap<String, BLECurveInfo> = mutableMapOf()
@@ -25,7 +27,7 @@ class BeaconInfoProvider private constructor(context: Context) {
     companion object {
         // Singleton instance of the class
         private var instance: BeaconInfoProvider? = null
-    
+        
         /**
          * Get a singleton instance of the BeaconInfoProvider
          *
@@ -61,7 +63,9 @@ class BeaconInfoProvider private constructor(context: Context) {
             context.resources.getString(R.string.ble_curves_file),
             object : TypeReference<List<BLECurveJson>>() {}
         )
-        bleCurveJsonList.forEach { x -> bleCurves[x.id] = BLECurveInfo(x.preCurveRight, x.preCurveLeft) }
+        bleCurveJsonList.forEach { x ->
+            bleCurves[x.id] = BLECurveInfo(x.preCurveRight, x.preCurveLeft)
+        }
         
         // Load data of areas before curves
         val bleAreaBeforeCurveJsonList = JsonParser.loadFromJsonAsset(
@@ -76,6 +80,44 @@ class BeaconInfoProvider private constructor(context: Context) {
     
     
     /**
+     * From the list of the detected BLE beacons, get the id of the current region id.
+     * The returned id is guaranteed to be valid inside the bleRegions map.
+     *
+     * @param beaconsList list of the beacons discovered ordered by descending rssi
+     * @return the id of the BLE region if a valid region can be identified, null otherwise
+     */
+    fun getBLERegionId(beaconsList: List<IBeaconDevice>): String? {
+        // Compute the regionId using the uniqueIds of the first and second beacons
+        var regionId = computeBLERegionId(
+            beaconsList.getOrNull(0)?.uniqueId,
+            beaconsList.getOrNull(1)?.uniqueId
+        )
+        if (bleRegions.containsKey(regionId)) {
+            return regionId
+        }
+        
+        // Compute the regionId using the uniqueIds of the first and third beacons
+        regionId = computeBLERegionId(
+            beaconsList.getOrNull(0)?.uniqueId,
+            beaconsList.getOrNull(2)?.uniqueId
+        )
+        if (bleRegions.containsKey(regionId)) {
+            return regionId
+        }
+        
+        // Compute the regionId using the uniqueIds of the second and third beacons
+        regionId = computeBLERegionId(
+            beaconsList.getOrNull(1)?.uniqueId,
+            beaconsList.getOrNull(2)?.uniqueId
+        )
+        if (bleRegions.containsKey(regionId)) {
+            return regionId
+        }
+        return null
+    }
+    
+    
+    /**
      * Compute the `id` of a **BLE region** from the `id` of the two corresponding beacons.
      *
      * The `region id` is computed by concatenating the `id` of the beacons in lexicographic order.
@@ -84,7 +126,10 @@ class BeaconInfoProvider private constructor(context: Context) {
      * @param beacon2 id of the second beacon
      * @return the id of the BLE region
      */
-    fun computeBLERegionId(beacon1: String, beacon2: String): String {
+    private fun computeBLERegionId(beacon1: String?, beacon2: String?): String {
+        if (beacon1 == null || beacon2 == null) {
+            return ""
+        }
         return if (beacon1 <= beacon2) {
             beacon1 + beacon2
         } else {
@@ -114,8 +159,8 @@ class BeaconInfoProvider private constructor(context: Context) {
     fun isCurve(regionId: String): Boolean {
         return bleCurves.contains(regionId)
     }
-
-    fun isPreCurve (regionId: String): Boolean {
+    
+    fun isPreCurve(regionId: String): Boolean {
         return bleAreasBeforeCurves.contains(regionId)
     }
     
