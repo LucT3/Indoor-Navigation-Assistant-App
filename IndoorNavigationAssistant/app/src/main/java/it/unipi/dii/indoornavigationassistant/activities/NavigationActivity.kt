@@ -241,6 +241,11 @@ class NavigationActivity : AppCompatActivity() {
         }
     }
     
+    /**
+     * Switch camera visibility state from invisible to visible and vice-versa.
+     *
+     * @param view unused reference to button. Must be kept otherwise code fails
+     */
     fun onClickSwitchLayout(view: View) {
         isCameraShowing = !isCameraShowing
         updateCameraVisibility()

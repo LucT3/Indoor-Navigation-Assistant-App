@@ -63,12 +63,14 @@ class QRCodeState(
         val info = qrCodeInfoProvider.getQrCodeInfo(qrCodeId)
         if (info == null) {
             // Qr code invalid
+            Log.d(Constants.LOG_TAG, "QRCodeState::notifyQrCode - QR code invalid")
             displayNotFound()
             return
         }
         
         // New QR code?
         if (qrCodeId != lastQrCode) {
+            Log.d(Constants.LOG_TAG, "QRCodeState::notifyQrCode - New QR code!")
             lastQrCode = qrCodeId
             lastTimestamp = LocalDateTime.now()
             displayQrCode(info)
@@ -82,6 +84,7 @@ class QRCodeState(
         }
         
         if (isRefreshNeeded(refreshPeriod)) {
+            Log.d(Constants.LOG_TAG, "QRCodeState::notifyQrCode - Refresh current QR code")
             lastTimestamp = LocalDateTime.now()
             displayQrCode(info)
         }

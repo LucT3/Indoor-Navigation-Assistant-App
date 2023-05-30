@@ -89,12 +89,18 @@ class QRCodeScanner(
                 
                 // Get the QR code ID from the first barcode result and notify new reading
                 val qrCodeId: String? = barcodeResults[0].rawValue
+                Log.d(
+                    Constants.LOG_TAG,
+                    "QRCodeScanner::MlKitAnalyzer::consumer - Scanned QR code $qrCodeId"
+                )
                 qrCodeState.notifyQrCode(qrCodeId)
             }
         )
         
         cameraController.bindToLifecycle(navigationActivity.get()!!)
         previewView.controller = cameraController
+        
+        Log.d(Constants.LOG_TAG,"QRCodeScanner::startCamera - Camera started")
     }
     
     
@@ -103,9 +109,10 @@ class QRCodeScanner(
      * It must be called inside the `onDestroy` method of the activity.
      */
     fun destroy() {
-        Log.d(Constants.LOG_TAG, "QrCodeScanner::stop - barCodeScanner instance closed")
         barcodeScanner.close()
+        Log.d(Constants.LOG_TAG, "QrCodeScanner::destroy - barCodeScanner instance closed")
         cameraExecutor.shutdown()
+        Log.d(Constants.LOG_TAG, "QrCodeScanner::destroy - cameraExecutor shutdown")
     }
     
 }
