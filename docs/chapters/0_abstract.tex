@@ -1,0 +1,12 @@
+\section{Abstract}
+
+Indoor-assisted navigation presents a significant challenge for individuals who are blind or visually impaired \cite{9126068, MURATA201914, en12193702, s20030636}.
+The limitations of traditional location technologies, such as GPS tracking, prevent achieving the necessary accuracy within enclosed buildings \cite{RAZAVI2012128, localization-taxonomy}.
+Accurate indoor navigation is vital for people with visual impairments, as it empowers them to navigate unfamiliar indoor environments independently and safely \cite{9126068}.
+
+To achieve an indoor navigation assistant tailored for enclosed buildings we employed a hybrid approach, combining two different technologies known for their success in similar contexts \cite{MURATA201914, s20030636}: 
+a network of \textbf{Bluetooth Low Energy beacons}, which allowed us to localize the user inside a \textit{region} within the building \cite{localization-taxonomy, 10.1145/3058555.3058560, en12193702}, and \textbf{QR codes}, which can inform the application about the presence of points of interest around the user \cite{indoor-navigation-qr-codes}.
+
+Once the application was developed, we proceeded to instrument a section of the main building at the \textit{School of Engineering, University of Pisa}, by strategically placing BLE beacons and QR codes along the hallway.
+
+The results we obtained were quite satisfactory. The application successfully guided the users along the designated path, being able to detect region switches, nearby points of interests and incoming curves with a good level of accuracy and responsiveness.

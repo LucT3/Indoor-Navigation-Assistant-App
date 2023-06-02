@@ -1,0 +1,15 @@
+Since our application specifically targets \textit{visually impaired users}, every interaction has been designed to be vocal, rather than written. 
+To achieve this, we employed two different technologies: \textit{Talkback} and \textit{TextToSpeech}.
+
+
+\textbf{Talkback} is a native Android functionality which \textit{announces content through a synthesized voice} and \textit{performs actions on an app in response to user gestures}\cite{android:accessibility}. 
+In our application, it plays a crucial role in assisting users in pressing the button to start the navigation activity, granting required Android permissions, and enabling GPS and Bluetooth services.\cite{android:request-runtime-permissions, android:bluetooth-setup}
+
+
+\textbf{TextToSpeech} is a functionality provided by the \texttt{android.speech.tts} library which \textit{synthesizes speech from a text for immediate playback}.\cite{android:text-to-speech-ref}
+This feature is crucial for announcing navigation directions and the presence of nearby points of interest. 
+
+The TextToSpeech object maintains a \textit{First-In-First-Out} (FIFO) queue of texts to be spoken, offering two queuing modes: \texttt{QUEUE\_ADD}, which appends new text to the existing queue, and \texttt{QUEUE\_FLUSH}, which clears the current queue before appending the new text.
+
+In our application, we have adopted the \texttt{QUEUE\_FLUSH} mode for high-priority announcements, such as approaching turns or nearby points of interest. On the other hand, the \texttt{QUEUE\_ADD} mode has been utilized for low-priority announcements, such as region announcements. 
+This ensures that important information takes precedence, enhancing the user's navigation experience.

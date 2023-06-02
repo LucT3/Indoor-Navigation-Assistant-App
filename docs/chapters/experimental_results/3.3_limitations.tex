@@ -1,0 +1,19 @@
+The main limitations of the adopted approach are the following:
+
+\subsubsection{Infrastructure}
+The indoor navigation assistant relies on the presence of a network of Bluetooth Low Energy (BLE) beacons and strategically placed QR codes. The effectiveness of the system is directly tied to the availability and maintenance of these infrastructure components. If the beacons or QR codes are damaged, removed, or not properly maintained, it can affect the accuracy and reliability of the navigation assistance.
+
+\subsubsection{Coverage}
+The system described is implemented in a specific building, and the infrastructure is deployed only in a section of that building. Therefore, the area covered by the system is limited to the instrumented section. Scaling up the system to cover larger buildings or multiple buildings would require additional configuration. The deployment of the BLE beacons and QR codes requires manual effort and careful placement. This process can be time-consuming and resource-intensive, especially for larger indoor environments. 
+
+\subsubsection{Accuracy}
+The accuracy of the localization and navigation functionalities using BLE beacons can be affected by signal interference or environmental factors such as walls, obstacles, or electromagnetic interference. Interference from other devices or signal propagation limitations within the building can result in inaccuracies in determining the user's location or detecting region switches. 
+The system's performance and accuracy may also change when applied to indoor environments with varying layouts, sizes, or infrastructure configurations. 
+
+\subsubsection{Additional functionalities}
+The system lacks more advanced features found in commercial indoor navigation solutions. For instance, the application does not provide specific directions or routes to individual destinations within the building.
+By incorporating advanced localization techniques such as \textbf{triangulation} or \textbf{fingerprinting} \cite{10.1145/3058555.3058560}, it would be possible to introduce additional functionalities like point-to-point navigation and improve the overall reliability of the application.
+Moreover, through the adoption of more complex approaches, the possibility of incorporating supplementary features, such as detecting intersections, as well as managing indoor open areas, could be achieved.
+
+Currently, the application loads information from JSON files. While this approach is very simple and allows for flexibility in managing the data, alternative methods could be explored. For instance, using a cloud-based database solution like \textbf{Firebase} \cite{firebase} could provide real-time updates and seamless synchronization of data across multiple devices.
+

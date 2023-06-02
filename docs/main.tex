@@ -1,0 +1,66 @@
+\documentclass[a4paper, 11pt]{article} % for final document
+% \documentclass[draft, a4paper,11pt]{article} % for drafts
+
+\usepackage{geometry} % for impagination
+\geometry{
+     left=20mm,
+     right=20mm,
+     top=25mm
+ }
+
+\usepackage{graphicx} % Required for inserting images
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage[parfill]{parskip}
+\usepackage{float}
+\usepackage{subfigure}
+\usepackage{svg}
+\usepackage[bookmarks]{hyperref}
+\usepackage{caption}
+\hypersetup{
+    colorlinks=true,
+    urlcolor=blue
+}
+\usepackage{microtype} % improves line filling [raccomended]
+\usepackage{listings} % highlights code
+\usepackage{bookmark} %improve bookmarks
+\usepackage[english]{babel} % language
+\usepackage[english]{varioref} % for relative reference (vref)
+\usepackage[justification=centering]{caption} % for centering the captions
+\usepackage{fancyvrb} % for better verbatim
+\usepackage{multicol} % for multicolumns
+\setlength{\columnsep}{1cm}
+
+% Configure bibliography
+\usepackage[backend=biber]{biblatex}
+\addbibresource{references.bib}
+\AtBeginBibliography{\footnotesize} % make text smaller for bibliography
+
+
+\title{\textbf{Indoor navigation assistant for visually impaired people}}
+\author{Salvatore Lombardi \\ \href{mailto:s.lombardi38@studenti.unipi.it}{s.lombardi38@studenti.unipi.it} \and Francesco Martoccia \\ \href{mailto:s.lombardi38@studenti.unipi.it}{f.martoccia@studenti.unipi.it} \and Riccardo Sagramoni \\ \href{mailto:s.lombardi38@studenti.unipi.it}{r.sagramoni@studenti.unipi.it} \and Luca Tartaglia \\ \href{mailto:s.lombardi38@studenti.unipi.it}{l.tartaglia@studenti.unipi.it}}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{multicols*}{2}
+
+\input{chapters/0_abstract}
+\input{chapters/1_introduction}
+\input{chapters/2_architecture}
+\input{chapters/3_experimental_results}
+\input{chapters/4_conclusion}
+
+% References
+\hypersetup{
+    urlcolor=black
+}
+\nocite{*}
+\printbibliography
+
+
+\end{multicols*}
+
+\end{document}
