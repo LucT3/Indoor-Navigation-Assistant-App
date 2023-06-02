@@ -4,6 +4,7 @@
 
 ![Kotlin](https://img.shields.io/badge/kotlin-B125EA.svg?style=for-the-badge&logo=kotlin&logoColor=white)
 ![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white&&color=darkgreen)
+![Bluetooth](https://img.shields.io/badge/bluetooth-navy.svg?style=for-the-badge&logo=bluetooth&logoColor=white)
 ![Gradle](https://img.shields.io/badge/Gradle-02303A.svg?style=for-the-badge&logo=Gradle&logoColor=white)
 ![Android Studio](https://img.shields.io/badge/Android%20Studio-blue.svg?style=for-the-badge&logo=android-studio&logoColor=lime)
 
